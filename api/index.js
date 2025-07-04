@@ -194,16 +194,34 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve static files
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// Serve uploaded files only (keep these for file storage)
 app.use('/uploads', express.static(path.join(__dirname, '../server/public/uploads')));
 app.use('/uploads/listings', express.static(path.join(__dirname, '../server/public/uploads/listings')));
 app.use('/uploads/profiles', express.static(path.join(__dirname, '../server/public/uploads/profiles')));
 
-// Serve index.html for all other routes (SPA support)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+// Root route - API status
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Cadre Markets API is alive 🚀',
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      docs: '/api-docs',
+      auth: '/api/auth',
+      listings: '/api/listing',
+      orders: '/api/orders',
+      services: '/api/services'
+    }
+  });
 });
+
+// Commented out: No longer serving frontend from backend (deployed separately on Vercel)
+// app.use(express.static(path.join(__dirname, '../client/dist')));
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+// });
 
 // Handle specific error types
 app.use((err, req, res, next) => {
