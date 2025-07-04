@@ -194,6 +194,27 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Test endpoint for API functionality
+app.get('/api/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Cadre Markets API is working perfectly! 🚀',
+    timestamp: new Date().toISOString(),
+    server: 'Render',
+    database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+    environment: process.env.NODE_ENV || 'development',
+    requestId: req.id,
+    features: [
+      'User Authentication',
+      'Listing Management', 
+      'Order Processing',
+      'Service Booking',
+      'Admin Dashboard',
+      'File Upload Support'
+    ]
+  });
+});
+
 // Serve uploaded files only (keep these for file storage)
 app.use('/uploads', express.static(path.join(__dirname, '../server/public/uploads')));
 app.use('/uploads/listings', express.static(path.join(__dirname, '../server/public/uploads/listings')));
