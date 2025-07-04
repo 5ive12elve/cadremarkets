@@ -34,7 +34,7 @@ export default function UserListings({ userId }) {
     const fetchListings = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`/api/user/listings/${userId}`);
+            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/user/listings/${userId}`);
             const data = await res.json();
             if (data.success === false) {
                 setError(data.message);
@@ -72,7 +72,7 @@ export default function UserListings({ userId }) {
             t.deleteListingConfirm || 'Are you sure you want to delete this listing? This action cannot be undone.',
             async () => {
                 try {
-                    const res = await fetch(`/api/listing/delete/${listingId}`, {
+                    const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/delete/${listingId}`, {
                         method: 'DELETE',
                     });
                     const data = await res.json();

@@ -52,7 +52,7 @@ export default function EditProfile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export default function EditProfile() {
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/api/users/${currentUser._id}/password`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/users/${currentUser._id}/password`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(passwordData),
@@ -99,7 +99,7 @@ export default function EditProfile() {
 
     if (!token) throw new Error('Token is missing');
   
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

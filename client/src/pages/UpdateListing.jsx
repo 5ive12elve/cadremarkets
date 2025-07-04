@@ -100,7 +100,7 @@ export default function UpdateListing() {
   useEffect(() => {
     const fetchClothingSizes = async () => {
       try {
-        const response = await fetch('/api/listing/clothing/sizes');
+        const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/clothing/sizes`);
         const data = await response.json();
         if (data.success) {
           setClothingSizes(data.sizes);
@@ -116,7 +116,7 @@ export default function UpdateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const res = await fetch(`/api/listing/get/${params.listingId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get/${params.listingId}`);
         const data = await res.json();
         if (data.success === false) {
           console.error(data.message);
@@ -346,7 +346,7 @@ export default function UpdateListing() {
         delete submitData.availableSizes;
       }
 
-      const res = await fetch(`/api/listing/update/${params.listingId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/update/${params.listingId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

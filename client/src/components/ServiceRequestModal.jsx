@@ -162,7 +162,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
     if (!validateStep(step)) return;
 
     try {
-      const response = await fetch('/api/services', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/services`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

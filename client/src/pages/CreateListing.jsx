@@ -134,7 +134,7 @@ export default function CreateListing() {
   useEffect(() => {
     const fetchClothingSizes = async () => {
       try {
-        const response = await fetch('/api/listing/clothing/sizes');
+        const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/clothing/sizes`);
         const data = await response.json();
         if (data.success) {
           setClothingSizes(data.sizes);
@@ -278,7 +278,7 @@ export default function CreateListing() {
     formData.append('image', file);
 
     try {
-      const response = await fetch('/api/listing/upload/image', {
+              const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/upload/image`, {
         method: 'POST',
         body: formData,
       });
@@ -502,7 +502,7 @@ export default function CreateListing() {
         delete submitData.availableSizes;
       }
 
-      const res = await fetch('/api/listing/create', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -16,7 +16,7 @@ export default function CadreBackLogin() {
     try {
       setLoading(true);
 
-      const response = await fetch('/api/backoffice/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/backoffice/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
