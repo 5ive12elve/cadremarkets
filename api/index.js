@@ -162,8 +162,21 @@ function sanitizeObject(obj) {
   return obj;
 }
 
+// CORS configuration for multiple domains
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://cadremarkets.vercel.app',
+  'https://cadremarkets.com',
+  'https://www.cadremarkets.com'
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
   credentials: true
 }));
 
