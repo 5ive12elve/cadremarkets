@@ -43,7 +43,7 @@ const CadreBackOrders = () => {
 
   const fetchListingDetails = async (listingId) => {
     try {
-      const response = await fetch(`/api/listing/get/${listingId}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get/${listingId}`);
       if (!response.ok) throw new Error('Failed to fetch listing details');
       const data = await response.json();
       setListingDetails(prev => ({
