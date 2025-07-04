@@ -108,7 +108,7 @@ export default function Search() {
       const searchQuery = urlParams.toString();
 
       try {
-        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get?${searchQuery}`);
         if (!res.ok) {
           throw new Error('Failed to fetch listings.');
         }
@@ -156,7 +156,7 @@ export default function Search() {
     urlParams.set('startIndex', startIndex);
 
     try {
-      const res = await fetch(`/api/listing/get?${urlParams.toString()}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get?${urlParams.toString()}`);
       if (!res.ok) {
         throw new Error('Failed to fetch additional listings.');
       }

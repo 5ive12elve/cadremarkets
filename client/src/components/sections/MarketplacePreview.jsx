@@ -49,7 +49,7 @@ export default function MarketplacePreview() {
         setError(null);
 
         // Fetch listings with cadremarketsService: true
-        const res = await fetch('/api/listing/get?limit=1000&cadremarketsService=true');
+        const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get?limit=1000&cadremarketsService=true`);
         
         if (!res.ok) {
           throw new Error('Failed to fetch listings');

@@ -1,7 +1,7 @@
-// Use relative URLs in development, absolute URLs in production
-export const API_URL = import.meta.env.PROD
-  ? 'https://api.cadremarkets.com/api'
-  : '/api';
+import { getApiUrl } from '../utils/apiConfig.js';
+
+// Use centralized API configuration
+export const API_URL = getApiUrl('api');
 
 export const backOfficeApi = {
   login: async (credentials) => {
