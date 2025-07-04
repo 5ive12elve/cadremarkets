@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: cadremarkets-db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: cadremarkets
+    volumes:
+      - mongodb_data:/data/db
+      - ./api/scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - cadremarkets-network
+
+  # Redis Cache
+  redis:
+    image: redis:7.2-alpine
+    container_name: cadremarkets-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - cadremarkets-network
+
+  # Main Application
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: cadremarkets-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGO=mongodb://admin:password@mongodb:27017/cadremarkets?authSource=admin
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your-super-secure-jwt-secret-change-this-in-production
+      - CLIENT_URL=http://localhost:3000
+      - PORT=3000
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./api/logs:/app/logs
+      - upload_data:/app/api/server/public/uploads
+    networks:
+      - cadremarkets-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy (Optional)
+  nginx:
+    image: nginx:alpine
+    container_name: cadremarkets-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    networks:
+      - cadremarkets-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+  upload_data:
+
+networks:
+  cadremarkets-network:
+    driver: bridge 

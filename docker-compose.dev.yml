@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: cadremarkets-db-dev
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: cadremarkets
+    volumes:
+      - mongodb_data_dev:/data/db
+    networks:
+      - cadremarkets-network-dev
+
+  # Redis Cache
+  redis:
+    image: redis:7.2-alpine
+    container_name: cadremarkets-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data_dev:/data
+    networks:
+      - cadremarkets-network-dev
+
+  # Development API Server
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    container_name: cadremarkets-api-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGO=mongodb://admin:password@mongodb:27017/cadremarkets?authSource=admin
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=development-jwt-secret
+      - CLIENT_URL=http://localhost:5173
+      - PORT=3000
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+      - ./api/logs:/app/logs
+    networks:
+      - cadremarkets-network-dev
+    command: npm run dev
+
+  # Development Client Server
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: cadremarkets-client-dev
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    networks:
+      - cadremarkets-network-dev
+    command: npm run dev
+
+volumes:
+  mongodb_data_dev:
+  redis_data_dev:
+
+networks:
+  cadremarkets-network-dev:
+    driver: bridge 

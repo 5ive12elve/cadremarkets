@@ -1,0 +1,186 @@
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/fonts/InstrumentSans[wdth,wght].woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('/fonts/InstrumentSans-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NT Voice';
+  src: url('/fonts/NTVoiceVF.woff2') format('woff2'),
+       url('/fonts/NTVoiceVF.woff') format('woff'),
+       url('/fonts/NTVoiceVF.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NT Voice';
+  src: url('/fonts/NTVoiceVF.woff2') format('woff2'),
+       url('/fonts/NTVoiceVF.woff') format('woff'),
+       url('/fonts/NTVoiceVF.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NT Voice';
+  src: url('/fonts/NTVoiceVF.woff2') format('woff2'),
+       url('/fonts/NTVoiceVF.woff') format('woff'),
+       url('/fonts/NTVoiceVF.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NT Voice';
+  src: url('/fonts/NTVoiceVF.woff2') format('woff2'),
+       url('/fonts/NTVoiceVF.woff') format('woff'),
+       url('/fonts/NTVoiceVF.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Arabic Fonts */
+@font-face {
+  font-family: 'Amiri';
+  src: url('/fonts/Arabic/Amiri/Amiri-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amiri';
+  src: url('/fonts/Arabic/Amiri/Amiri-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amiri';
+  src: url('/fonts/Arabic/Amiri/Amiri-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amiri';
+  src: url('/fonts/Arabic/Amiri/Amiri-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  src: url('/fonts/Arabic/Noto_Sans_Arabic/NotoSansArabic-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .font-nt-light {
+    font-family: 'NT Voice';
+    font-weight: 300;
+  }
+  
+  .font-nt-regular {
+    font-family: 'NT Voice';
+    font-weight: 400;
+  }
+  
+  .font-nt-bold {
+    font-family: 'NT Voice';
+    font-weight: 700;
+  }
+  
+  .font-nt-light-italic {
+    font-family: 'NT Voice';
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  /* Arabic Font Classes */
+  .font-amiri {
+    font-family: 'Amiri', serif;
+  }
+  
+  .font-noto-arabic {
+    font-family: 'Noto Sans Arabic', sans-serif;
+  }
+
+  /* Language-specific font classes */
+  .font-primary {
+    font-family: 'NT Voice', sans-serif;
+  }
+
+  [dir="rtl"] .font-primary {
+    font-family: 'Amiri', serif;
+  }
+
+  .font-secondary {
+    font-family: 'Instrument Sans', sans-serif;
+  }
+
+  [dir="rtl"] .font-secondary {
+    font-family: 'Noto Sans Arabic', sans-serif;
+  }
+
+  /* RTL-specific utilities */
+  [dir="rtl"] .rtl\:text-right {
+    text-align: right;
+  }
+
+  [dir="rtl"] .rtl\:text-left {
+    text-align: left;
+  }
+
+  [dir="rtl"] .rtl\:ml-auto {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  [dir="rtl"] .rtl\:mr-auto {
+    margin-right: auto;
+    margin-left: 0;
+  }
+
+  [dir="rtl"] .rtl\:pl-4 {
+    padding-left: 1rem;
+    padding-right: 0;
+  }
+
+  [dir="rtl"] .rtl\:pr-4 {
+    padding-right: 1rem;
+    padding-left: 0;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: 'NT Voice', sans-serif;
+  font-weight: 400;
+  background-color: #000;
+  color: #fff;
+}
