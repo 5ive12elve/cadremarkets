@@ -90,14 +90,17 @@ export const signin = async (req, res, next) => {
     console.log('Setting cookie with token:', token.substring(0, 20) + '...');
     console.log('Cookie options:', {
       httpOnly: true,
+      // Secure and domain must be set for cross-origin cookies in production
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
+      domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
       maxAge: 24 * 60 * 60 * 1000
     });
     
     res
       .cookie('access_token', token, { 
         httpOnly: true,
+        // Secure and domain must be set for cross-origin cookies in production
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'none',
         domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
@@ -136,6 +139,7 @@ export const google = async (req, res, next) => {
       res
         .cookie('access_token', token, { 
           httpOnly: true,
+          // Secure and domain must be set for cross-origin cookies in production
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'none',
           domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
@@ -165,6 +169,7 @@ export const google = async (req, res, next) => {
       res
         .cookie('access_token', token, { 
           httpOnly: true,
+          // Secure and domain must be set for cross-origin cookies in production
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'none',
           domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,

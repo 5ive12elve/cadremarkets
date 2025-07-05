@@ -30,6 +30,7 @@ export const login = async (req, res, next) => {
     res
       .cookie('backoffice_token', token, {
         httpOnly: true,
+        // Secure and domain must be set for cross-origin cookies in production
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'none',
         domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
