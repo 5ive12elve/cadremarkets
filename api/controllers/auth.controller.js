@@ -72,6 +72,8 @@ export const signin = async (req, res, next) => {
   console.log('=== SIGNIN DEBUG ===');
   console.log('Signin attempt for email:', email);
   console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('Request host:', req.get('host'));
+  console.log('Request origin:', req.get('origin'));
   
   // Input validation
   if (!email || !password) {
@@ -88,18 +90,25 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
     
+    // Determine if we're in production based on host or NODE_ENV
+    const isProduction = process.env.NODE_ENV === 'production' || 
+                        req.get('host')?.includes('cadremarkets.com') ||
+                        req.get('origin')?.includes('cadremarkets.com');
+    
     // Define cookie options
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction, // Force secure in production
       sameSite: 'none',
-      domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
+      domain: isProduction ? '.cadremarkets.com' : undefined,
       maxAge: 24 * 60 * 60 * 1000 // 24 hours
     };
     
     console.log('Setting cookie with token:', token.substring(0, 20) + '...');
     console.log('Cookie options:', cookieOptions);
-    console.log('Is production?', process.env.NODE_ENV === 'production');
+    console.log('Is production?', isProduction);
+    console.log('Host check:', req.get('host')?.includes('cadremarkets.com'));
+    console.log('Origin check:', req.get('origin')?.includes('cadremarkets.com'));
     
     res
       .cookie('access_token', token, cookieOptions)
@@ -129,19 +138,25 @@ export const google = async (req, res, next) => {
       return next(errorHandler(400, 'Invalid Google token'));
     }
     
+    // Determine if we're in production based on host or NODE_ENV
+    const isProduction = process.env.NODE_ENV === 'production' || 
+                        req.get('host')?.includes('cadremarkets.com') ||
+                        req.get('origin')?.includes('cadremarkets.com');
+    
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction, // Force secure in production
+      sameSite: 'none',
+      domain: isProduction ? '.cadremarkets.com' : undefined,
+      maxAge: 24 * 60 * 60 * 1000
+    };
+    
     const user = await User.findOne({ email });
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
       res
-        .cookie('access_token', token, { 
-          httpOnly: true,
-          // Secure and domain must be set for cross-origin cookies in production
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'none',
-          domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
-          maxAge: 24 * 60 * 60 * 1000
-        })
+        .cookie('access_token', token, cookieOptions)
         .status(200)
         .json({
           success: true,
@@ -164,14 +179,7 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
       res
-        .cookie('access_token', token, { 
-          httpOnly: true,
-          // Secure and domain must be set for cross-origin cookies in production
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'none',
-          domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
-          maxAge: 24 * 60 * 60 * 1000
-        })
+        .cookie('access_token', token, cookieOptions)
         .status(200)
         .json({ 
           success: true, 

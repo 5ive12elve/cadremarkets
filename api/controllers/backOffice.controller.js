@@ -27,15 +27,21 @@ export const login = async (req, res, next) => {
 
     const { password: pass, ...rest } = user._doc;
 
+    // Determine if we're in production based on host or NODE_ENV
+    const isProduction = process.env.NODE_ENV === 'production' || 
+                        req.get('host')?.includes('cadremarkets.com') ||
+                        req.get('origin')?.includes('cadremarkets.com');
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction, // Force secure in production
+      sameSite: 'none',
+      domain: isProduction ? '.cadremarkets.com' : undefined,
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    };
+
     res
-      .cookie('backoffice_token', token, {
-        httpOnly: true,
-        // Secure and domain must be set for cross-origin cookies in production
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
-        domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-      })
+      .cookie('backoffice_token', token, cookieOptions)
       .status(200)
       .json(rest);
   } catch (error) {
