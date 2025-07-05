@@ -5,8 +5,30 @@ import Listing from '../models/listing.model.js';
 import Order from '../models/order.model.js';
 
 export const test = (req, res) => {
+  console.log('=== TEST ENDPOINT DEBUG ===');
+  console.log('Request headers:', req.headers);
+  console.log('Request cookies:', req.cookies);
+  console.log('Authorization header:', req.headers.authorization);
+  
   res.json({
     message: 'Api route is working!',
+    headers: req.headers,
+    cookies: req.cookies,
+    authorization: req.headers.authorization ? 'Present' : 'Missing'
+  });
+};
+
+export const testAuth = (req, res) => {
+  console.log('=== TEST AUTH ENDPOINT DEBUG ===');
+  console.log('User from token:', req.user);
+  console.log('Request headers:', req.headers);
+  console.log('Request cookies:', req.cookies);
+  
+  res.json({
+    message: 'Authenticated route is working!',
+    user: req.user,
+    tokenType: req.user?.tokenType,
+    userId: req.user?.id
   });
 };
 

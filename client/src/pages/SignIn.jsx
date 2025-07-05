@@ -91,6 +91,24 @@ export default function SignIn() {
         console.log('=== TOKEN ACCESS TEST ===');
         console.log('localStorage.getItem("auth_token"):', !!localStorage.getItem('auth_token'));
         console.log('localStorage keys:', Object.keys(localStorage));
+        
+        // Additional verification - test the token format
+        console.log('=== TOKEN FORMAT TEST ===');
+        console.log('Token starts with "eyJ":', data.token.startsWith('eyJ'));
+        console.log('Token contains dots:', (data.token.match(/\./g) || []).length === 2);
+        
+        // Test immediate API call to verify token works
+        try {
+          console.log('=== IMMEDIATE API TEST ===');
+          const testResponse = await apiCall('/api/user/test');
+          console.log('Immediate API test successful:', testResponse);
+          
+          // Test authenticated endpoint
+          const authTestResponse = await apiCall('/api/user/test-auth');
+          console.log('Authenticated API test successful:', authTestResponse);
+        } catch (testError) {
+          console.error('Immediate API test failed:', testError);
+        }
       } else {
         console.log('No token received in signin response');
       }

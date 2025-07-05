@@ -15,6 +15,8 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   signOutUserStart,
+  signOutUserSuccess,
+  signOutUserFailure,
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -199,8 +201,8 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const data = await apiCall('/api/auth/signout');
-      dispatch(deleteUserSuccess(data));
+      await apiCall('/api/auth/signout');
+      dispatch(signOutUserSuccess());
       
       // Custom success toast
       toast.custom((toastData) => (
@@ -230,7 +232,7 @@ export default function Profile() {
       });
       
     } catch (err) {
-      dispatch(deleteUserFailure(err.message));
+      dispatch(signOutUserFailure(err.message));
     }
   };
 

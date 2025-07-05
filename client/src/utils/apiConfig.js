@@ -32,6 +32,13 @@ export const apiCall = async (endpoint, options = {}) => {
   // Add Authorization header if token is available
   if (storedToken) {
     defaultOptions.headers['Authorization'] = `Bearer ${storedToken}`;
+    console.log('=== TOKEN DEBUG ===');
+    console.log('Token found in localStorage, length:', storedToken.length);
+    console.log('Token preview:', storedToken.substring(0, 20) + '...');
+  } else {
+    console.log('=== TOKEN DEBUG ===');
+    console.log('No token found in localStorage');
+    console.log('localStorage keys:', Object.keys(localStorage));
   }
   
   // If body is FormData, remove Content-Type header to let browser set it
@@ -52,6 +59,7 @@ export const apiCall = async (endpoint, options = {}) => {
   console.log('Stored token available:', !!storedToken);
   console.log('Stored token length:', storedToken ? storedToken.length : 0);
   console.log('Authorization header set:', !!finalOptions.headers['Authorization']);
+  console.log('Authorization header value:', finalOptions.headers['Authorization'] ? finalOptions.headers['Authorization'].substring(0, 30) + '...' : 'undefined');
   
   // Check if cookies are available
   console.log('Document cookie available:', typeof document !== 'undefined' && document.cookie);

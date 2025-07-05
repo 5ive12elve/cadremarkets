@@ -35,9 +35,9 @@ import Support from './pages/Support';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import ReturnPolicy from './pages/ReturnPolicy';
+import AuthDebug from './pages/AuthDebug';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
-import { useState, useEffect } from 'react';
 
 // Debug: Check if frontend has been updated
 console.log('=== FRONTEND VERSION CHECK ===');
@@ -105,63 +105,7 @@ const BackOfficeRoutes = () => {
     );
 };
 
-// Debug component for testing authentication
-const AuthDebug = () => {
-  const [debugInfo, setDebugInfo] = useState({});
-  
-  useEffect(() => {
-    const info = {
-      localStorage: {
-        auth_token: !!localStorage.getItem('auth_token'),
-        auth_token_length: localStorage.getItem('auth_token')?.length || 0,
-        all_keys: Object.keys(localStorage)
-      },
-      cookies: {
-        enabled: navigator.cookieEnabled,
-        document_cookies: document.cookie,
-        cookie_count: document.cookie.split(';').filter(c => c.trim()).length
-      },
-      domain: {
-        current: window.location.hostname,
-        api: import.meta.env.VITE_API_URL ? new URL(import.meta.env.VITE_API_URL).hostname : 'N/A'
-      }
-    };
-    setDebugInfo(info);
-    console.log('=== AUTH DEBUG INFO ===', info);
-  }, []);
-  
-  const testApiCall = async () => {
-    try {
-      console.log('Testing API call...');
-      const response = await fetch('/api/auth/verify', {
-        credentials: 'include',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-        }
-      });
-      console.log('API test response:', response.status, response.statusText);
-      const data = await response.json().catch(() => ({}));
-      console.log('API test data:', data);
-    } catch (error) {
-      console.error('API test error:', error);
-    }
-  };
-  
-  return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Authentication Debug</h1>
-      <button 
-        onClick={testApiCall}
-        className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
-      >
-        Test API Call
-      </button>
-      <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto">
-        {JSON.stringify(debugInfo, null, 2)}
-      </pre>
-    </div>
-  );
-};
+
 
 export default function App() {
     return (

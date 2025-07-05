@@ -1,6 +1,7 @@
 import express from 'express';
 import { 
   test, 
+  testAuth,
   updateUser, 
   deleteUser, 
   getUserListings,
@@ -34,6 +35,7 @@ const router = express.Router();
  *         description: Test successful
  */
 router.get('/test', test);
+router.get('/test-auth', verifyToken, testAuth);
 
 /**
  * @swagger
