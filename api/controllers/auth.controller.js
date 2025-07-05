@@ -71,6 +71,7 @@ export const signin = async (req, res, next) => {
   
   console.log('=== SIGNIN DEBUG ===');
   console.log('Signin attempt for email:', email);
+  console.log('NODE_ENV:', process.env.NODE_ENV);
   
   // Input validation
   if (!email || !password) {
@@ -87,25 +88,21 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
     
-    console.log('Setting cookie with token:', token.substring(0, 20) + '...');
-    console.log('Cookie options:', {
+    // Define cookie options
+    const cookieOptions = {
       httpOnly: true,
-      // Secure and domain must be set for cross-origin cookies in production
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none',
       domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
-      maxAge: 24 * 60 * 60 * 1000
-    });
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    };
+    
+    console.log('Setting cookie with token:', token.substring(0, 20) + '...');
+    console.log('Cookie options:', cookieOptions);
+    console.log('Is production?', process.env.NODE_ENV === 'production');
     
     res
-      .cookie('access_token', token, { 
-        httpOnly: true,
-        // Secure and domain must be set for cross-origin cookies in production
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
-        domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-      })
+      .cookie('access_token', token, cookieOptions)
       .status(200)
       .json({
         success: true,

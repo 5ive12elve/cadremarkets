@@ -31,7 +31,16 @@ export const apiCall = async (endpoint, options = {}) => {
     delete defaultOptions.headers['Content-Type'];
   }
   
-  const response = await fetch(url, { ...defaultOptions, ...options });
+  const finalOptions = { ...defaultOptions, ...options };
+  
+  // Debug logging
+  console.log('=== API CALL DEBUG ===');
+  console.log('Endpoint:', endpoint);
+  console.log('Constructed URL:', url);
+  console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+  console.log('Final options:', finalOptions);
+  
+  const response = await fetch(url, finalOptions);
   
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'An error occurred' }));
