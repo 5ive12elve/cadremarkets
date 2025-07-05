@@ -1,111 +1,166 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { apiCall } from '../utils/apiConfig';
 
 export default function AuthDebug() {
-  const [debugInfo, setDebugInfo] = useState({});
-  const [testResults, setTestResults] = useState({});
-  
+  const [testResults, setTestResults] = useState({
+    basicTest: null,
+    authTest: null,
+    localStorage: null,
+    cookies: null
+  });
+  const [loading, setLoading] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
+
   useEffect(() => {
-    const info = {
-      localStorage: {
-        auth_token: !!localStorage.getItem('auth_token'),
-        auth_token_length: localStorage.getItem('auth_token')?.length || 0,
-        all_keys: Object.keys(localStorage)
-      },
-      cookies: {
-        enabled: navigator.cookieEnabled,
-        document_cookies: document.cookie,
-        cookie_count: document.cookie.split(';').filter(c => c.trim()).length
-      },
-      domain: {
-        current: window.location.hostname,
-        api: import.meta.env.VITE_API_URL ? new URL(import.meta.env.VITE_API_URL).hostname : 'N/A'
-      }
-    };
-    setDebugInfo(info);
-    console.log('=== AUTH DEBUG INFO ===', info);
+    // Check localStorage on component mount
+    checkLocalStorage();
+    checkCookies();
   }, []);
-  
-  const testApiCall = async () => {
+
+  const checkLocalStorage = () => {
+    const authToken = localStorage.getItem('auth_token');
+    setTestResults(prev => ({
+      ...prev,
+      localStorage: {
+        hasToken: !!authToken,
+        tokenLength: authToken ? authToken.length : 0,
+        tokenPreview: authToken ? authToken.substring(0, 20) + '...' : 'None',
+        allKeys: Object.keys(localStorage)
+      }
+    }));
+  };
+
+  const checkCookies = () => {
+    const cookies = document.cookie;
+    setTestResults(prev => ({
+      ...prev,
+      cookies: {
+        hasCookies: !!cookies,
+        cookieString: cookies || 'No cookies found',
+        cookieEnabled: navigator.cookieEnabled
+      }
+    }));
+  };
+
+  const testBasicApiCall = async () => {
     try {
-      console.log('Testing API call...');
+      setLoading(true);
+      console.log('Testing basic API call...');
       const response = await apiCall('/api/user/test');
-      console.log('API test response:', response);
-      setTestResults(prev => ({ ...prev, test: response }));
+      console.log('Basic API test successful:', response);
+      setTestResults(prev => ({ ...prev, basicTest: response }));
     } catch (error) {
-      console.error('API test error:', error);
-      setTestResults(prev => ({ ...prev, test: { error: error.message } }));
+      console.error('Basic API test failed:', error);
+      setTestResults(prev => ({ ...prev, basicTest: { error: error.message } }));
+    } finally {
+      setLoading(false);
     }
   };
 
   const testAuthApiCall = async () => {
     try {
+      setLoading(true);
       console.log('Testing authenticated API call...');
-      const response = await apiCall('/api/user/test-auth');
-      console.log('Auth API test response:', response);
+      const response = await apiCall('/api/user/auth-test');
+      console.log('Auth API test successful:', response);
       setTestResults(prev => ({ ...prev, authTest: response }));
     } catch (error) {
-      console.error('Auth API test error:', error);
+      console.error('Auth API test failed:', error);
       setTestResults(prev => ({ ...prev, authTest: { error: error.message } }));
+    } finally {
+      setLoading(false);
     }
   };
 
-  const clearToken = () => {
-    localStorage.removeItem('auth_token');
-    window.location.reload();
+  const refreshData = () => {
+    checkLocalStorage();
+    checkCookies();
   };
 
-  const setTestToken = () => {
-    // Set a test token (this is just for testing, not a real token)
-    localStorage.setItem('auth_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NjU2MDBiZTdiMWM0ZTdkODNiNmE0MCIsImlhdCI6MTc1MTc1NTQ0NSwiZXhwIjoxNzUxODQxODQ1fQ.test');
-    window.location.reload();
-  };
-  
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Authentication Debug</h1>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">Authentication Debug</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <button 
-          onClick={testApiCall}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+      {/* Current User State */}
+      <div className="bg-gray-100 p-4 rounded mb-6">
+        <h2 className="text-lg font-semibold mb-2">Current User State</h2>
+        <pre className="text-sm bg-white p-2 rounded">
+          {JSON.stringify({ currentUser }, null, 2)}
+        </pre>
+      </div>
+
+      {/* Local Storage */}
+      <div className="bg-blue-50 p-4 rounded mb-6">
+        <h2 className="text-lg font-semibold mb-2">Local Storage</h2>
+        <pre className="text-sm bg-white p-2 rounded">
+          {JSON.stringify(testResults.localStorage, null, 2)}
+        </pre>
+      </div>
+
+      {/* Cookies */}
+      <div className="bg-green-50 p-4 rounded mb-6">
+        <h2 className="text-lg font-semibold mb-2">Cookies</h2>
+        <pre className="text-sm bg-white p-2 rounded">
+          {JSON.stringify(testResults.cookies, null, 2)}
+        </pre>
+      </div>
+
+      {/* Test Results */}
+      <div className="bg-yellow-50 p-4 rounded mb-6">
+        <h2 className="text-lg font-semibold mb-2">API Test Results</h2>
+        
+        <div className="mb-4">
+          <h3 className="font-semibold">Basic API Test</h3>
+          <pre className="text-sm bg-white p-2 rounded">
+            {JSON.stringify(testResults.basicTest, null, 2)}
+          </pre>
+        </div>
+
+        <div className="mb-4">
+          <h3 className="font-semibold">Auth API Test</h3>
+          <pre className="text-sm bg-white p-2 rounded">
+            {JSON.stringify(testResults.authTest, null, 2)}
+          </pre>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={testBasicApiCall}
+          disabled={loading}
+          className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
         >
-          Test API Call
+          {loading ? 'Testing...' : 'Test Basic API'}
         </button>
-        <button 
+        
+        <button
           onClick={testAuthApiCall}
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          disabled={loading}
+          className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
         >
-          Test Auth API Call
+          {loading ? 'Testing...' : 'Test Auth API'}
         </button>
-        <button 
-          onClick={clearToken}
-          className="bg-red-500 text-white px-4 py-2 rounded"
+        
+        <button
+          onClick={refreshData}
+          className="bg-gray-500 text-white px-4 py-2 rounded"
         >
-          Clear Token
-        </button>
-        <button 
-          onClick={setTestToken}
-          className="bg-yellow-500 text-white px-4 py-2 rounded"
-        >
-          Set Test Token
+          Refresh Data
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Debug Info</h2>
-          <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto max-h-96">
-            {JSON.stringify(debugInfo, null, 2)}
-          </pre>
-        </div>
-        
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Test Results</h2>
-          <pre className="bg-gray-100 p-4 rounded text-sm overflow-auto max-h-96">
-            {JSON.stringify(testResults, null, 2)}
-          </pre>
-        </div>
+      {/* Instructions */}
+      <div className="bg-gray-100 p-4 rounded">
+        <h2 className="text-lg font-semibold mb-2">Debug Instructions</h2>
+        <ol className="list-decimal list-inside space-y-1 text-sm">
+          <li>Check if there&apos;s a token in localStorage (should be stored as &apos;auth_token&apos;)</li>
+          <li>Check if cookies are enabled and accessible</li>
+          <li>Test the basic API endpoint to ensure connectivity</li>
+          <li>Test the auth API endpoint to check authentication</li>
+          <li>If auth fails, the user may need to log in again</li>
+        </ol>
       </div>
     </div>
   );

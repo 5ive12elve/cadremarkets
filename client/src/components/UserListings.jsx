@@ -9,6 +9,7 @@ import { getPageTranslations } from '../locales/translations';
 import { getMainImageUrl } from '../utils/imageUtils';
 import { migrateListingImages, needsMigration } from '../utils/imageMigration';
 import { apiCall } from '../utils/apiConfig';
+import { isAuthenticated, clearAuth, isTokenExpired } from '../utils/authUtils';
 
 export default function UserListings({ userId }) {
     const navigate = useNavigate();
@@ -38,10 +39,37 @@ export default function UserListings({ userId }) {
     const fetchListings = async () => {
         try {
             setLoading(true);
+            
+            // Check authentication status first
+            if (!isAuthenticated()) {
+                setError('Authentication required. Please sign in again.');
+                return;
+            }
+            
+            const authToken = localStorage.getItem('auth_token');
+            if (isTokenExpired(authToken)) {
+                setError('Authentication expired. Please sign in again.');
+                clearAuth();
+                return;
+            }
+            
+            console.log('=== FETCH LISTINGS DEBUG ===');
+            console.log('User ID:', userId);
+            console.log('Auth token exists:', !!authToken);
+            console.log('Auth token length:', authToken.length);
+            
             const data = await apiCall(`/api/user/listings/${userId}`);
             setListings(data);
-        } catch {
-            setError('Error fetching listings');
+        } catch (error) {
+            console.error('Fetch listings error:', error);
+            
+            // Handle specific authentication errors
+            if (error.message.includes('Unauthorized') || error.message.includes('401')) {
+                setError('Authentication failed. Please sign in again.');
+                clearAuth();
+            } else {
+                setError('Error fetching listings: ' + error.message);
+            }
         } finally {
             setLoading(false);
         }
@@ -216,7 +244,28 @@ export default function UserListings({ userId }) {
     
     if (error) return (
         <div className="p-4 border border-[#db2b2e] bg-[#db2b2e]/5 text-[#db2b2e]">
-            {error}
+            <div className="flex flex-col gap-2">
+                <p>{error}</p>
+                {error.includes('Authentication') && (
+                    <div className="flex gap-2">
+                        <button 
+                            onClick={() => {
+                                setError('');
+                                fetchListings();
+                            }}
+                            className="bg-[#db2b2e] text-white px-3 py-1 rounded text-sm hover:bg-[#db2b2e]/80"
+                        >
+                            Retry
+                        </button>
+                        <button 
+                            onClick={() => window.location.href = '/sign-in'}
+                            className="bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700"
+                        >
+                            Sign In
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 
