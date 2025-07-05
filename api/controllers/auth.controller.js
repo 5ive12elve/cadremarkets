@@ -115,7 +115,8 @@ export const signin = async (req, res, next) => {
       .status(200)
       .json({
         success: true,
-        user: rest
+        user: rest,
+        token: token // Include token in response for cross-origin fallback
       });
       
     console.log('Signin successful, cookie set');
@@ -160,7 +161,8 @@ export const google = async (req, res, next) => {
         .status(200)
         .json({
           success: true,
-          user: rest
+          user: rest,
+          token: token // Include token in response for cross-origin fallback
         });
     } else {
       const generatedPassword =
@@ -183,7 +185,8 @@ export const google = async (req, res, next) => {
         .status(200)
         .json({ 
           success: true, 
-          user: rest 
+          user: rest,
+          token: token // Include token in response for cross-origin fallback
         });
     }
   } catch (error) {

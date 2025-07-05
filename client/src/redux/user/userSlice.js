@@ -53,6 +53,10 @@ const userSlice = createSlice({
       state.currentUser = null;
       state.loading = false;
       state.error = null;
+      // Clear stored token from localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+      }
     },
     signOutUserFailure: (state, action) => {
       state.error = action.payload;

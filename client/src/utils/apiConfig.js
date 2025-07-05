@@ -17,6 +17,9 @@ export const getApiUrl = (endpoint = '') => {
 export const apiCall = async (endpoint, options = {}) => {
   const url = getApiUrl(endpoint);
   
+  // Get stored token as fallback for cross-origin cookie issues
+  const storedToken = localStorage.getItem('auth_token');
+  
   // Default options
   const defaultOptions = {
     credentials: 'include',
@@ -25,6 +28,11 @@ export const apiCall = async (endpoint, options = {}) => {
       ...options.headers
     }
   };
+  
+  // Add Authorization header if token is available
+  if (storedToken) {
+    defaultOptions.headers['Authorization'] = `Bearer ${storedToken}`;
+  }
   
   // If body is FormData, remove Content-Type header to let browser set it
   if (options.body instanceof FormData) {
@@ -41,6 +49,7 @@ export const apiCall = async (endpoint, options = {}) => {
   console.log('Final options:', finalOptions);
   console.log('Credentials included:', finalOptions.credentials);
   console.log('Mode:', finalOptions.mode);
+  console.log('Stored token available:', !!storedToken);
   
   // Check if cookies are available
   console.log('Document cookie available:', typeof document !== 'undefined' && document.cookie);

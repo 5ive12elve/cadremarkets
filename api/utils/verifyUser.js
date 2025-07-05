@@ -5,12 +5,22 @@ export const verifyToken = (req, res, next) => {
   console.log('=== VERIFY TOKEN DEBUG ===');
   console.log('Request cookies:', req.cookies);
   console.log('Request headers:', req.headers);
-  console.log('Access token:', req.cookies.access_token);
+  console.log('Access token from cookies:', req.cookies.access_token);
+  console.log('Authorization header:', req.headers.authorization);
   
-  const accessToken = req.cookies.access_token;
+  let accessToken = req.cookies.access_token;
+
+  // Fallback: check Authorization header if no cookie
+  if (!accessToken && req.headers.authorization) {
+    const authHeader = req.headers.authorization;
+    if (authHeader.startsWith('Bearer ')) {
+      accessToken = authHeader.substring(7);
+      console.log('Using token from Authorization header');
+    }
+  }
 
   if (!accessToken) {
-    console.log('No access token found in cookies');
+    console.log('No access token found in cookies or Authorization header');
     return next(errorHandler(401, 'Unauthorized'));
   }
 

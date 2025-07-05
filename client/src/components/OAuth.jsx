@@ -52,6 +52,12 @@ export default function OAuth() {
       });
       
       if (data.success) {
+        // Store token in localStorage as fallback for cross-origin cookie issues
+        if (data.token) {
+          localStorage.setItem('auth_token', data.token);
+          console.log('Token stored in localStorage for cross-origin fallback');
+        }
+        
         dispatch(signInSuccess(data.user));
         navigate('/');
       } else {
