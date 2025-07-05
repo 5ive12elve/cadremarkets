@@ -31,7 +31,7 @@ export const login = async (req, res, next) => {
       .cookie('backoffice_token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'none',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
       })
       .status(200)

@@ -64,6 +64,9 @@ if (process.env.MONGO) {
 
 const app = express();
 
+// Trust proxy for rate limiting behind load balancers/proxies
+app.set('trust proxy', 1);
+
 // Security middleware - must be first
 app.use(helmet({
   contentSecurityPolicy: {
