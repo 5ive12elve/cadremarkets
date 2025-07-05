@@ -1,18 +1,22 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'; // Import PropTypes
+import { getMainImageUrl } from '../utils/imageUtils';
 
 export default function ListingItem({ listing }) {
+  const mainImageUrl = getMainImageUrl(listing.imageUrls);
+
   return (
     <div className="border border-primary bg-white dark:bg-black hover:!bg-[#db2b2e] transition-all duration-300 text-black dark:text-white hover:!text-white w-full max-w-[265px] sm:max-w-none mx-auto group relative z-10">
       <Link to={`/listing/${listing._id}`} className="block w-full h-full">
         <div className="aspect-[4/3] w-full">
           <img
-            src={
-              listing.imageUrls[0] ||
-              'https://via.placeholder.com/320x240?text=No+Image'
-            }
+            src={mainImageUrl}
             alt="listing cover"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              console.error(`Failed to load image for listing ${listing._id}:`, mainImageUrl);
+              e.target.src = 'https://via.placeholder.com/320x240?text=No+Image';
+            }}
           />
         </div>
         <div className="p-3 sm:p-4 w-full overflow-hidden">

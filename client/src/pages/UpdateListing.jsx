@@ -9,6 +9,7 @@ import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getAuth } from 'firebase/auth';
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -217,8 +218,19 @@ export default function UpdateListing() {
         return;
       }
 
+      // Check if user is authenticated
       const storage = getStorage(app);
-      const fileName = new Date().getTime() + file.name;
+      const auth = getAuth(app);
+      const currentUser = auth.currentUser;
+      
+      if (!currentUser) {
+        // User not authenticated - require authentication for uploads
+        reject(new Error('Please sign in to upload images.'));
+        return;
+      }
+
+      // Use a more specific path structure for better organization
+      const fileName = `listings/${currentUser.uid}/${new Date().getTime()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
       
@@ -228,8 +240,43 @@ export default function UpdateListing() {
           // Optional: You can add progress tracking here if needed
         },
         (error) => {
-          console.error('Firebase Storage Error:', error);
-          reject(error);
+          console.error('Firebase Storage Error Details:', {
+            code: error.code,
+            message: error.message,
+            serverResponse: error.serverResponse,
+            customMetadata: error.customMetadata
+          });
+          
+          // Enhanced error handling with better error messages
+          let errorMessage = 'Upload failed';
+          
+          switch (error.code) {
+            case 'storage/unauthorized':
+              errorMessage = 'Upload failed: You are not authorized to upload images.';
+              break;
+            case 'storage/canceled':
+              errorMessage = 'Upload was canceled.';
+              break;
+            case 'storage/unknown':
+              errorMessage = 'Upload failed: An unknown error occurred. Please try again.';
+              break;
+            case 'storage/object-not-found':
+              errorMessage = 'Upload failed: Storage location not found.';
+              break;
+            case 'storage/quota-exceeded':
+              errorMessage = 'Upload failed: Storage quota exceeded.';
+              break;
+            case 'storage/unauthenticated':
+              errorMessage = 'Upload failed: Please sign in to upload images.';
+              break;
+            case 'storage/retry-limit-exceeded':
+              errorMessage = 'Upload failed: Too many attempts. Please try again later.';
+              break;
+            default:
+              errorMessage = `Upload failed: ${error.message || 'Unknown error'}`;
+          }
+          
+          reject(new Error(errorMessage));
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref)
@@ -238,7 +285,7 @@ export default function UpdateListing() {
             })
             .catch((error) => {
               console.error('Error getting download URL:', error);
-              reject(error);
+              reject(new Error('Upload completed but failed to get download URL. Please try again.'));
             });
         }
       );

@@ -24,6 +24,7 @@ import { FiCheck } from 'react-icons/fi';
 import ProfileUpdateSuccessPopup from '../components/ui/ProfileUpdateSuccessPopup';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
+import { apiCall } from '../utils/apiConfig';
 
 
 export default function Profile() {
@@ -141,18 +142,12 @@ export default function Profile() {
     }, 100);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/upload/profile`, {
+      const data = await apiCall('/api/listing/upload/profile', {
         method: 'POST',
         body: formData,
       });
 
       clearInterval(progressInterval);
-
-      if (!response.ok) {
-        throw new Error(`Server upload failed: ${response.status}`);
-      }
-
-      const data = await response.json();
       
       if (data.success) {
         // Convert relative URL to full URL for consistency
@@ -175,18 +170,10 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/user/update/${currentUser._id}`, {
+      const data = await apiCall(`/api/user/update/${currentUser._id}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(updateUserFailure(data.message));
-        return;
-      }
 
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
@@ -200,14 +187,9 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/user/delete/${currentUser._id}`, {
+      const data = await apiCall(`/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
       });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data.message));
-        return;
-      }
       dispatch(deleteUserSuccess(data));
     } catch (err) {
       dispatch(deleteUserFailure(err.message));
@@ -217,12 +199,7 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/auth/signout`);
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data.message));
-        return;
-      }
+      const data = await apiCall('/api/auth/signout');
       dispatch(deleteUserSuccess(data));
       
       // Custom success toast

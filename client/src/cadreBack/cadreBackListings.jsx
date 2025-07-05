@@ -8,6 +8,7 @@ import Button from '../components/shared/Button';
 import GE02Loader from '../components/GE02Loader';
 import pdfExporter from '../utils/pdfExporter';
 import toast from 'react-hot-toast';
+import { getMainImageUrl, processImageUrls } from '../utils/imageUtils';
 
 const LISTING_STATUSES = {
     PENDING: 'Pending',
@@ -206,10 +207,19 @@ const CadreBackListings = () => {
                 <div className="flex items-center gap-3">
                     <div className="w-12 h-12 bg-black border border-[#db2b2e]/20 flex items-center justify-center overflow-hidden">
                         {row.imageUrls?.[0] ? (
-                            <img src={row.imageUrls[0]} alt={row.name} className="w-full h-full object-cover" />
+                            <img 
+                                src={getMainImageUrl(row.imageUrls)} 
+                                alt={row.name} 
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'flex';
+                                }}
+                            />
                         ) : (
                             <FiImage className="w-6 h-6 text-gray-400" />
                         )}
+                        <FiImage className="w-6 h-6 text-gray-400 hidden" />
                     </div>
                     <div>
                         <p className="font-medium text-white">{row.name}</p>
@@ -460,7 +470,7 @@ const CadreBackListings = () => {
                             <h3 className="text-xl font-semibold mb-4 text-[#db2b2e]">Images</h3>
                             {selectedListing.imageUrls && selectedListing.imageUrls.length > 0 ? (
                                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                    {selectedListing.imageUrls.map((imageUrl, index) => (
+                                    {processImageUrls(selectedListing.imageUrls).map((imageUrl, index) => (
                                         <div 
                                             key={index} 
                                             className="relative group cursor-pointer"

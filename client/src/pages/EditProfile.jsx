@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import AlertDialog from '../components/ui/AlertDialog';
+import { apiCall } from '../utils/apiConfig';
 
 export default function EditProfile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -52,18 +53,10 @@ export default function EditProfile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/user/update/${currentUser._id}`, {
+      const data = await apiCall(`/api/user/update/${currentUser._id}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (!data.success) {
-        dispatch(updateUserFailure(data.message));
-        return;
-      }
 
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
@@ -76,13 +69,10 @@ export default function EditProfile() {
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/users/${currentUser._id}/password`, {
+      await apiCall(`/api/users/${currentUser._id}/password`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(passwordData),
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Error updating password');
       showAlert('Password Updated', 'Your password has been updated successfully!', 'success');
       setPasswordData({ currentPassword: '', newPassword: '' });
     } catch (err) {
@@ -99,16 +89,9 @@ export default function EditProfile() {
 
     if (!token) throw new Error('Token is missing');
   
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/user/delete/${currentUser._id}`, {
+      const data = await apiCall(`/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`, // Ensure token is sent
-        },
       });
-  
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to delete account');
   
       dispatch(deleteUserSuccess(data));
       localStorage.removeItem('user'); // Remove user data from local storage

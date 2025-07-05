@@ -272,28 +272,6 @@ export default function CreateListing() {
     }
   };
 
-  // Fallback upload method using local server
-  const storeImageFallback = async (file) => {
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-              const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/upload/image`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Server upload failed: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data.url;
-    } catch (error) {
-      throw new Error(`Local upload failed: ${error.message}`);
-    }
-  };
-
   const storeImage = (file) => {
     return new Promise((resolve, reject) => {
       // Double-check file size before Firebase upload
@@ -308,10 +286,8 @@ export default function CreateListing() {
       const currentUser = auth.currentUser;
       
       if (!currentUser) {
-        // User not authenticated, use fallback upload
-        storeImageFallback(file)
-          .then(resolve)
-          .catch(reject);
+        // User not authenticated - require authentication for uploads
+        reject(new Error('Please sign in to upload images.'));
         return;
       }
 
@@ -334,17 +310,36 @@ export default function CreateListing() {
             customMetadata: error.customMetadata
           });
           
-          // Enhanced error handling for 412 errors - try fallback
-          if (error.message.includes('412') || error.code === 'storage/unknown') {
-            // Firebase Storage failed, trying fallback upload
-            storeImageFallback(file)
-              .then(resolve)
-              .catch((fallbackError) => {
-                reject(new Error(`Both Firebase Storage and server upload failed. Firebase: ${error.message}, Server: ${fallbackError.message}`));
-              });
-          } else {
-            reject(error);
+          // Enhanced error handling with better error messages
+          let errorMessage = 'Upload failed';
+          
+          switch (error.code) {
+            case 'storage/unauthorized':
+              errorMessage = 'Upload failed: You are not authorized to upload images.';
+              break;
+            case 'storage/canceled':
+              errorMessage = 'Upload was canceled.';
+              break;
+            case 'storage/unknown':
+              errorMessage = 'Upload failed: An unknown error occurred. Please try again.';
+              break;
+            case 'storage/object-not-found':
+              errorMessage = 'Upload failed: Storage location not found.';
+              break;
+            case 'storage/quota-exceeded':
+              errorMessage = 'Upload failed: Storage quota exceeded.';
+              break;
+            case 'storage/unauthenticated':
+              errorMessage = 'Upload failed: Please sign in to upload images.';
+              break;
+            case 'storage/retry-limit-exceeded':
+              errorMessage = 'Upload failed: Too many attempts. Please try again later.';
+              break;
+            default:
+              errorMessage = `Upload failed: ${error.message || 'Unknown error'}`;
           }
+          
+          reject(new Error(errorMessage));
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref)
@@ -354,7 +349,7 @@ export default function CreateListing() {
             })
             .catch((error) => {
               console.error('Error getting download URL:', error);
-              reject(error);
+              reject(new Error('Upload completed but failed to get download URL. Please try again.'));
             });
         }
       );

@@ -6,6 +6,9 @@ import PropTypes from 'prop-types';
 import ConfirmDialog from './ui/ConfirmDialog';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
+import { getMainImageUrl } from '../utils/imageUtils';
+import { migrateListingImages, needsMigration } from '../utils/imageMigration';
+import { apiCall } from '../utils/apiConfig';
 
 export default function UserListings({ userId }) {
     const navigate = useNavigate();
@@ -13,6 +16,7 @@ export default function UserListings({ userId }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('all');
+    const [migrating, setMigrating] = useState(false);
     
     // Language context
     const { currentLang, isArabic } = useLanguage();
@@ -34,12 +38,7 @@ export default function UserListings({ userId }) {
     const fetchListings = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/user/listings/${userId}`);
-            const data = await res.json();
-            if (data.success === false) {
-                setError(data.message);
-                return;
-            }
+            const data = await apiCall(`/api/user/listings/${userId}`);
             setListings(data);
         } catch {
             setError('Error fetching listings');
@@ -72,14 +71,9 @@ export default function UserListings({ userId }) {
             t.deleteListingConfirm || 'Are you sure you want to delete this listing? This action cannot be undone.',
             async () => {
                 try {
-                    const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/delete/${listingId}`, {
+                    await apiCall(`/api/listing/delete/${listingId}`, {
                         method: 'DELETE',
                     });
-                    const data = await res.json();
-                    if (data.success === false) {
-                        toast.error(data.message);
-                        return;
-                    }
                     setListings((prev) => prev.filter((listing) => listing._id !== listingId));
                     toast.success(common.listingDeleted);
                 } catch {
@@ -163,6 +157,55 @@ export default function UserListings({ userId }) {
         return listings.filter(listing => listing.status === status).length;
     };
 
+    // Check if any listings need migration
+    const listingsNeedingMigration = listings.filter(listing => 
+        listing.imageUrls?.some(url => needsMigration(url))
+    );
+
+    const handleMigrateImages = async () => {
+        if (listingsNeedingMigration.length === 0) {
+            toast.success('All images are already migrated!');
+            return;
+        }
+
+        setMigrating(true);
+        let migratedCount = 0;
+
+        try {
+            for (const listing of listingsNeedingMigration) {
+                try {
+                    const migratedListing = await migrateListingImages(listing);
+                    
+                    // Update the listing in the database
+                    await apiCall(`/api/listing/update/${listing._id}`, {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                            imageUrls: migratedListing.imageUrls
+                        }),
+                    });
+                    
+                    migratedCount++;
+                    // Update local state
+                    setListings(prev => prev.map(l => 
+                        l._id === listing._id ? { ...l, imageUrls: migratedListing.imageUrls } : l
+                    ));
+                } catch (error) {
+                    console.error(`Failed to migrate listing ${listing._id}:`, error);
+                }
+            }
+
+            if (migratedCount > 0) {
+                toast.success(`Successfully migrated ${migratedCount} listings!`);
+            } else {
+                toast.error('Failed to migrate any listings. Please try again.');
+            }
+        } catch {
+            toast.error('Migration failed. Please try again.');
+        } finally {
+            setMigrating(false);
+        }
+    };
+
     if (loading) return (
         <div className="flex justify-center items-center h-64">
             <div className="w-12 h-12 relative">
@@ -180,21 +223,38 @@ export default function UserListings({ userId }) {
     return (
         <>
             <div dir={isArabic ? 'rtl' : 'ltr'}>
-                {/* Tabs */}
-                <div className="flex flex-wrap gap-4 mb-8">
-                    {tabs.map(tab => (
+                {/* Tabs and Migration Button */}
+                <div className="flex flex-wrap gap-4 mb-8 items-center justify-between">
+                    <div className="flex flex-wrap gap-4">
+                        {tabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`px-6 py-3 font-semibold transition-colors ${isArabic ? 'font-noto' : 'font-nt'} ${
+                                    activeTab === tab.id
+                                        ? 'bg-[#db2b2e] text-white'
+                                        : 'bg-white dark:bg-black border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white'
+                                }`}
+                            >
+                                {tab.label} ({getListingCount(tab.id)})
+                            </button>
+                        ))}
+                    </div>
+                    
+                    {/* Migration Button */}
+                    {listingsNeedingMigration.length > 0 && (
                         <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`px-6 py-3 font-semibold transition-colors ${isArabic ? 'font-noto' : 'font-nt'} ${
-                                activeTab === tab.id
-                                    ? 'bg-[#db2b2e] text-white'
-                                    : 'bg-white dark:bg-black border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white'
-                            }`}
+                            onClick={handleMigrateImages}
+                            disabled={migrating}
+                            className={`px-4 py-2 text-sm font-medium transition-colors ${
+                                migrating 
+                                    ? 'bg-gray-500 text-white cursor-not-allowed' 
+                                    : 'bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90'
+                            } ${isArabic ? 'font-noto' : 'font-nt'}`}
                         >
-                            {tab.label} ({getListingCount(tab.id)})
+                            {migrating ? 'Migrating...' : `Migrate ${listingsNeedingMigration.length} Listing(s)`}
                         </button>
-                    ))}
+                    )}
                 </div>
 
                 {/* Listings Grid */}
@@ -207,7 +267,7 @@ export default function UserListings({ userId }) {
                             {/* Listing Image with Sharp Edges */}
                             <div className="h-[200px] sm:h-[250px] md:h-[300px] relative">
                                 <img
-                                    src={listing.imageUrls[0]}
+                                    src={getMainImageUrl(listing.imageUrls)}
                                     alt={listing.name}
                                     className="w-full h-full object-cover"
                                 />

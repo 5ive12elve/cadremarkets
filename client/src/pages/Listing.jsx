@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
 import {
@@ -20,6 +20,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import { processImageUrls } from '../utils/imageUtils';
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -55,8 +56,7 @@ export default function Listing() {
   const descriptionText = useTranslation('listing', 'description', currentLang);
   const priceText = useTranslation('listing', 'price', currentLang);
   const availableText = useTranslation('listing', 'available', currentLang);
-  const quantityText = useTranslation('listing', 'quantity', currentLang);
-  const selectSizeText = useTranslation('listing', 'selectSize', currentLang);
+
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -69,7 +69,14 @@ export default function Listing() {
           setLoading(false);
           return;
         }
-        setListing(data);
+        
+        // Process image URLs to handle missing images
+        const processedListing = {
+          ...data,
+          imageUrls: processImageUrls(data.imageUrls)
+        };
+        
+        setListing(processedListing);
         setLoading(false);
         setError(false);
       } catch {
