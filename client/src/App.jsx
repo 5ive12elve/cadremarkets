@@ -38,6 +38,11 @@ import ReturnPolicy from './pages/ReturnPolicy';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 
+// Debug: Check if frontend has been updated
+console.log('=== FRONTEND VERSION CHECK ===');
+console.log('Frontend updated with token storage: true');
+console.log('Current timestamp:', new Date().toISOString());
+
 // Layout component for the main website
 const MainLayout = () => {
     return (
