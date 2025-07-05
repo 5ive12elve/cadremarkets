@@ -65,6 +65,10 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       
+      console.log('=== SIGNIN RESPONSE DEBUG ===');
+      console.log('Signin response:', data);
+      console.log('Token in response:', !!data.token);
+      
       if (data.success === false) {
         dispatch(signInFailure(data.message));
         toast.error(data.message);
@@ -75,6 +79,9 @@ export default function SignIn() {
       if (data.token) {
         localStorage.setItem('auth_token', data.token);
         console.log('Token stored in localStorage for cross-origin fallback');
+        console.log('Stored token length:', data.token.length);
+      } else {
+        console.log('No token received in signin response');
       }
       
       dispatch(signInSuccess(data.user));

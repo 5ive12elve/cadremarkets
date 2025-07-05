@@ -51,11 +51,18 @@ export default function OAuth() {
         }),
       });
       
+      console.log('=== GOOGLE AUTH RESPONSE DEBUG ===');
+      console.log('Google auth response:', data);
+      console.log('Token in response:', !!data.token);
+      
       if (data.success) {
         // Store token in localStorage as fallback for cross-origin cookie issues
         if (data.token) {
           localStorage.setItem('auth_token', data.token);
           console.log('Token stored in localStorage for cross-origin fallback');
+          console.log('Stored token length:', data.token.length);
+        } else {
+          console.log('No token received in Google auth response');
         }
         
         dispatch(signInSuccess(data.user));
