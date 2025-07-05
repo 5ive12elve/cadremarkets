@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { FiCheck } from 'react-icons/fi';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
+import { apiCall } from '../utils/apiConfig';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -59,19 +60,10 @@ export default function SignIn() {
     try {
       dispatch(signInStart());
       
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/auth/signin`, {
+      const data = await apiCall('/api/auth/signin', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(formData),
       });
-      
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      
-      const data = await res.json();
       
       if (data.success === false) {
         dispatch(signInFailure(data.message));

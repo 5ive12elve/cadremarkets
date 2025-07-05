@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { FiCheck } from 'react-icons/fi';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
+import { apiCall } from '../utils/apiConfig';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -35,14 +36,10 @@ export default function SignUp() {
     
     try {
       setLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/auth/signup`, {
+      const data = await apiCall('/api/auth/signup', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
       if (data.success === false) {
         setLoading(false);
         setError(data.message);
