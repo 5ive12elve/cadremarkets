@@ -195,68 +195,68 @@ export default function Header() {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-black p-3 sm:p-4 border-t border-primary/10 transition-colors duration-300 shadow-lg">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-black p-4 sm:p-5 border-t border-primary/10 transition-colors duration-300 shadow-lg">
             <nav>
-              <ul className="flex flex-col gap-3">
+              <ul className="flex flex-col gap-4">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-sm sm:text-base font-normal font-primary ${
+                  <li className={`text-base sm:text-lg font-normal font-primary ${
                     isActive('/') ? 'text-primary font-bold' : 'text-black dark:text-white'
                   }`}>
                     {t.home || 'Home'}
                   </li>
                 </Link>
                 <Link to="/search" onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-sm sm:text-base font-normal font-primary ${
+                  <li className={`text-base sm:text-lg font-normal font-primary ${
                     isActive('/search') ? 'text-primary font-bold' : 'text-black dark:text-white'
                   }`}>
                     {t.marketplace || 'Marketplace'}
                   </li>
                 </Link>
                 <Link to="/projects" onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-sm sm:text-base font-normal font-primary ${
+                  <li className={`text-base sm:text-lg font-normal font-primary ${
                     isActive('/projects') ? 'text-primary font-bold' : 'text-black dark:text-white'
                   }`}>
                     {t.projects || 'Projects'}
                   </li>
                 </Link>
                 <Link to="/services" onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-sm sm:text-base font-normal font-primary ${
+                  <li className={`text-base sm:text-lg font-normal font-primary ${
                     isActive('/services') ? 'text-primary font-bold' : 'text-black dark:text-white'
                   }`}>
                     {t.services || 'Services'}
                   </li>
                 </Link>
                 <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-sm sm:text-base font-normal font-primary ${
+                  <li className={`text-base sm:text-lg font-normal font-primary ${
                     isActive('/about') ? 'text-primary font-bold' : 'text-black dark:text-white'
                   }`}>
                     {t.about || 'About'}
                   </li>
                 </Link>
                 <Link to={currentUser ? '/profile' : '/sign-in'} onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-sm sm:text-base font-normal font-primary ${
+                  <li className={`text-base sm:text-lg font-normal font-primary ${
                     isActive('/profile') || isActive('/sign-in') ? 'text-primary font-bold' : 'text-black dark:text-white'
                   }`}>
                     {currentUser ? (t.profile || 'Profile') : (t.signin || 'Sign in')}
                   </li>
                 </Link>
                 <Link to="/cart" onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-sm sm:text-base font-normal flex items-center font-primary ${
+                  <li className={`text-base sm:text-lg font-normal flex items-center font-primary ${
                     isActive('/cart') ? 'text-primary font-bold' : 'text-black dark:text-white'
                   }`}>
                     {t.cart || 'Cart'}
                     {cartItems?.length > 0 && (
-                      <span className="ml-1 bg-primary text-black text-xs rounded-full px-1.5 py-0.5">
+                      <span className="ml-2 bg-primary text-black text-sm rounded-full px-2 py-1">
                         {cartItems.length}
                       </span>
                     )}
                   </li>
                 </Link>
-                <li className="flex items-center justify-between pt-2 border-t border-gray-300 dark:border-white/20">
-                  <span className="text-sm sm:text-base font-normal text-black dark:text-white font-primary">
+                <li className="flex items-center justify-between pt-3 border-t border-gray-300 dark:border-white/20">
+                  <span className="text-base sm:text-lg font-normal text-black dark:text-white font-primary">
                     {t.languageTheme || 'Language / Theme'}
                   </span>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <LanguageToggle />
                     <ThemeToggle />
                   </div>
@@ -268,13 +268,13 @@ export default function Header() {
                 handleSubmit(e);
                 setIsMobileMenuOpen(false);
               }}
-              className="mt-3 flex items-center border border-transparent hover:border-primary focus-within:border-primary transition-colors duration-200 p-2 bg-white/50 dark:bg-black/50"
+              className="mt-4 flex items-center border border-transparent hover:border-primary focus-within:border-primary transition-colors duration-200 p-3 bg-white/50 dark:bg-black/50"
               dir={isArabic ? 'rtl' : 'ltr'}
             >
               <input
                 type="text"
                 placeholder={t.search || 'Search...'}
-                className={`bg-transparent focus:outline-none w-full py-1 text-black dark:text-white placeholder-gray-500 dark:placeholder-white/70 text-sm font-primary ${
+                className={`bg-transparent focus:outline-none w-full py-2 text-black dark:text-white placeholder-gray-500 dark:placeholder-white/70 text-base font-primary ${
                   isArabic ? 'text-right' : 'text-left'
                 }`}
                 value={searchTerm}
@@ -284,7 +284,7 @@ export default function Header() {
               <button className={`hover:text-primary transition-colors duration-200 ${
                 isArabic ? 'mr-2' : 'ml-2'
               }`}>
-                <FaSearch className="text-black dark:text-white hover:text-primary transition-colors duration-200 w-4 h-4" />
+                <FaSearch className="text-black dark:text-white hover:text-primary transition-colors duration-200 w-5 h-5" />
               </button>
             </form>
           </div>

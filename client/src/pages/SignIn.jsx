@@ -80,6 +80,17 @@ export default function SignIn() {
         localStorage.setItem('auth_token', data.token);
         console.log('Token stored in localStorage for cross-origin fallback');
         console.log('Stored token length:', data.token.length);
+        
+        // Verify token was stored correctly
+        const storedToken = localStorage.getItem('auth_token');
+        console.log('Token verification - stored token exists:', !!storedToken);
+        console.log('Token verification - stored token length:', storedToken ? storedToken.length : 0);
+        console.log('Token verification - tokens match:', storedToken === data.token);
+        
+        // Test if we can access the token immediately
+        console.log('=== TOKEN ACCESS TEST ===');
+        console.log('localStorage.getItem("auth_token"):', !!localStorage.getItem('auth_token'));
+        console.log('localStorage keys:', Object.keys(localStorage));
       } else {
         console.log('No token received in signin response');
       }

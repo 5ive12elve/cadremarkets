@@ -105,7 +105,7 @@ export default function Services() {
             className={`flex flex-col items-start mb-6 md:mb-8 md:flex-1`}
           >
             <div className="flex items-center gap-4 mb-4">
-              <h2 className={`text-primary text-2xl md:text-3xl font-normal ${isArabic ? 'font-amiri font-bold' : 'font-nt'}`}>
+              <h2 className={`text-primary text-2xl sm:text-3xl md:text-4xl font-normal ${isArabic ? 'font-amiri font-bold' : 'font-nt'}`}>
             {useTranslation('home', 'services', currentLang)}
               </h2>
             </div>
@@ -122,7 +122,7 @@ export default function Services() {
               }}
             />
           </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 md:flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5 md:flex-1">
             {Object.entries(services).map(([category, items], index) => (
               <motion.div 
                 key={category}
@@ -130,10 +130,10 @@ export default function Services() {
                 custom={index}
                 className="relative group"
               >
-                <h3 className="text-primary text-lg md:text-xl font-medium underline underline-offset-4 mb-2 md:mb-3">
+                <h3 className="text-primary text-lg sm:text-xl md:text-2xl font-medium underline underline-offset-4 mb-3 md:mb-4">
                   {category}
                 </h3>
-                <ul className="space-y-1 text-black dark:text-white text-sm md:text-base font-light transition-colors duration-300">
+                <ul className="space-y-2 text-black dark:text-white text-base sm:text-lg md:text-xl font-light transition-colors duration-300">
                   {items.map((item, itemIndex) => (
                     <motion.li 
                       key={item}
@@ -148,9 +148,9 @@ export default function Services() {
                           },
                         },
                       }}
-                      className="group/item flex items-center gap-2 hover:text-red-500 transition-colors"
+                      className="group/item flex items-center gap-3 hover:text-red-500 transition-colors"
                     >
-                      <span className="w-1.5 h-1.5 bg-primary rounded-full group-hover/item:bg-red-500 transition-colors"></span>
+                      <span className="w-2 h-2 bg-primary rounded-full group-hover/item:bg-red-500 transition-colors"></span>
                       {item}
                     </motion.li>
                   ))}
@@ -165,7 +165,7 @@ export default function Services() {
         className="w-full max-w-7xl mx-auto px-3 mt-6 md:mt-8 flex justify-end"
       >
         <motion.button 
-          className={`bg-primary text-[#f3eb4b] font-bold px-6 py-3 hover:bg-primary/90 transition ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
+          className={`bg-primary text-[#f3eb4b] font-bold px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg hover:bg-primary/90 transition ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowRequestModal(true)}

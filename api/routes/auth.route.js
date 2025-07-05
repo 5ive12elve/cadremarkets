@@ -1,5 +1,6 @@
 import express from 'express';
 import { google, signOut, signin, signup } from '../controllers/auth.controller.js';
+import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -124,5 +125,41 @@ router.post('/google', google);
  *         description: Server error
  */
 router.get('/signout', signOut)
+
+/**
+ * @swagger
+ * /api/auth/verify:
+ *   get:
+ *     tags:
+ *       - Auth
+ *     summary: Verify authentication token
+ *     description: Verify if the current user is authenticated
+ *     responses:
+ *       200:
+ *         description: User is authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 user:
+ *                   type: object
+ *       401:
+ *         description: User is not authenticated
+ */
+router.get('/verify', verifyToken, (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: {
+      id: req.user.id,
+      username: req.user.username,
+      email: req.user.email,
+      role: req.user.role
+    }
+  });
+});
 
 export default router;

@@ -60,37 +60,37 @@ export default function WhoIsThisFor() {
       >
         <motion.p 
           variants={itemVariants}
-          className="text-sm text-primary mb-2"
+          className="text-base text-primary mb-3"
         >
           {useTranslation('home', 'artistsBrands', currentLang)}
         </motion.p>
         <motion.h2 
           variants={itemVariants}
-          className={`text-3xl font-medium mb-4 ${isArabic ? 'font-amiri font-bold' : 'font-nt'}`}
+          className={`text-2xl sm:text-3xl md:text-4xl font-medium mb-5 ${isArabic ? 'font-amiri font-bold' : 'font-nt'}`}
         >
           {useTranslation('home', 'whoIsThisBuiltFor', currentLang)}
         </motion.h2>
         <motion.p 
           variants={itemVariants}
-          className="mb-3"
+          className="mb-4 text-base sm:text-lg"
         >
           {useTranslation('home', 'makingOrAmplifying', currentLang)}<br />{useTranslation('home', 'eitherWayHome', currentLang)}
         </motion.p>
         <motion.p 
           variants={itemVariants}
-          className="mb-3"
+          className="mb-4 text-base sm:text-lg"
         >
           {useTranslation('home', 'buildToolsDaily', currentLang)} <span className="bg-primary text-white px-1">{useTranslation('home', 'creativeHustle', currentLang)}</span>
         </motion.p>
         <motion.p 
           variants={itemVariants}
-          className="mb-3"
+          className="mb-4 text-base sm:text-lg"
         >
           {useTranslation('home', 'believeInOriginal', currentLang)}
         </motion.p>
         <motion.p 
           variants={itemVariants}
-          className="mb-6"
+          className="mb-6 text-base sm:text-lg"
         >
           {useTranslation('home', 'sayWhatWeDo', currentLang)}<br />{useTranslation('home', 'doItBoldly', currentLang)} <span className="bg-primary text-white px-1">{useTranslation('home', 'boldly', currentLang)}</span>
         </motion.p>
@@ -125,13 +125,13 @@ export default function WhoIsThisFor() {
           <div className={`text-center ${isArabic ? 'md:text-right' : 'md:text-left'} flex-1 min-w-0 ${isArabic ? 'font-noto' : 'font-nt'}`}>
             <motion.h3 
               variants={itemVariants}
-              className={`text-primary text-[18px] md:text-[24px] font-bold mb-2 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
+              className={`text-primary text-[20px] sm:text-[22px] md:text-[24px] font-bold mb-3 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
             >
               {useTranslation('home', 'forArtists', currentLang)}
             </motion.h3>
             <motion.p 
               variants={itemVariants}
-              className="text-black dark:text-white text-[14px] md:text-[18px] font-light mb-4 leading-snug min-h-[60px] flex items-center"
+              className="text-black dark:text-white text-[16px] sm:text-[17px] md:text-[18px] font-light mb-4 leading-relaxed min-h-[60px] flex items-center"
             >
               {useTranslation('home', 'artistsDescription', currentLang)}
             </motion.p>
@@ -139,7 +139,7 @@ export default function WhoIsThisFor() {
               <motion.button 
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`bg-primary text-white px-4 py-2 font-semibold hover:opacity-90 text-sm whitespace-nowrap ${isArabic ? 'font-amiri' : 'font-nt'}`}
+                className={`bg-primary text-white px-5 py-3 font-semibold hover:opacity-90 text-base whitespace-nowrap ${isArabic ? 'font-amiri' : 'font-nt'}`}
               >
                 {useTranslation('home', 'joinAsArtist', currentLang)}
               </motion.button>
@@ -164,20 +164,20 @@ export default function WhoIsThisFor() {
           <div className={`text-center ${isArabic ? 'md:text-right' : 'md:text-left'} flex-1 min-w-0 ${isArabic ? 'font-noto' : 'font-nt'}`}>
             <motion.h3 
               variants={itemVariants}
-              className={`text-primary text-[18px] md:text-[24px] font-bold mb-2 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
+              className={`text-primary text-[20px] sm:text-[22px] md:text-[24px] font-bold mb-3 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
             >
               {useTranslation('home', 'forBrandsClients', currentLang)}
             </motion.h3>
             <motion.p 
               variants={itemVariants}
-              className="text-black dark:text-white text-[14px] md:text-[18px] font-light mb-4 leading-snug min-h-[60px] flex items-center"
+              className="text-black dark:text-white text-[16px] sm:text-[17px] md:text-[18px] font-light mb-4 leading-relaxed min-h-[60px] flex items-center"
             >
               {useTranslation('home', 'brandsDescription', currentLang)}
             </motion.p>
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`border border-primary text-black dark:text-white px-4 py-2 font-semibold hover:bg-primary hover:text-black text-sm whitespace-nowrap ${isArabic ? 'font-amiri' : 'font-nt'}`}
+              className={`border border-primary text-black dark:text-white px-5 py-3 font-semibold hover:bg-primary hover:text-black text-base whitespace-nowrap ${isArabic ? 'font-amiri' : 'font-nt'}`}
               onClick={() => setShowRequestModal(true)}
             >
               {useTranslation('home', 'bookAdServices', currentLang)}

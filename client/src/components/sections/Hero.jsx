@@ -75,7 +75,7 @@ export default function Hero() {
           {/* Text Block */}
           <motion.div 
             variants={itemVariants}
-            className={`text-black dark:text-white ${isArabic ? 'font-noto' : 'font-nt'} text-[16px] md:text-[18px] font-light max-w-[360px] ${isArabic ? 'text-right md:text-right order-2' : 'text-left md:text-left order-2'} leading-snug mt-4 md:mt-20 px-4 md:px-0 transition-colors duration-300`}
+            className={`text-black dark:text-white ${isArabic ? 'font-noto' : 'font-nt'} text-[18px] md:text-[20px] font-light max-w-[360px] ${isArabic ? 'text-right md:text-right order-2' : 'text-left md:text-left order-2'} leading-relaxed mt-4 md:mt-20 px-4 md:px-0 transition-colors duration-300`}
           >
             <motion.p
               variants={itemVariants}

@@ -41,7 +41,7 @@ export const apiCall = async (endpoint, options = {}) => {
   
   const finalOptions = { ...defaultOptions, ...options };
   
-  // Debug logging
+  // Enhanced debug logging
   console.log('=== API CALL DEBUG ===');
   console.log('Endpoint:', endpoint);
   console.log('Constructed URL:', url);
@@ -50,12 +50,23 @@ export const apiCall = async (endpoint, options = {}) => {
   console.log('Credentials included:', finalOptions.credentials);
   console.log('Mode:', finalOptions.mode);
   console.log('Stored token available:', !!storedToken);
+  console.log('Stored token length:', storedToken ? storedToken.length : 0);
+  console.log('Authorization header set:', !!finalOptions.headers['Authorization']);
   
   // Check if cookies are available
   console.log('Document cookie available:', typeof document !== 'undefined' && document.cookie);
   console.log('Navigator cookie enabled:', typeof navigator !== 'undefined' && navigator.cookieEnabled);
+  console.log('Current domain:', typeof window !== 'undefined' ? window.location.hostname : 'N/A');
+  console.log('API domain:', new URL(url).hostname);
+  
+  // Log all headers being sent
+  console.log('Headers being sent:', finalOptions.headers);
   
   const response = await fetch(url, finalOptions);
+  
+  // Log response details
+  console.log('Response status:', response.status);
+  console.log('Response headers:', Object.fromEntries(response.headers.entries()));
   
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'An error occurred' }));

@@ -129,15 +129,15 @@ const ContactForm = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="bg-primary/10 p-8 rounded-lg"
+          className="bg-primary/10 p-6 sm:p-8 rounded-lg"
         >
-          <h3 className={`text-2xl font-bold mb-4 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}>{thankYou}</h3>
-          <p className={`text-gray-300 ${isArabic ? 'font-noto' : 'font-nt'}`}>
+          <h3 className={`text-xl sm:text-2xl md:text-3xl font-bold mb-4 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}>{thankYou}</h3>
+          <p className={`text-gray-300 text-base sm:text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>
             {successMessage}
           </p>
           <motion.button
             onClick={() => setSubmitSuccess(false)}
-            className={`mt-6 bg-primary text-[#f3eb4b] font-bold px-6 py-2 hover:bg-primary/90 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
+            className={`mt-6 bg-primary text-[#f3eb4b] font-bold px-6 py-3 text-base sm:text-lg hover:bg-primary/90 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -154,7 +154,7 @@ const ContactForm = () => {
           exit={{ opacity: 0, y: -20 }}
         >
           <div>
-            <label htmlFor="name" className={`block mb-2 ${isArabic ? 'font-noto' : 'font-nt'}`}>
+            <label htmlFor="name" className={`block mb-2 text-base sm:text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>
               {nameLabel} <span className="text-primary">*</span>
             </label>
             <input
@@ -163,17 +163,17 @@ const ContactForm = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-                              className={`w-full bg-transparent border-b ${errors.name ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-2 outline-none text-black dark:text-white focus:border-primary transition-colors`}
+              className={`w-full bg-transparent border-b ${errors.name ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-3 text-base sm:text-lg outline-none text-black dark:text-white focus:border-primary transition-colors`}
               required
               aria-invalid={errors.name ? "true" : "false"}
             />
             {errors.name && (
-              <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
             )}
           </div>
           
           <div>
-            <label htmlFor="email" className={`block mb-2 ${isArabic ? 'font-noto' : 'font-nt'}`}>
+            <label htmlFor="email" className={`block mb-2 text-base sm:text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>
               {emailLabel} <span className="text-primary">*</span>
             </label>
             <input
@@ -182,17 +182,17 @@ const ContactForm = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-                              className={`w-full bg-transparent border-b ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-2 outline-none text-black dark:text-white focus:border-primary transition-colors`}
+              className={`w-full bg-transparent border-b ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-3 text-base sm:text-lg outline-none text-black dark:text-white focus:border-primary transition-colors`}
               required
               aria-invalid={errors.email ? "true" : "false"}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="phone" className={`block mb-2 ${isArabic ? 'font-noto' : 'font-nt'}`}>
+            <label htmlFor="phone" className={`block mb-2 text-base sm:text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>
               {phoneLabel} <span className="text-gray-400">{phoneOptional}</span>
             </label>
             <input
@@ -201,16 +201,16 @@ const ContactForm = () => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-                              className={`w-full bg-transparent border-b ${errors.phone ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-2 outline-none text-black dark:text-white focus:border-primary transition-colors`}
+              className={`w-full bg-transparent border-b ${errors.phone ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-3 text-base sm:text-lg outline-none text-black dark:text-white focus:border-primary transition-colors`}
               aria-invalid={errors.phone ? "true" : "false"}
             />
             {errors.phone && (
-              <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="reason" className={`block mb-2 ${isArabic ? 'font-noto' : 'font-nt'}`}>
+            <label htmlFor="reason" className={`block mb-2 text-base sm:text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>
               {reasonLabel} <span className="text-primary">*</span>
             </label>
             <select
@@ -218,7 +218,7 @@ const ContactForm = () => {
               name="reason"
               value={formData.reason}
               onChange={handleChange}
-              className={`w-full bg-transparent border-b ${errors.reason ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-2 outline-none text-black dark:text-white focus:border-primary transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
+              className={`w-full bg-transparent border-b ${errors.reason ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-3 text-base sm:text-lg outline-none text-black dark:text-white focus:border-primary transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
               required
               aria-invalid={errors.reason ? "true" : "false"}
             >
@@ -228,12 +228,12 @@ const ContactForm = () => {
               ))}
             </select>
             {errors.reason && (
-              <p className="text-red-500 text-xs mt-1">{errors.reason}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.reason}</p>
             )}
           </div>
           
           <div className="md:col-span-2">
-            <label htmlFor="message" className={`block mb-2 ${isArabic ? 'font-noto' : 'font-nt'}`}>
+            <label htmlFor="message" className={`block mb-2 text-base sm:text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>
               {messageLabel} <span className="text-primary">*</span>
             </label>
             <textarea
@@ -242,25 +242,25 @@ const ContactForm = () => {
               value={formData.message}
               onChange={handleChange}
               rows="4"
-              className={`w-full bg-transparent border-b ${errors.message ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-2 outline-none text-black dark:text-white focus:border-primary transition-colors resize-none ${isArabic ? 'font-noto' : 'font-nt'}`}
+              className={`w-full bg-transparent border-b ${errors.message ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-3 text-base sm:text-lg outline-none text-black dark:text-white focus:border-primary transition-colors resize-none ${isArabic ? 'font-noto' : 'font-nt'}`}
               required
               aria-invalid={errors.message ? "true" : "false"}
               placeholder={messagePlaceholder}
               dir={isArabic ? 'rtl' : 'ltr'}
             />
             {errors.message && (
-              <p className="text-red-500 text-xs mt-1">{errors.message}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.message}</p>
             )}
           </div>
           
           <div className="md:col-span-2">
             {submitError && (
-              <p className="text-red-500 text-sm mb-4">{submitError}</p>
+              <p className="text-red-500 text-base mb-4">{submitError}</p>
             )}
             <motion.button
               type="submit"
               disabled={isSubmitting}
-              className={`bg-primary text-[#f3eb4b] font-bold px-6 py-2 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
+              className={`bg-primary text-[#f3eb4b] font-bold px-6 py-3 text-base sm:text-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

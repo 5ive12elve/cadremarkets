@@ -39,13 +39,13 @@ export default function Contact() {
         <div className="border-t border-primary pt-6 md:pt-8 relative">
           <div className={`flex flex-col ${isArabic ? 'md:flex-row' : 'md:flex-row'} justify-between items-start mb-6 md:mb-8 gap-8`}>
             <div className={`flex-1 ${isArabic ? 'order-1' : 'order-1'}`}>
-              <h2 className={`text-[48px] md:text-[72px] font-bold leading-none mb-6 text-[#db2b2e] dark:text-white transition-colors duration-300 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}>
+              <h2 className={`text-[32px] sm:text-[40px] md:text-[48px] lg:text-[72px] font-bold leading-none mb-6 text-[#db2b2e] dark:text-white transition-colors duration-300 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}>
                 {useTranslation('home', 'contactUs', currentLang)} <span className="text-[#f3eb4b]">{useTranslation('home', 'contactUsText', currentLang)}</span>
               </h2>
-              <p className={`text-lg text-[#db2b2e] dark:text-gray-300 max-w-xl transition-colors duration-300 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+              <p className={`text-base sm:text-lg md:text-xl text-[#db2b2e] dark:text-gray-300 max-w-xl transition-colors duration-300 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
                 {useTranslation('home', 'contactDescription', currentLang)}
               </p>
-              <div className={`flex gap-6 text-primary text-lg underline mt-8 ${isArabic ? 'font-noto justify-start' : 'font-nt justify-start'}`}>
+              <div className={`flex gap-6 text-primary text-base sm:text-lg md:text-xl underline mt-8 ${isArabic ? 'font-noto justify-start' : 'font-nt justify-start'}`}>
                   <motion.a 
                     href="https://www.facebook.com/cadremarkets" 
                     target="_blank" 
