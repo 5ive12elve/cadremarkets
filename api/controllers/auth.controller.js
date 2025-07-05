@@ -69,6 +69,9 @@ export const signup = async (req, res, next) => {
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
   
+  console.log('=== SIGNIN DEBUG ===');
+  console.log('Signin attempt for email:', email);
+  
   // Input validation
   if (!email || !password) {
     return next(errorHandler(400, 'Email and password are required'));
@@ -84,11 +87,20 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
     
+    console.log('Setting cookie with token:', token.substring(0, 20) + '...');
+    console.log('Cookie options:', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000
+    });
+    
     res
       .cookie('access_token', token, { 
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'none',
+        domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
       })
       .status(200)
@@ -96,7 +108,10 @@ export const signin = async (req, res, next) => {
         success: true,
         user: rest
       });
+      
+    console.log('Signin successful, cookie set');
   } catch (error) {
+    console.log('Signin error:', error);
     next(error);
   }
 };
@@ -123,6 +138,7 @@ export const google = async (req, res, next) => {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'none',
+          domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
           maxAge: 24 * 60 * 60 * 1000
         })
         .status(200)
@@ -151,6 +167,7 @@ export const google = async (req, res, next) => {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'none',
+          domain: process.env.NODE_ENV === 'production' ? '.cadremarkets.com' : undefined,
           maxAge: 24 * 60 * 60 * 1000
         })
         .status(200)
