@@ -104,7 +104,7 @@ export default function SignIn() {
           console.log('Immediate API test successful:', testResponse);
           
           // Test authenticated endpoint
-          const authTestResponse = await apiCall('/api/user/test-auth');
+          const authTestResponse = await apiCall('/api/user/auth-test');
           console.log('Authenticated API test successful:', authTestResponse);
         } catch (testError) {
           console.error('Immediate API test failed:', testError);

@@ -35,7 +35,7 @@ const router = express.Router();
  *         description: Test successful
  */
 router.get('/test', test);
-router.get('/test-auth', verifyToken, testAuth);
+router.get('/auth-test', verifyToken, testAuth);
 
 /**
  * @swagger
