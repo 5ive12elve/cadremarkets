@@ -39,6 +39,12 @@ export const apiCall = async (endpoint, options = {}) => {
   console.log('Constructed URL:', url);
   console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
   console.log('Final options:', finalOptions);
+  console.log('Credentials included:', finalOptions.credentials);
+  console.log('Mode:', finalOptions.mode);
+  
+  // Check if cookies are available
+  console.log('Document cookie available:', typeof document !== 'undefined' && document.cookie);
+  console.log('Navigator cookie enabled:', typeof navigator !== 'undefined' && navigator.cookieEnabled);
   
   const response = await fetch(url, finalOptions);
   
