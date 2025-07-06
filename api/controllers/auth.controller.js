@@ -100,7 +100,7 @@ export const signin = async (req, res, next) => {
       httpOnly: true,
       secure: isProduction, // Force secure in production
       sameSite: 'none',
-      domain: isProduction ? '.cadremarkets.com' : undefined,
+      // Remove domain restriction to allow cross-origin requests
       maxAge: 24 * 60 * 60 * 1000 // 24 hours
     };
     
@@ -148,7 +148,7 @@ export const google = async (req, res, next) => {
       httpOnly: true,
       secure: isProduction, // Force secure in production
       sameSite: 'none',
-      domain: isProduction ? '.cadremarkets.com' : undefined,
+      // Remove domain restriction to allow cross-origin requests
       maxAge: 24 * 60 * 60 * 1000
     };
     

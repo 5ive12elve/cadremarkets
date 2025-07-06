@@ -53,12 +53,14 @@ export default function UserListings({ userId }) {
                 return;
             }
             
-            console.log('=== FETCH LISTINGS DEBUG ===');
+            console.log('=== USERLISTINGS FETCH DEBUG ===');
             console.log('User ID:', userId);
             console.log('Auth token exists:', !!authToken);
             console.log('Auth token length:', authToken.length);
+            console.log('About to call authenticatedFetch...');
             
             const data = await authenticatedFetch(`/api/user/listings/${userId}`);
+            console.log('authenticatedFetch completed successfully');
             setListings(data);
         } catch (error) {
             console.error('Fetch listings error:', error);
