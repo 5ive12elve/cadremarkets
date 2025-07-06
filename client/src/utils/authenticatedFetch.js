@@ -72,6 +72,35 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   console.log('All localStorage keys:', Object.keys(localStorage));
   console.log('Final options:', finalOptions);
   
+  // Enhanced token validation
+  if (token) {
+    try {
+      // Basic JWT structure validation
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        console.error('Invalid JWT token structure');
+        throw new Error('Invalid token format');
+      }
+      
+      // Check if token is expired
+      const payload = JSON.parse(atob(parts[1]));
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (payload.exp && payload.exp < currentTime) {
+        console.error('Token is expired');
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+        throw new Error('Token expired');
+      }
+      
+      console.log('Token validation passed');
+    } catch (error) {
+      console.error('Token validation failed:', error);
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      throw new Error('Invalid or expired token');
+    }
+  }
+  
   const response = await fetch(url, finalOptions);
   
   console.log('Response status:', response.status);
@@ -81,14 +110,14 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     const error = await response.json().catch(() => ({ message: 'An error occurred' }));
     console.log('Error response:', error);
     
-    // If we get a 401 and have a token, try to refresh or re-authenticate
-    if (response.status === 401 && token) {
-      console.log('401 error with token present - attempting to clear auth and redirect');
+    // Handle specific error cases
+    if (response.status === 401) {
+      console.log('401 Unauthorized - clearing auth data');
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user');
       
-      // Redirect to sign-in page
-      if (typeof window !== 'undefined') {
+      // Redirect to sign-in page if we're not already there
+      if (typeof window !== 'undefined' && !window.location.pathname.includes('/sign-in')) {
         window.location.href = '/sign-in';
         return;
       }

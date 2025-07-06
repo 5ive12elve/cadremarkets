@@ -39,6 +39,7 @@ export default function UserListings({ userId }) {
     const fetchListings = async () => {
         try {
             setLoading(true);
+            setError(null); // Clear any previous errors
             
             // Check authentication status first
             if (!isAuthenticated()) {
@@ -56,12 +57,26 @@ export default function UserListings({ userId }) {
             console.log('=== USERLISTINGS FETCH DEBUG ===');
             console.log('User ID:', userId);
             console.log('Auth token exists:', !!authToken);
-            console.log('Auth token length:', authToken.length);
+            console.log('Auth token length:', authToken ? authToken.length : 0);
             console.log('About to call authenticatedFetch...');
+            
+            // Validate user ID format
+            if (!userId || userId.length !== 24) {
+                setError('Invalid user ID format');
+                return;
+            }
             
             const data = await authenticatedFetch(`/api/user/listings/${userId}`);
             console.log('authenticatedFetch completed successfully');
-            setListings(data);
+            console.log('Received data:', data);
+            
+            // Ensure data is an array
+            if (Array.isArray(data)) {
+                setListings(data);
+            } else {
+                console.error('Expected array but received:', typeof data, data);
+                setError('Invalid response format from server');
+            }
         } catch (error) {
             console.error('Fetch listings error:', error);
             
@@ -69,6 +84,11 @@ export default function UserListings({ userId }) {
             if (error.message.includes('Unauthorized') || error.message.includes('401')) {
                 setError('Authentication failed. Please sign in again.');
                 clearAuth();
+            } else if (error.message.includes('Token expired') || error.message.includes('Invalid token')) {
+                setError('Your session has expired. Please sign in again.');
+                clearAuth();
+            } else if (error.message.includes('Invalid user ID')) {
+                setError('Invalid user ID provided.');
             } else {
                 setError('Error fetching listings: ' + error.message);
             }

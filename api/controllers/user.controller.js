@@ -19,16 +19,16 @@ export const test = (req, res) => {
 };
 
 export const testAuth = (req, res) => {
-  console.log('=== TEST AUTH ENDPOINT DEBUG ===');
-  console.log('User from token:', req.user);
+  console.log('=== AUTH TEST DEBUG ===');
+  console.log('User object:', req.user);
   console.log('Request headers:', req.headers);
   console.log('Request cookies:', req.cookies);
   
   res.json({
-    message: 'Authenticated route is working!',
+    success: true,
+    message: 'Authentication successful',
     user: req.user,
-    tokenType: req.user?.tokenType,
-    userId: req.user?.id
+    timestamp: new Date().toISOString()
   });
 };
 
@@ -236,14 +236,33 @@ export const deleteUser = async (req, res, next) => {
 };
 
 export const getUserListings = async (req, res, next) => {
+  console.log('=== GET USER LISTINGS DEBUG ===');
+  console.log('Requested user ID:', req.params.id);
+  console.log('Authenticated user ID:', req.user.id);
+  console.log('User IDs match:', req.user.id === req.params.id);
+  console.log('User object:', req.user);
+  
+  // Validate user ID format
+  if (!req.params.id || req.params.id.length !== 24) {
+    console.log('Invalid user ID format:', req.params.id);
+    return next(errorHandler(400, 'Invalid user ID format'));
+  }
+  
+  // Check if user is requesting their own listings
   if (req.user.id === req.params.id) {
     try {
+      console.log('Fetching listings for user:', req.params.id);
       const listings = await Listing.find({ userRef: req.params.id });
+      console.log('Found listings count:', listings.length);
       res.status(200).json(listings);
     } catch (error) {
+      console.error('Error fetching listings:', error);
       next(error);
     }
   } else {
+    console.log('User ID mismatch - access denied');
+    console.log('Requested:', req.params.id);
+    console.log('Authenticated:', req.user.id);
     return next(errorHandler(401, 'You can only view your own listings!'));
   }
 };
