@@ -75,9 +75,8 @@ export default function SignIn() {
         return;
       }
       
-      // Store token in multiple locations for better persistence
       if (data.token) {
-        console.log('=== ENHANCED TOKEN STORAGE ===');
+        console.log('=== ENHANCED TOKEN STORAGE (FIXED ORDER) ===');
         console.log('About to store token in multiple locations');
         console.log('Token length:', data.token.length);
         console.log('Token preview:', data.token.substring(0, 20) + '...');
@@ -141,7 +140,6 @@ export default function SignIn() {
           console.log('All localStorage keys:', Object.keys(localStorage));
           console.log('All sessionStorage keys:', Object.keys(sessionStorage));
         }, 50);
-        
       } else {
         console.log('No token received in signin response');
       }
@@ -180,7 +178,7 @@ export default function SignIn() {
 
       // Add a small delay to ensure token is properly stored before navigation
       setTimeout(() => {
-        console.log('=== PRE-NAVIGATION TOKEN CHECK ===');
+        console.log('=== PRE-NAVIGATION TOKEN CHECK (FIXED ORDER) ===');
         console.log('Token before navigation:', !!localStorage.getItem('auth_token'));
         console.log('Token length before navigation:', localStorage.getItem('auth_token')?.length || 0);
         navigate('/');
