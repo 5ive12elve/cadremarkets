@@ -7,6 +7,11 @@ import { store, persistor } from './redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Toaster } from 'react-hot-toast';
 
+// Expose store to window for debugging and token access
+if (typeof window !== 'undefined') {
+  window.__REDUX_STORE__ = store;
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>

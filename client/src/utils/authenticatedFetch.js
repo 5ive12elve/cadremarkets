@@ -1,5 +1,5 @@
 // Authenticated fetch utility for regular users
-// This handles authentication tokens stored in localStorage
+// This handles authentication tokens stored in localStorage and Redux state
 
 const getApiUrl = (endpoint = '') => {
   const baseUrl = import.meta.env.VITE_API_URL || '';
@@ -33,8 +33,19 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     }
   }
   
-  // Use storedToken first, then fallback to userToken
-  const token = storedToken || userToken;
+  // Check Redux state for token (if available)
+  let reduxToken = null;
+  if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
+    try {
+      const state = window.__REDUX_STORE__.getState();
+      reduxToken = state.user?.token;
+    } catch (e) {
+      console.log('Error accessing Redux state:', e);
+    }
+  }
+  
+  // Use storedToken first, then Redux token, then userToken
+  const token = storedToken || reduxToken || userToken;
   
   // Default options
   const defaultOptions = {
@@ -63,6 +74,7 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
   console.log('Current location:', window.location.href);
   console.log('Stored token available:', !!storedToken);
+  console.log('Redux token available:', !!reduxToken);
   console.log('User token available:', !!userToken);
   console.log('Final token available:', !!token);
   console.log('Token length:', token ? token.length : 0);

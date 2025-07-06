@@ -1,34 +1,30 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { restoreToken } from './redux/user/userSlice';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { LanguageProvider } from './contexts/LanguageContext';
+import ErrorBoundary from './components/ErrorBoundary';
+
+// Components
+import Header from './components/Header';
+import TopBar from './components/TopBar';
+import Footer from './components/Footer';
+import Sidebar from './components/Sidebar';
+
+// Main site pages
 import Home from './pages/Home';
+import About from './pages/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import About from './pages/About';
 import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 import CreateListing from './pages/CreateListing';
 import UpdateListing from './pages/UpdateListing';
 import Listing from './pages/Listing';
 import Search from './pages/Search';
-import Header from './components/Header';
-import TopBar from './components/TopBar';
-import Footer from './components/Footer';
-import PrivateRoute from './components/PrivateRoute';
-import ErrorBoundary from './components/ErrorBoundary';
-import CadreBackListings from './cadreBack/cadreBackListings';
-import CadreBackUsers from './cadreBack/cadreBackUsers';
-import CadreBackLogin from './cadreBack/cadreBackLogin';
-import CadreBackDashboard from './cadreBack/cadreBackDashboard';
-import CadreBackOrders from './cadreBack/cadreBackOrders';
-import CadreBackServices from './cadreBack/cadreBackServices';
-import CadreBackCustomerService from './cadreBack/cadreBackCustomerService';
-import CadreBackArtists from './cadreBack/cadreBackArtists';
-import Sidebar from './components/Sidebar';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
-import Error404 from './pages/Error404';
-import Error500 from './pages/Error500';
-import Error401 from './pages/Error401';
-import Error403 from './pages/Error403';
-import EditProfile from './pages/EditProfile';
 import Services from './pages/Services';
 import Projects from './pages/Projects';
 import Support from './pages/Support';
@@ -36,15 +32,52 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import ReturnPolicy from './pages/ReturnPolicy';
 import AuthDebug from './pages/AuthDebug';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { LanguageProvider } from './contexts/LanguageContext';
+import LoadingDemo from './pages/LoadingDemo';
 
-// Debug: Check if frontend has been updated
+// Back office pages
+import CadreBackLogin from './cadreBack/cadreBackLogin';
+import CadreBackDashboard from './cadreBack/cadreBackDashboard';
+import CadreBackOrders from './cadreBack/cadreBackOrders';
+import CadreBackListings from './cadreBack/cadreBackListings';
+import CadreBackArtists from './cadreBack/cadreBackArtists';
+import CadreBackUsers from './cadreBack/cadreBackUsers';
+import CadreBackServices from './cadreBack/cadreBackServices';
+import CadreBackCustomerService from './cadreBack/cadreBackCustomerService';
+
+// Route protection components
+import PrivateRoute from './components/PrivateRoute';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Error pages
+import Error404 from './pages/Error404';
+import Error401 from './pages/Error401';
+import Error403 from './pages/Error403';
+import Error500 from './pages/Error500';
+
 console.log('=== FRONTEND VERSION CHECK ===');
 console.log('Frontend updated with token storage: true');
 console.log('Current timestamp:', new Date().toISOString());
 console.log('Environment:', import.meta.env.MODE);
 console.log('API URL:', import.meta.env.VITE_API_URL);
+
+// Token restoration component
+const TokenRestorer = () => {
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    // If no token in Redux state, try to restore from localStorage
+    if (!token) {
+      const storedToken = localStorage.getItem('auth_token');
+      if (storedToken) {
+        console.log('Restoring token from localStorage to Redux state');
+        dispatch(restoreToken(storedToken));
+      }
+    }
+  }, [dispatch, token]);
+
+  return null;
+};
 
 // Layout component for the main website
 const MainLayout = () => {
@@ -85,76 +118,67 @@ const BackOfficeLayout = () => {
     );
 };
 
-// Layout component for the back office routes
-const BackOfficeRoutes = () => {
-    return (
-        <Routes>
-            <Route index element={<CadreBackLogin />} />
-            <Route element={<PrivateRoute />}>
-                <Route element={<BackOfficeLayout />}>
-                    <Route path="dashboard" element={<CadreBackDashboard />} />
-                    <Route path="orders" element={<CadreBackOrders />} />
-                    <Route path="listings" element={<CadreBackListings />} />
-                    <Route path="artists" element={<CadreBackArtists />} />
-                    <Route path="users" element={<CadreBackUsers />} />
-                    <Route path="services" element={<CadreBackServices />} />
-                    <Route path="customer-service" element={<CadreBackCustomerService />} />
-                </Route>
-            </Route>
-        </Routes>
-    );
-};
-
-
-
 export default function App() {
-    return (
+  return (
+    <ErrorBoundary>
+      <ThemeProvider>
         <LanguageProvider>
-            <ThemeProvider>
-                <ErrorBoundary>
-                    <BrowserRouter>
-                    <Routes>
-                    {/* Main Website Routes */}
-                    <Route path="/" element={<MainLayout />}>
-                        <Route index element={<Home />} />
-                        <Route path="about" element={<About />} />
-                        <Route path="sign-in" element={<SignIn />} />
-                        <Route path="sign-up" element={<SignUp />} />
-                        <Route path="search" element={<Search />} />
-                        <Route path="listing/:listingId" element={<Listing />} />
-                        <Route path="cart" element={<Cart />} />
-                        <Route path="checkout" element={<Checkout />} />
-                        <Route path="support" element={<Support />} />
-                        <Route path="privacy-policy" element={<PrivacyPolicy />} />
-                        <Route path="terms-of-service" element={<TermsOfService />} />
-                        <Route path="return-policy" element={<ReturnPolicy />} />
-                        <Route path="401" element={<Error401 />} />
-                        <Route path="403" element={<Error403 />} />
-                        <Route path="500" element={<Error500 />} />
-                        <Route path="services" element={<Services />} />
-                        <Route path="projects" element={<Projects />} />
+          <Router>
+            <TokenRestorer />
+            <Routes>
+              {/* Main site routes */}
+              <Route path="/" element={<MainLayout />}>
+                <Route index element={<Home />} />
+                <Route path="about" element={<About />} />
+                <Route path="sign-in" element={<SignIn />} />
+                <Route path="sign-up" element={<SignUp />} />
+                <Route path="services" element={<Services />} />
+                <Route path="projects" element={<Projects />} />
+                <Route path="support" element={<Support />} />
+                <Route path="privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="terms-of-service" element={<TermsOfService />} />
+                <Route path="return-policy" element={<ReturnPolicy />} />
+                <Route path="debug" element={<AuthDebug />} />
+                <Route path="loading-demo" element={<LoadingDemo />} />
+                
+                {/* Protected routes */}
+                <Route element={<PrivateRoute />}>
+                  <Route path="profile" element={<Profile />} />
+                  <Route path="edit-profile" element={<EditProfile />} />
+                  <Route path="create-listing" element={<CreateListing />} />
+                  <Route path="update-listing/:id" element={<UpdateListing />} />
+                  <Route path="cart" element={<Cart />} />
+                  <Route path="checkout" element={<Checkout />} />
+                </Route>
+                
+                {/* Public routes that don't need authentication */}
+                <Route path="listing/:id" element={<Listing />} />
+                <Route path="search" element={<Search />} />
+              </Route>
 
-                        {/* Protected Routes */}
-                        <Route element={<PrivateRoute />}>
-                            <Route path="profile" element={<Profile />} />
-                            <Route path="edit-profile" element={<EditProfile />} />
-                            <Route path="create-listing" element={<CreateListing />} />
-                            <Route path="update-listing/:listingId" element={<UpdateListing />} />
-                        </Route>
-                        
-                        {/* Debug Route */}
-                        <Route path="debug" element={<AuthDebug />} />
-                    </Route>
+              {/* Back office routes */}
+              <Route path="/cadreBack" element={<CadreBackLogin />} />
+              <Route path="/cadreBack/*" element={<ProtectedRoute />}>
+                <Route element={<BackOfficeLayout />}>
+                  <Route path="dashboard" element={<CadreBackDashboard />} />
+                  <Route path="orders" element={<CadreBackOrders />} />
+                  <Route path="listings" element={<CadreBackListings />} />
+                  <Route path="artists" element={<CadreBackArtists />} />
+                  <Route path="users" element={<CadreBackUsers />} />
+                  <Route path="services" element={<CadreBackServices />} />
+                  <Route path="customer-service" element={<CadreBackCustomerService />} />
+                </Route>
+              </Route>
 
-                    {/* Back-Office Routes */}
-                    <Route path="/cadreBack/*" element={<BackOfficeRoutes />} />
-
-                    {/* Catch-all route */}
-                    <Route path="*" element={<Error404 />} />
-                </Routes>
-            </BrowserRouter>
-        </ErrorBoundary>
-        </ThemeProvider>
+              {/* Error pages */}
+              <Route path="/401" element={<Error401 />} />
+              <Route path="/403" element={<Error403 />} />
+              <Route path="/500" element={<Error500 />} />
+              <Route path="*" element={<Error404 />} />
+            </Routes>
+          </Router>
         </LanguageProvider>
-    );
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
 }

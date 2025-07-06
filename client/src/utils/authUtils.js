@@ -5,7 +5,7 @@
  * @returns {boolean} True if user has a valid token
  */
 export const isAuthenticated = () => {
-  const token = localStorage.getItem('auth_token');
+  const token = getAuthToken();
   return !!token;
 };
 
@@ -14,7 +14,26 @@ export const isAuthenticated = () => {
  * @returns {string|null} The token or null if not found
  */
 export const getAuthToken = () => {
-  return localStorage.getItem('auth_token');
+  // Check localStorage first
+  const localStorageToken = localStorage.getItem('auth_token');
+  if (localStorageToken) return localStorageToken;
+  
+  // Check Redux state as fallback
+  if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
+    try {
+      const state = window.__REDUX_STORE__.getState();
+      const reduxToken = state.user?.token;
+      if (reduxToken) {
+        // Store in localStorage for consistency
+        localStorage.setItem('auth_token', reduxToken);
+        return reduxToken;
+      }
+    } catch (e) {
+      console.log('Error accessing Redux state:', e);
+    }
+  }
+  
+  return null;
 };
 
 /**

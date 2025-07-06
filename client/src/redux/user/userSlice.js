@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   currentUser: null,
+  token: null,
   error: null,
   loading: false,
 };
@@ -14,9 +15,14 @@ const userSlice = createSlice({
       state.loading = true;
     },
     signInSuccess: (state, action) => {
-      state.currentUser = action.payload;
+      state.currentUser = action.payload.user;
+      state.token = action.payload.token;
       state.loading = false;
       state.error = null;
+      
+      if (typeof window !== 'undefined' && action.payload.token) {
+        localStorage.setItem('auth_token', action.payload.token);
+      }
     },
     signInFailure: (state, action) => {
       state.error = action.payload;
@@ -39,6 +45,7 @@ const userSlice = createSlice({
     },
     deleteUserSuccess: (state) => {
       state.currentUser = null;
+      state.token = null;
       state.loading = false;
       state.error = null;
     },
@@ -51,9 +58,9 @@ const userSlice = createSlice({
     },
     signOutUserSuccess: (state) => {
       state.currentUser = null;
+      state.token = null;
       state.loading = false;
       state.error = null;
-      // Clear stored token from localStorage
       if (typeof window !== 'undefined') {
         localStorage.removeItem('auth_token');
       }
@@ -61,6 +68,9 @@ const userSlice = createSlice({
     signOutUserFailure: (state, action) => {
       state.error = action.payload;
       state.loading = false;
+    },
+    restoreToken: (state, action) => {
+      state.token = action.payload;
     },
   },
 });
@@ -78,6 +88,7 @@ export const {
   signOutUserFailure,
   signOutUserSuccess,
   signOutUserStart,
+  restoreToken,
 } = userSlice.actions;
 
 export default userSlice.reducer;

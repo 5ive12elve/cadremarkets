@@ -113,7 +113,10 @@ export default function SignIn() {
         console.log('No token received in signin response');
       }
       
-      dispatch(signInSuccess(data.user));
+      dispatch(signInSuccess({
+        user: data.user,
+        token: data.token
+      }));
       
       // Custom success toast
       toast.custom((toastData) => (
