@@ -142,11 +142,18 @@ export default function SignIn() {
         position: 'top-center',
       });
 
-      navigate('/');
+      // Add a small delay to ensure token is properly stored before navigation
+      setTimeout(() => {
+        console.log('=== PRE-NAVIGATION TOKEN CHECK ===');
+        console.log('Token before navigation:', !!localStorage.getItem('auth_token'));
+        console.log('Token length before navigation:', localStorage.getItem('auth_token')?.length || 0);
+        navigate('/');
+      }, 100);
+
     } catch (error) {
-      console.error('Sign in error:', error);
-      dispatch(signInFailure(error.message || 'Sign in failed'));
-      toast.error(common.signInError || 'Sign in failed. Please try again.');
+      console.error('Signin error:', error);
+      dispatch(signInFailure(error.message));
+      toast.error(error.message);
     }
   };
   return (

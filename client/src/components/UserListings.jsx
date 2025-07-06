@@ -33,16 +33,35 @@ export default function UserListings({ userId }) {
     });
 
     useEffect(() => {
-        fetchListings();
+        console.log('=== USERLISTINGS COMPONENT MOUNT ===');
+        console.log('Component mounted with userId:', userId);
+        console.log('Current localStorage state:', {
+            auth_token: !!localStorage.getItem('auth_token'),
+            auth_token_length: localStorage.getItem('auth_token')?.length || 0,
+            user: !!localStorage.getItem('user'),
+            all_keys: Object.keys(localStorage)
+        });
+        
+        // Add a small delay to ensure any async operations complete
+        const timer = setTimeout(() => {
+            fetchListings();
+        }, 100);
+        
+        return () => clearTimeout(timer);
     }, [userId]);
 
-    const fetchListings = async () => {
+    const fetchListings = async (retryCount = 0) => {
         try {
             setLoading(true);
             setError(null); // Clear any previous errors
             
             // Check authentication status first
             if (!isAuthenticated()) {
+                if (retryCount < 3) {
+                    console.log(`Authentication not ready, retrying in 500ms (attempt ${retryCount + 1}/3)`);
+                    setTimeout(() => fetchListings(retryCount + 1), 500);
+                    return;
+                }
                 setError('Authentication required. Please sign in again.');
                 return;
             }
@@ -82,6 +101,11 @@ export default function UserListings({ userId }) {
             
             // Handle specific authentication errors
             if (error.message.includes('Unauthorized') || error.message.includes('401')) {
+                if (retryCount < 2) {
+                    console.log(`401 error, retrying in 1000ms (attempt ${retryCount + 1}/3)`);
+                    setTimeout(() => fetchListings(retryCount + 1), 1000);
+                    return;
+                }
                 setError('Authentication failed. Please sign in again.');
                 clearAuth();
             } else if (error.message.includes('Token expired') || error.message.includes('Invalid token')) {
