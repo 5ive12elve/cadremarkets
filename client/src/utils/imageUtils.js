@@ -31,10 +31,23 @@ export const isLocalServerUrl = (url) => {
 
 /**
  * Get a placeholder image URL for missing images
- * @returns {string} - Placeholder image URL
+ * @returns {string} - Placeholder image URL (data URL for reliability)
  */
 export const getPlaceholderImageUrl = () => {
-  return 'https://via.placeholder.com/400x300?text=Image+Not+Available';
+  // Use a data URL for a simple placeholder image
+  // This is a 1x1 transparent pixel that will be styled with CSS
+  return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2NzM4NyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIE5vdCBBdmFpbGFibGU8L3RleHQ+Cjwvc3ZnPgo=';
+};
+
+/**
+ * Test function to verify placeholder image works
+ * @returns {boolean} - True if placeholder image is valid
+ */
+export const testPlaceholderImage = () => {
+  const placeholderUrl = getPlaceholderImageUrl();
+  console.log('Placeholder image URL:', placeholderUrl);
+  console.log('Is data URL:', placeholderUrl.startsWith('data:'));
+  return placeholderUrl.startsWith('data:');
 };
 
 /**

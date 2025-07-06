@@ -1,9 +1,17 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types'; // Import PropTypes
-import { getMainImageUrl } from '../utils/imageUtils';
+import { getMainImageUrl, getPlaceholderImageUrl } from '../utils/imageUtils';
 
 export default function ListingItem({ listing }) {
   const mainImageUrl = getMainImageUrl(listing.imageUrls);
+
+  const handleImageError = (e) => {
+    console.error(`Failed to load image for listing ${listing._id}:`, mainImageUrl);
+    // Use the placeholder image from our utils
+    e.target.src = getPlaceholderImageUrl();
+    // Add a class to style the placeholder
+    e.target.classList.add('placeholder-image');
+  };
 
   return (
     <div className="border border-primary bg-white dark:bg-black hover:!bg-[#db2b2e] transition-all duration-300 text-black dark:text-white hover:!text-white w-full max-w-[265px] sm:max-w-none mx-auto group relative z-10">
@@ -13,10 +21,7 @@ export default function ListingItem({ listing }) {
             src={mainImageUrl}
             alt="listing cover"
             className="w-full h-full object-cover"
-            onError={(e) => {
-              console.error(`Failed to load image for listing ${listing._id}:`, mainImageUrl);
-              e.target.src = 'https://via.placeholder.com/320x240?text=No+Image';
-            }}
+            onError={handleImageError}
           />
         </div>
         <div className="p-3 sm:p-4 w-full overflow-hidden">
