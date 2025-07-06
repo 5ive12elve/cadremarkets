@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
 import { FiFilter, FiMessageSquare, FiClock, FiStar, FiRefreshCw, FiDownload } from 'react-icons/fi';
 import PageHeader from '../components/shared/PageHeader';
 import Card from '../components/shared/Card';
@@ -11,6 +12,13 @@ import pdfExporter from '../utils/pdfExporter';
 import toast from 'react-hot-toast';
 
 export default function CadreBackCustomerService() {
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!isBackofficeAuthenticated()) {
+      window.location.href = '/cadreBack/login';
+    }
+  }, []);
+
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
@@ -37,9 +45,7 @@ export default function CadreBackCustomerService() {
         ...(searchTerm && { search: searchTerm })
       });
 
-      const response = await fetch(`/api/support?${queryParams}`, {
-        credentials: 'include'
-      });
+      const response = await backofficeApiRequest(`/support?${queryParams}`);
       
       if (!response.ok) throw new Error('Failed to fetch requests');
       
@@ -56,9 +62,7 @@ export default function CadreBackCustomerService() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('/api/support/stats', {
-        credentials: 'include'
-      });
+      const response = await backofficeApiRequest('/support/stats');
       if (!response.ok) throw new Error('Failed to fetch stats');
       const data = await response.json();
       setStats(data);

@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react';
 import { FiPlus, FiEdit2, FiTrash2, FiUser, FiX } from 'react-icons/fi';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
 import Button from '../components/shared/Button';
 import PageHeader from '../components/shared/PageHeader';
 import GE02Loader from '../components/GE02Loader';
 import toast from 'react-hot-toast';
 
 const CadreBackUsers = () => {
+    // Check authentication on component mount
+    useEffect(() => {
+        if (!isBackofficeAuthenticated()) {
+            window.location.href = '/cadreBack/login';
+        }
+    }, []);
+
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -22,9 +30,7 @@ const CadreBackUsers = () => {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/backoffice/users', {
-                credentials: 'include'
-            });
+            const response = await backofficeApiRequest('/backoffice/users');
             if (!response.ok) throw new Error('Failed to fetch users');
             const data = await response.json();
             setUsers(data);
@@ -43,11 +49,9 @@ const CadreBackUsers = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('/api/backoffice/users', {
+            const response = await backofficeApiRequest('/backoffice/users', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
-                credentials: 'include'
             });
 
             if (!response.ok) throw new Error('Failed to create user');
@@ -71,11 +75,9 @@ const CadreBackUsers = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`/api/backoffice/users/${selectedUser._id}`, {
+            const response = await backofficeApiRequest(`/backoffice/users/${selectedUser._id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
-                credentials: 'include'
             });
 
             if (!response.ok) throw new Error('Failed to update user');
@@ -94,9 +96,8 @@ const CadreBackUsers = () => {
         if (!window.confirm('Are you sure you want to delete this user?')) return;
         
         try {
-            const response = await fetch(`/api/backoffice/users/${userId}`, {
+            const response = await backofficeApiRequest(`/backoffice/users/${userId}`, {
                 method: 'DELETE',
-                credentials: 'include'
             });
 
             if (!response.ok) throw new Error('Failed to delete user');

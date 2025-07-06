@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../../backUtils/cadreBackAuth';
 import { 
   FiShoppingCart, 
   FiDollarSign, 
@@ -25,7 +26,15 @@ const OrderStatistics = ({ refreshTrigger = 0 }) => {
   const fetchStatistics = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/orders/backoffice/statistics?timeframe=${timeframe}`);
+      
+      // Check if we're in backoffice context and use appropriate API call
+      let response;
+      if (isBackofficeAuthenticated()) {
+        response = await backofficeApiRequest(`/orders/backoffice/statistics?timeframe=${timeframe}`);
+      } else {
+        response = await fetch(`/api/orders/backoffice/statistics?timeframe=${timeframe}`);
+      }
+      
       if (!response.ok) {
         throw new Error('Failed to fetch order statistics');
       }

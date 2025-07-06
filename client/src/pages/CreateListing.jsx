@@ -1,19 +1,14 @@
 import { useState, useEffect } from 'react';
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
-import { app } from '../firebase';
 import { useSelector } from 'react-redux';
+import { uploadToCloudinary } from '../utils/cloudinaryUpload';
+import { authenticatedFetch, isAuthenticated } from '../utils/apiUtils';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { FiCheck, FiArrowLeft, FiUpload, FiX, FiImage, FiTrash2 } from 'react-icons/fi';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
-import { getAuth } from 'firebase/auth';
+
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -36,6 +31,13 @@ const calculateSellerProfit = (price, usesCadreService) => {
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  // Check if user is authenticated
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate('/signin', { state: { from: '/create-listing' } });
+    }
+  }, [navigate]);
   const { isArabic } = useLanguage();
   
   // Helper text translations
@@ -274,85 +276,31 @@ export default function CreateListing() {
 
   const storeImage = (file) => {
     return new Promise((resolve, reject) => {
-      // Double-check file size before Firebase upload
-      if (file.size > 2 * 1024 * 1024) {
-        reject(new Error(`File "${file.name}" is ${(file.size / (1024 * 1024)).toFixed(2)}MB, which exceeds the 2MB limit.`));
+      // Check file size (Cloudinary free tier: 10MB per file)
+      if (file.size > 10 * 1024 * 1024) {
+        reject(new Error(`File "${file.name}" is ${(file.size / (1024 * 1024)).toFixed(2)}MB, which exceeds the 10MB limit.`));
         return;
       }
 
       // Check if user is authenticated
-      const storage = getStorage(app);
-      const auth = getAuth(app);
-      const currentUser = auth.currentUser;
-      
       if (!currentUser) {
         // User not authenticated - require authentication for uploads
         reject(new Error('Please sign in to upload images.'));
         return;
       }
 
-      // Use a more specific path structure for better organization
-      const fileName = `listings/${currentUser.uid}/${new Date().getTime()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress(Math.round(progress));
-        },
-        (error) => {
-          console.error('Firebase Storage Error Details:', {
-            code: error.code,
-            message: error.message,
-            serverResponse: error.serverResponse,
-            customMetadata: error.customMetadata
-          });
-          
-          // Enhanced error handling with better error messages
-          let errorMessage = 'Upload failed';
-          
-          switch (error.code) {
-            case 'storage/unauthorized':
-              errorMessage = 'Upload failed: You are not authorized to upload images.';
-              break;
-            case 'storage/canceled':
-              errorMessage = 'Upload was canceled.';
-              break;
-            case 'storage/unknown':
-              errorMessage = 'Upload failed: An unknown error occurred. Please try again.';
-              break;
-            case 'storage/object-not-found':
-              errorMessage = 'Upload failed: Storage location not found.';
-              break;
-            case 'storage/quota-exceeded':
-              errorMessage = 'Upload failed: Storage quota exceeded.';
-              break;
-            case 'storage/unauthenticated':
-              errorMessage = 'Upload failed: Please sign in to upload images.';
-              break;
-            case 'storage/retry-limit-exceeded':
-              errorMessage = 'Upload failed: Too many attempts. Please try again later.';
-              break;
-            default:
-              errorMessage = `Upload failed: ${error.message || 'Unknown error'}`;
-          }
-          
-          reject(new Error(errorMessage));
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref)
-            .then((downloadURL) => {
-              // Upload successful
-              resolve(downloadURL);
-            })
-            .catch((error) => {
-              console.error('Error getting download URL:', error);
-              reject(new Error('Upload completed but failed to get download URL. Please try again.'));
-            });
-        }
-      );
+      // Upload to Cloudinary with progress tracking
+      uploadToCloudinary(file, 'listings', (progress) => {
+        setUploadProgress(progress);
+      })
+        .then((downloadURL) => {
+          // Upload successful
+          resolve(downloadURL);
+        })
+        .catch((error) => {
+          console.error('Cloudinary upload error:', error);
+          reject(new Error(error.message || 'Upload failed. Please try again.'));
+        });
     });
   };
 
@@ -497,11 +445,8 @@ export default function CreateListing() {
         delete submitData.availableSizes;
       }
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/create`, {
+      const res = await authenticatedFetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/create`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(submitData),
       });
   

@@ -34,8 +34,16 @@ import GE02Loader from '../components/GE02Loader';
 import toast from 'react-hot-toast';
 import PageHeader from '../components/shared/PageHeader';
 import pdfExporter from '../utils/pdfExporter';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
 
 const CadreBackDashboard = () => {
+    // Check authentication on component mount
+    useEffect(() => {
+        if (!isBackofficeAuthenticated()) {
+            window.location.href = '/cadreBack/login';
+        }
+    }, []);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [stats, setStats] = useState(null);
@@ -51,10 +59,13 @@ const CadreBackDashboard = () => {
         try {
             setLoading(true);
             
+            // Check authentication first
+            if (!isBackofficeAuthenticated()) {
+                throw new Error('Not authenticated for backoffice access');
+            }
+
             // Fetch main dashboard stats
-            const response = await fetch('/api/backoffice/stats', {
-                credentials: 'include'
-            });
+            const response = await backofficeApiRequest('/backoffice/stats');
             
             if (!response.ok) {
                 throw new Error('Failed to fetch stats');
@@ -72,7 +83,7 @@ const CadreBackDashboard = () => {
 
             // Try to fetch users count
             try {
-                const usersResponse = await fetch('/api/user', { credentials: 'include' });
+                const usersResponse = await backofficeApiRequest('/user');
                 if (usersResponse.ok) {
                     const users = await usersResponse.json();
                     totalUsers = Array.isArray(users) ? users.length : 0;
@@ -83,7 +94,7 @@ const CadreBackDashboard = () => {
 
             // Try to fetch support requests count  
             try {
-                const supportResponse = await fetch('/api/support', { credentials: 'include' });
+                const supportResponse = await backofficeApiRequest('/support');
                 if (supportResponse.ok) {
                     const supportData = await supportResponse.json();
                     // The support API returns { requests: [], totalPages: ... }
@@ -95,7 +106,7 @@ const CadreBackDashboard = () => {
 
             // Try to fetch active listings count
             try {
-                const listingsResponse = await fetch('/api/listing/backoffice/all', { credentials: 'include' });
+                const listingsResponse = await backofficeApiRequest('/listing/backoffice/all');
                 if (listingsResponse.ok) {
                     const listings = await listingsResponse.json();
                     if (Array.isArray(listings)) {

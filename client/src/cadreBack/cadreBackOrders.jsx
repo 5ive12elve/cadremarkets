@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
 import { FiSearch, FiX, FiRefreshCw, FiDownload } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import PageHeader from '../components/shared/PageHeader';
@@ -16,8 +17,15 @@ const ORDER_STATUSES = {
 };
 
 const CadreBackOrders = () => {
-  const [orders, setOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]);
+    // Check authentication on component mount
+    useEffect(() => {
+        if (!isBackofficeAuthenticated()) {
+            window.location.href = '/cadreBack/login';
+        }
+    }, []);
+
+    const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -58,9 +66,7 @@ const CadreBackOrders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('/api/orders', {
-        credentials: 'include'
-      });
+                  const response = await backofficeApiRequest('/orders');
       if (!response.ok) throw new Error('Failed to fetch orders');
       const data = await response.json();
       setOrders(data);

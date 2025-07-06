@@ -9,6 +9,7 @@ import GE02Loader from '../components/GE02Loader';
 import pdfExporter from '../utils/pdfExporter';
 import toast from 'react-hot-toast';
 import { getMainImageUrl, processImageUrls } from '../utils/imageUtils';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
 
 const LISTING_STATUSES = {
     PENDING: 'Pending',
@@ -19,6 +20,13 @@ const LISTING_STATUSES = {
 };
 
 const CadreBackListings = () => {
+    // Check authentication on component mount
+    useEffect(() => {
+        if (!isBackofficeAuthenticated()) {
+            window.location.href = '/cadreBack/login';
+        }
+    }, []);
+
     const [listings, setListings] = useState([]);
     const [filteredListings, setFilteredListings] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -36,7 +44,7 @@ const CadreBackListings = () => {
     const fetchListings = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/listing/backoffice/all');
+            const response = await backofficeApiRequest('/listing/backoffice/all');
             if (!response.ok) {
                 toast.error('Failed to fetch listings');
                 throw new Error('Failed to fetch listings');
@@ -94,9 +102,8 @@ const CadreBackListings = () => {
     const handleStatusChange = async (listingId, newStatus) => {
         try {
             setUpdatingStatus(true);
-            const response = await fetch(`/api/listing/${listingId}/status`, {
+            const response = await backofficeApiRequest(`/listing/${listingId}/status`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus }),
             });
 
@@ -140,7 +147,7 @@ const CadreBackListings = () => {
 
     const handleDeleteListing = async (listingId) => {
         try {
-            const response = await fetch(`/api/listing/delete/${listingId}`, {
+            const response = await backofficeApiRequest(`/listing/delete/${listingId}`, {
                 method: 'DELETE',
             });
 
@@ -173,7 +180,7 @@ const CadreBackListings = () => {
             // Fetch detailed statistics
             let detailedStats = null;
             try {
-                const response = await fetch('/api/listing/backoffice/statistics?timeframe=365');
+                const response = await backofficeApiRequest('/listing/backoffice/statistics?timeframe=365');
                 if (response.ok) {
                     detailedStats = await response.json();
                 }

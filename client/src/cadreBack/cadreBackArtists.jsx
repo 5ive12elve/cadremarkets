@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
 import { FiUser, FiImage, FiX, FiSearch } from 'react-icons/fi';
 import PageHeader from '../components/shared/PageHeader';
 import Card from '../components/shared/Card';
@@ -15,6 +16,13 @@ const ROLE_TYPES = {
 };
 
 const CadreBackArtists = () => {
+    // Check authentication on component mount
+    useEffect(() => {
+        if (!isBackofficeAuthenticated()) {
+            window.location.href = '/cadreBack/login';
+        }
+    }, []);
+
     const [artists, setArtists] = useState([]);
     const [filteredArtists, setFilteredArtists] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,7 +38,7 @@ const CadreBackArtists = () => {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/user');
+            const response = await backofficeApiRequest('/user');
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
             const users = await response.json();
@@ -75,10 +83,8 @@ const CadreBackArtists = () => {
 
     const handleDeleteUser = async (userId) => {
         try {
-            const response = await fetch(`/api/user/delete/${userId}`, {
+            const response = await backofficeApiRequest(`/user/delete/${userId}`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include'
             });
 
             if (!response.ok) {

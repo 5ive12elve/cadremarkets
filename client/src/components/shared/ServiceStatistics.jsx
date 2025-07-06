@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../../backUtils/cadreBackAuth';
 import { 
   FiUsers, 
   FiClock, 
@@ -22,7 +23,15 @@ const ServiceStatistics = ({ refreshTrigger }) => {
   const fetchStatistics = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/services/backoffice/statistics?timeframe=${timeframe}`);
+      
+      // Check if we're in backoffice context and use appropriate API call
+      let response;
+      if (isBackofficeAuthenticated()) {
+        response = await backofficeApiRequest(`/services/backoffice/statistics?timeframe=${timeframe}`);
+      } else {
+        response = await fetch(`/api/services/backoffice/statistics?timeframe=${timeframe}`);
+      }
+      
       if (!response.ok) throw new Error('Failed to fetch statistics');
       const data = await response.json();
       setStatistics(data);

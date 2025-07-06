@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
 import { FiFilter, FiSearch, FiX, FiRefreshCw, FiDownload } from 'react-icons/fi';
 import PageHeader from '../components/shared/PageHeader';
 import Card from '../components/shared/Card';
@@ -9,8 +10,15 @@ import pdfExporter from '../utils/pdfExporter';
 import toast from 'react-hot-toast';
 
 const CadreBackServices = () => {
-  const [services, setServices] = useState([]);
-  const [filteredServices, setFilteredServices] = useState([]);
+    // Check authentication on component mount
+    useEffect(() => {
+        if (!isBackofficeAuthenticated()) {
+            window.location.href = '/cadreBack/login';
+        }
+    }, []);
+
+    const [services, setServices] = useState([]);
+    const [filteredServices, setFilteredServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedService, setSelectedService] = useState(null);
@@ -22,9 +30,7 @@ const CadreBackServices = () => {
   const fetchServices = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/services', {
-        credentials: 'include'
-      });
+      const response = await backofficeApiRequest('/services');
       if (!response.ok) throw new Error('Failed to fetch services');
       const data = await response.json();
       setServices(data);
