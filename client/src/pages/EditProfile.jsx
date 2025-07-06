@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import AlertDialog from '../components/ui/AlertDialog';
-import { apiCall } from '../utils/apiConfig';
+import { authenticatedFetch } from '../utils/authenticatedFetch';
 
 export default function EditProfile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -53,7 +53,7 @@ export default function EditProfile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const data = await apiCall(`/api/user/update/${currentUser._id}`, {
+      const data = await authenticatedFetch(`/api/user/update/${currentUser._id}`, {
         method: 'POST',
         body: JSON.stringify(formData),
       });
@@ -69,7 +69,7 @@ export default function EditProfile() {
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
     try {
-      await apiCall(`/api/users/${currentUser._id}/password`, {
+      await authenticatedFetch(`/api/users/${currentUser._id}/password`, {
         method: 'PUT',
         body: JSON.stringify(passwordData),
       });
@@ -89,7 +89,7 @@ export default function EditProfile() {
 
     if (!token) throw new Error('Token is missing');
   
-      const data = await apiCall(`/api/user/delete/${currentUser._id}`, {
+      const data = await authenticatedFetch(`/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
       });
   

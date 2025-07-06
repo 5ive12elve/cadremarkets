@@ -8,7 +8,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
 import { getMainImageUrl } from '../utils/imageUtils';
 import { migrateListingImages, needsMigration } from '../utils/imageMigration';
-import { apiCall } from '../utils/apiConfig';
+import { authenticatedFetch } from '../utils/authenticatedFetch';
 import { isAuthenticated, clearAuth, isTokenExpired } from '../utils/authUtils';
 
 export default function UserListings({ userId }) {
@@ -58,7 +58,7 @@ export default function UserListings({ userId }) {
             console.log('Auth token exists:', !!authToken);
             console.log('Auth token length:', authToken.length);
             
-            const data = await apiCall(`/api/user/listings/${userId}`);
+            const data = await authenticatedFetch(`/api/user/listings/${userId}`);
             setListings(data);
         } catch (error) {
             console.error('Fetch listings error:', error);
@@ -99,7 +99,7 @@ export default function UserListings({ userId }) {
             t.deleteListingConfirm || 'Are you sure you want to delete this listing? This action cannot be undone.',
             async () => {
                 try {
-                    await apiCall(`/api/listing/delete/${listingId}`, {
+                    await authenticatedFetch(`/api/listing/delete/${listingId}`, {
                         method: 'DELETE',
                     });
                     setListings((prev) => prev.filter((listing) => listing._id !== listingId));
@@ -205,7 +205,7 @@ export default function UserListings({ userId }) {
                     const migratedListing = await migrateListingImages(listing);
                     
                     // Update the listing in the database
-                    await apiCall(`/api/listing/update/${listing._id}`, {
+                    await authenticatedFetch(`/api/listing/update/${listing._id}`, {
                         method: 'PUT',
                         body: JSON.stringify({
                             imageUrls: migratedListing.imageUrls

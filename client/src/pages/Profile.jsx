@@ -26,7 +26,7 @@ import { FiCheck } from 'react-icons/fi';
 import ProfileUpdateSuccessPopup from '../components/ui/ProfileUpdateSuccessPopup';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
-import { apiCall } from '../utils/apiConfig';
+import { authenticatedFetch } from '../utils/authenticatedFetch';
 
 
 export default function Profile() {
@@ -144,7 +144,7 @@ export default function Profile() {
     }, 100);
 
     try {
-      const data = await apiCall('/api/listing/upload/profile', {
+      const data = await authenticatedFetch('/api/listing/upload/profile', {
         method: 'POST',
         body: formData,
       });
@@ -172,7 +172,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const data = await apiCall(`/api/user/update/${currentUser._id}`, {
+      const data = await authenticatedFetch(`/api/user/update/${currentUser._id}`, {
         method: 'POST',
         body: JSON.stringify(formData),
       });
@@ -189,7 +189,7 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const data = await apiCall(`/api/user/delete/${currentUser._id}`, {
+      const data = await authenticatedFetch(`/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
       });
       dispatch(deleteUserSuccess(data));
@@ -201,7 +201,7 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      await apiCall('/api/auth/signout');
+      await authenticatedFetch('/api/auth/signout');
       dispatch(signOutUserSuccess());
       
       // Custom success toast
