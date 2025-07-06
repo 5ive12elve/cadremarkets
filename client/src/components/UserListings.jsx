@@ -55,8 +55,13 @@ export default function UserListings({ userId }) {
             setLoading(true);
             setError(null); // Clear any previous errors
             
+            console.log('=== USERLISTINGS FETCH START ===');
+            console.log('Retry count:', retryCount);
+            console.log('User ID:', userId);
+            
             // Check authentication status first
             if (!isAuthenticated()) {
+                console.log('Authentication check failed');
                 if (retryCount < 3) {
                     console.log(`Authentication not ready, retrying in 500ms (attempt ${retryCount + 1}/3)`);
                     setTimeout(() => fetchListings(retryCount + 1), 500);
@@ -67,7 +72,11 @@ export default function UserListings({ userId }) {
             }
             
             const authToken = localStorage.getItem('auth_token');
+            console.log('Auth token from localStorage:', !!authToken);
+            console.log('Auth token length:', authToken ? authToken.length : 0);
+            
             if (isTokenExpired(authToken)) {
+                console.log('Token is expired');
                 setError('Authentication expired. Please sign in again.');
                 clearAuth();
                 return;
@@ -85,6 +94,7 @@ export default function UserListings({ userId }) {
                 return;
             }
             
+            console.log('Calling authenticatedFetch with endpoint:', `/api/user/listings/${userId}`);
             const data = await authenticatedFetch(`/api/user/listings/${userId}`);
             console.log('authenticatedFetch completed successfully');
             console.log('Received data:', data);

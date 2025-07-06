@@ -15,13 +15,25 @@ const userSlice = createSlice({
       state.loading = true;
     },
     signInSuccess: (state, action) => {
+      console.log('=== REDUX SIGNIN SUCCESS ===');
+      console.log('Action payload:', action.payload);
+      console.log('Token in payload:', !!action.payload.token);
+      console.log('Token length:', action.payload.token ? action.payload.token.length : 0);
+      
       state.currentUser = action.payload.user;
       state.token = action.payload.token;
       state.loading = false;
       state.error = null;
       
       if (typeof window !== 'undefined' && action.payload.token) {
+        console.log('Storing token in localStorage from Redux');
         localStorage.setItem('auth_token', action.payload.token);
+        
+        // Verify storage
+        const storedToken = localStorage.getItem('auth_token');
+        console.log('Token stored successfully:', !!storedToken);
+        console.log('Stored token length:', storedToken ? storedToken.length : 0);
+        console.log('Tokens match:', storedToken === action.payload.token);
       }
     },
     signInFailure: (state, action) => {
@@ -70,6 +82,9 @@ const userSlice = createSlice({
       state.loading = false;
     },
     restoreToken: (state, action) => {
+      console.log('=== REDUX RESTORE TOKEN ===');
+      console.log('Token to restore:', !!action.payload);
+      console.log('Token length:', action.payload ? action.payload.length : 0);
       state.token = action.payload;
     },
   },

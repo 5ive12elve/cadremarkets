@@ -20,6 +20,10 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   
   // Get stored token from localStorage
   const storedToken = localStorage.getItem('auth_token');
+  console.log('=== AUTHENTICATED FETCH TOKEN RETRIEVAL ===');
+  console.log('Direct localStorage.getItem("auth_token"):', !!storedToken);
+  console.log('Stored token length:', storedToken ? storedToken.length : 0);
+  console.log('Stored token preview:', storedToken ? storedToken.substring(0, 20) + '...' : 'N/A');
   
   // Also check for token in user object (fallback)
   const userString = localStorage.getItem('user');
@@ -28,9 +32,12 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     try {
       const user = JSON.parse(userString);
       userToken = user.token;
+      console.log('User token from localStorage found:', !!userToken);
     } catch (e) {
       console.log('Error parsing user from localStorage:', e);
     }
+  } else {
+    console.log('No user object in localStorage');
   }
   
   // Check Redux state for token (if available)
@@ -39,13 +46,18 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     try {
       const state = window.__REDUX_STORE__.getState();
       reduxToken = state.user?.token;
+      console.log('Redux token found:', !!reduxToken);
     } catch (e) {
       console.log('Error accessing Redux state:', e);
     }
+  } else {
+    console.log('Redux store not available');
   }
   
   // Use storedToken first, then Redux token, then userToken
   const token = storedToken || reduxToken || userToken;
+  console.log('Final token selected:', !!token);
+  console.log('Final token source:', token === storedToken ? 'localStorage' : token === reduxToken ? 'Redux' : token === userToken ? 'user object' : 'none');
   
   // Default options
   const defaultOptions = {

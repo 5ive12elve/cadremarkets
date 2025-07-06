@@ -77,15 +77,19 @@ export default function SignIn() {
       
       // Store token in localStorage as fallback for cross-origin cookie issues
       if (data.token) {
-        localStorage.setItem('auth_token', data.token);
-        console.log('Token stored in localStorage for cross-origin fallback');
-        console.log('Stored token length:', data.token.length);
+        console.log('=== TOKEN STORAGE DEBUG ===');
+        console.log('About to store token in localStorage');
+        console.log('Token length:', data.token.length);
+        console.log('Token preview:', data.token.substring(0, 20) + '...');
         
-        // Verify token was stored correctly
+        // Store the token
+        localStorage.setItem('auth_token', data.token);
+        
+        // Immediate verification
         const storedToken = localStorage.getItem('auth_token');
-        console.log('Token verification - stored token exists:', !!storedToken);
-        console.log('Token verification - stored token length:', storedToken ? storedToken.length : 0);
-        console.log('Token verification - tokens match:', storedToken === data.token);
+        console.log('Immediate verification - stored token exists:', !!storedToken);
+        console.log('Immediate verification - stored token length:', storedToken ? storedToken.length : 0);
+        console.log('Immediate verification - tokens match:', storedToken === data.token);
         
         // Test if we can access the token immediately
         console.log('=== TOKEN ACCESS TEST ===');
@@ -109,6 +113,17 @@ export default function SignIn() {
         } catch (testError) {
           console.error('Immediate API test failed:', testError);
         }
+        
+        // Additional verification after a small delay
+        setTimeout(() => {
+          console.log('=== DELAYED TOKEN VERIFICATION ===');
+          const delayedToken = localStorage.getItem('auth_token');
+          console.log('Delayed verification - stored token exists:', !!delayedToken);
+          console.log('Delayed verification - stored token length:', delayedToken ? delayedToken.length : 0);
+          console.log('Delayed verification - tokens match:', delayedToken === data.token);
+          console.log('All localStorage keys:', Object.keys(localStorage));
+        }, 50);
+        
       } else {
         console.log('No token received in signin response');
       }

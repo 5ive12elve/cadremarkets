@@ -66,13 +66,24 @@ const TokenRestorer = () => {
   const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
+    console.log('=== TOKEN RESTORER DEBUG ===');
+    console.log('Current Redux token:', !!token);
+    console.log('Current Redux token length:', token ? token.length : 0);
+    
     // If no token in Redux state, try to restore from localStorage
     if (!token) {
       const storedToken = localStorage.getItem('auth_token');
+      console.log('Stored token in localStorage:', !!storedToken);
+      console.log('Stored token length:', storedToken ? storedToken.length : 0);
+      
       if (storedToken) {
         console.log('Restoring token from localStorage to Redux state');
         dispatch(restoreToken(storedToken));
+      } else {
+        console.log('No token found in localStorage to restore');
       }
+    } else {
+      console.log('Token already exists in Redux state');
     }
   }, [dispatch, token]);
 

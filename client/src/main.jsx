@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Toaster } from 'react-hot-toast';
+import './utils/debug-token.js'; // Import debug utilities
 
 // Expose store to window for debugging and token access
 if (typeof window !== 'undefined') {

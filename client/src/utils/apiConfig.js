@@ -17,9 +17,6 @@ export const getApiUrl = (endpoint = '') => {
 export const apiCall = async (endpoint, options = {}) => {
   const url = getApiUrl(endpoint);
   
-  // Get stored token as fallback for cross-origin cookie issues
-  const storedToken = localStorage.getItem('auth_token');
-  
   // Default options
   const defaultOptions = {
     credentials: 'include',
@@ -29,16 +26,25 @@ export const apiCall = async (endpoint, options = {}) => {
     }
   };
   
-  // Add Authorization header if token is available
-  if (storedToken) {
-    defaultOptions.headers['Authorization'] = `Bearer ${storedToken}`;
-    console.log('=== TOKEN DEBUG ===');
-    console.log('Token found in localStorage, length:', storedToken.length);
-    console.log('Token preview:', storedToken.substring(0, 20) + '...');
+  // Only add Authorization header for non-auth endpoints
+  if (!endpoint.includes('/auth/')) {
+    // Get stored token as fallback for cross-origin cookie issues
+    const storedToken = localStorage.getItem('auth_token');
+    
+    // Add Authorization header if token is available
+    if (storedToken) {
+      defaultOptions.headers['Authorization'] = `Bearer ${storedToken}`;
+      console.log('=== TOKEN DEBUG ===');
+      console.log('Token found in localStorage, length:', storedToken.length);
+      console.log('Token preview:', storedToken.substring(0, 20) + '...');
+    } else {
+      console.log('=== TOKEN DEBUG ===');
+      console.log('No token found in localStorage');
+      console.log('localStorage keys:', Object.keys(localStorage));
+    }
   } else {
-    console.log('=== TOKEN DEBUG ===');
-    console.log('No token found in localStorage');
-    console.log('localStorage keys:', Object.keys(localStorage));
+    console.log('=== AUTH ENDPOINT DEBUG ===');
+    console.log('Auth endpoint detected, skipping Authorization header');
   }
   
   // If body is FormData, remove Content-Type header to let browser set it
@@ -56,8 +62,6 @@ export const apiCall = async (endpoint, options = {}) => {
   console.log('Final options:', finalOptions);
   console.log('Credentials included:', finalOptions.credentials);
   console.log('Mode:', finalOptions.mode);
-  console.log('Stored token available:', !!storedToken);
-  console.log('Stored token length:', storedToken ? storedToken.length : 0);
   console.log('Authorization header set:', !!finalOptions.headers['Authorization']);
   console.log('Authorization header value:', finalOptions.headers['Authorization'] ? finalOptions.headers['Authorization'].substring(0, 30) + '...' : 'undefined');
   
