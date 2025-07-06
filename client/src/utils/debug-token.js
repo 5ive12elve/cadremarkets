@@ -229,10 +229,85 @@ export const debugProductionToken = () => {
   console.log('All sessionStorage keys:', Object.keys(sessionStorage));
 };
 
+// New function to monitor token throughout user journey
+export const monitorTokenJourney = () => {
+  console.log('=== TOKEN JOURNEY MONITOR ===');
+  console.log('Starting token monitoring...');
+  
+  // Set up interval to check token status every 2 seconds
+  const intervalId = setInterval(() => {
+    const authToken = localStorage.getItem('auth_token');
+    const userString = localStorage.getItem('user');
+    const sessionToken = sessionStorage.getItem('auth_token');
+    
+    console.log(`[${new Date().toLocaleTimeString()}] Token Status:`);
+    console.log(`  localStorage auth_token: ${!!authToken} (${authToken ? authToken.length : 0} chars)`);
+    console.log(`  sessionStorage auth_token: ${!!sessionToken} (${sessionToken ? sessionToken.length : 0} chars)`);
+    console.log(`  localStorage user object: ${!!userString}`);
+    
+    // Check Redux state
+    if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
+      const state = window.__REDUX_STORE__.getState();
+      console.log(`  Redux user.token: ${!!state.user?.token} (${state.user?.token ? state.user.token.length : 0} chars)`);
+    }
+    
+    // Check if we're on a page that should have a token
+    const currentPath = window.location.pathname;
+    if (currentPath === '/profile' || currentPath.includes('/user/')) {
+      console.log(`  ⚠️ On protected page (${currentPath}) - token should be present`);
+    }
+  }, 2000);
+  
+  // Return function to stop monitoring
+  return () => {
+    clearInterval(intervalId);
+    console.log('Token monitoring stopped');
+  };
+};
+
+// Function to test API request with current token
+export const testCurrentToken = async () => {
+  console.log('=== TESTING CURRENT TOKEN ===');
+  
+  const authToken = localStorage.getItem('auth_token');
+  if (!authToken) {
+    console.log('❌ No token found in localStorage');
+    return;
+  }
+  
+  console.log('✅ Token found, testing API request...');
+  
+  try {
+    // Test the exact endpoint that's failing
+    const response = await fetch('/api/user/listings/68687724b9bb2ebe001621de', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+    
+    console.log('Response status:', response.status);
+    const data = await response.json();
+    console.log('Response data:', data);
+    
+    if (response.ok) {
+      console.log('✅ API request successful!');
+    } else {
+      console.log('❌ API request failed');
+    }
+  } catch (error) {
+    console.error('❌ API request error:', error);
+  }
+};
+
 // Make functions available globally for console debugging
 if (typeof window !== 'undefined') {
   window.debugTokenStorage = debugTokenStorage;
   window.testAuthenticatedRequest = testAuthenticatedRequest;
   window.testTokenFlow = testTokenFlow;
   window.debugProductionToken = debugProductionToken;
+  window.monitorTokenJourney = monitorTokenJourney;
+  window.testCurrentToken = testCurrentToken;
 } 

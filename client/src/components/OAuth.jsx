@@ -64,12 +64,44 @@ export default function OAuth() {
           localStorage.setItem('user', JSON.stringify(userWithToken));
           console.log('Token stored in localStorage, sessionStorage, and user object for cross-origin fallback');
           console.log('Stored token length:', data.token.length);
+          console.log('Token preview:', data.token.substring(0, 20) + '...');
+          
+          // Immediate verification
+          const storedToken = localStorage.getItem('auth_token');
+          const sessionToken = sessionStorage.getItem('auth_token');
+          const userToken = JSON.parse(localStorage.getItem('user') || '{}').token;
+          
+          console.log('=== OAUTH STORAGE VERIFICATION ===');
+          console.log('localStorage token exists:', !!storedToken);
+          console.log('sessionStorage token exists:', !!sessionToken);
+          console.log('user object token exists:', !!userToken);
+          console.log('All tokens match:', storedToken === sessionToken && sessionToken === userToken);
         } else {
           console.log('No token received in Google auth response');
         }
         // Dispatch with both user and token (fix)
+        console.log('=== OAUTH REDUX DISPATCH ===');
+        console.log('Dispatching signInSuccess with user and token');
+        console.log('User object:', !!data.user);
+        console.log('Token object:', !!data.token);
         dispatch(signInSuccess({ user: data.user, token: data.token }));
-        navigate('/');
+        
+        // Add delay before navigation to ensure Redux state is updated
+        setTimeout(() => {
+          console.log('=== OAUTH PRE-NAVIGATION CHECK ===');
+          console.log('Token before OAuth navigation:', !!localStorage.getItem('auth_token'));
+          console.log('Token length before OAuth navigation:', localStorage.getItem('auth_token')?.length || 0);
+          
+          // Check Redux state before navigation
+          if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
+            const state = window.__REDUX_STORE__.getState();
+            console.log('Redux token before OAuth navigation:', !!state.user?.token);
+            console.log('Redux token length before OAuth navigation:', state.user?.token ? state.user.token.length : 0);
+          }
+          
+          console.log('About to navigate to homepage from OAuth...');
+          navigate('/');
+        }, 100);
       } else {
         throw new Error(data.message || 'Authentication failed');
       }

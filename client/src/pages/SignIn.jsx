@@ -181,6 +181,36 @@ export default function SignIn() {
         console.log('=== PRE-NAVIGATION TOKEN CHECK (FIXED ORDER) ===');
         console.log('Token before navigation:', !!localStorage.getItem('auth_token'));
         console.log('Token length before navigation:', localStorage.getItem('auth_token')?.length || 0);
+        console.log('Token preview before navigation:', localStorage.getItem('auth_token') ? localStorage.getItem('auth_token').substring(0, 20) + '...' : 'N/A');
+        
+        // Check all storage locations before navigation
+        const finalAuthToken = localStorage.getItem('auth_token');
+        const finalSessionToken = sessionStorage.getItem('auth_token');
+        const finalUserString = localStorage.getItem('user');
+        
+        console.log('=== FINAL STORAGE CHECK BEFORE NAVIGATION ===');
+        console.log('localStorage auth_token exists:', !!finalAuthToken);
+        console.log('sessionStorage auth_token exists:', !!finalSessionToken);
+        console.log('localStorage user object exists:', !!finalUserString);
+        
+        if (finalUserString) {
+          try {
+            const finalUser = JSON.parse(finalUserString);
+            console.log('User object token exists:', !!finalUser.token);
+            console.log('User object token length:', finalUser.token ? finalUser.token.length : 0);
+          } catch (e) {
+            console.log('Error parsing user object before navigation:', e);
+          }
+        }
+        
+        // Check Redux state before navigation
+        if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
+          const state = window.__REDUX_STORE__.getState();
+          console.log('Redux token before navigation:', !!state.user?.token);
+          console.log('Redux token length before navigation:', state.user?.token ? state.user.token.length : 0);
+        }
+        
+        console.log('About to navigate to homepage...');
         navigate('/');
       }, 100);
 
