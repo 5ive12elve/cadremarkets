@@ -99,9 +99,31 @@ export const testTokenFlow = async () => {
     console.log('   Redux token length:', state.user?.token ? state.user?.token.length : 0);
   }
   
+  // Test API health first
+  try {
+    console.log('3. Testing API health...');
+    const healthResponse = await fetch('/api/health');
+    console.log('   Health check status:', healthResponse.status);
+    const healthData = await healthResponse.json();
+    console.log('   Health check data:', healthData);
+  } catch (error) {
+    console.error('   Health check failed:', error);
+  }
+  
+  // Test basic API endpoint
+  try {
+    console.log('4. Testing basic API endpoint...');
+    const testResponse = await fetch('/api/test');
+    console.log('   Basic API status:', testResponse.status);
+    const testData = await testResponse.json();
+    console.log('   Basic API data:', testData);
+  } catch (error) {
+    console.error('   Basic API test failed:', error);
+  }
+  
   // Test authenticatedFetch
   try {
-    console.log('3. Testing authenticatedFetch...');
+    console.log('5. Testing authenticatedFetch...');
     const response = await fetch('/api/user/test', {
       method: 'GET',
       headers: {
@@ -120,7 +142,7 @@ export const testTokenFlow = async () => {
   
   // Test the actual endpoint that's failing
   try {
-    console.log('4. Testing user listings endpoint...');
+    console.log('6. Testing user listings endpoint...');
     const response = await fetch('/api/user/listings/6865600be7b1c4e7d83b6a40', {
       method: 'GET',
       headers: {

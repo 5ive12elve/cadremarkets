@@ -75,26 +75,42 @@ export default function SignIn() {
         return;
       }
       
-      // Store token in localStorage as fallback for cross-origin cookie issues
+      // Store token in multiple locations for better persistence
       if (data.token) {
-        console.log('=== TOKEN STORAGE DEBUG ===');
-        console.log('About to store token in localStorage');
+        console.log('=== ENHANCED TOKEN STORAGE ===');
+        console.log('About to store token in multiple locations');
         console.log('Token length:', data.token.length);
         console.log('Token preview:', data.token.substring(0, 20) + '...');
         
-        // Store the token
+        // Store in localStorage (primary)
         localStorage.setItem('auth_token', data.token);
+        console.log('✓ Token stored in localStorage');
+        
+        // Store in sessionStorage (backup)
+        sessionStorage.setItem('auth_token', data.token);
+        console.log('✓ Token stored in sessionStorage');
+        
+        // Store in user object (legacy support)
+        const userWithToken = { ...data.user, token: data.token };
+        localStorage.setItem('user', JSON.stringify(userWithToken));
+        console.log('✓ Token stored in user object');
         
         // Immediate verification
         const storedToken = localStorage.getItem('auth_token');
-        console.log('Immediate verification - stored token exists:', !!storedToken);
-        console.log('Immediate verification - stored token length:', storedToken ? storedToken.length : 0);
-        console.log('Immediate verification - tokens match:', storedToken === data.token);
+        const sessionToken = sessionStorage.getItem('auth_token');
+        const userToken = JSON.parse(localStorage.getItem('user') || '{}').token;
+        
+        console.log('=== STORAGE VERIFICATION ===');
+        console.log('localStorage token exists:', !!storedToken);
+        console.log('sessionStorage token exists:', !!sessionToken);
+        console.log('user object token exists:', !!userToken);
+        console.log('All tokens match:', storedToken === sessionToken && sessionToken === userToken);
         
         // Test if we can access the token immediately
         console.log('=== TOKEN ACCESS TEST ===');
         console.log('localStorage.getItem("auth_token"):', !!localStorage.getItem('auth_token'));
         console.log('localStorage keys:', Object.keys(localStorage));
+        console.log('sessionStorage keys:', Object.keys(sessionStorage));
         
         // Additional verification - test the token format
         console.log('=== TOKEN FORMAT TEST ===');
@@ -118,10 +134,12 @@ export default function SignIn() {
         setTimeout(() => {
           console.log('=== DELAYED TOKEN VERIFICATION ===');
           const delayedToken = localStorage.getItem('auth_token');
-          console.log('Delayed verification - stored token exists:', !!delayedToken);
-          console.log('Delayed verification - stored token length:', delayedToken ? delayedToken.length : 0);
-          console.log('Delayed verification - tokens match:', delayedToken === data.token);
+          const delayedSessionToken = sessionStorage.getItem('auth_token');
+          console.log('Delayed localStorage token exists:', !!delayedToken);
+          console.log('Delayed sessionStorage token exists:', !!delayedSessionToken);
+          console.log('Delayed tokens match:', delayedToken === data.token);
           console.log('All localStorage keys:', Object.keys(localStorage));
+          console.log('All sessionStorage keys:', Object.keys(sessionStorage));
         }, 50);
         
       } else {

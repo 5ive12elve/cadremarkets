@@ -66,22 +66,60 @@ const TokenRestorer = () => {
   const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log('=== TOKEN RESTORER DEBUG ===');
+    console.log('=== ENHANCED TOKEN RESTORER ===');
     console.log('Current Redux token:', !!token);
     console.log('Current Redux token length:', token ? token.length : 0);
     
-    // If no token in Redux state, try to restore from localStorage
+    // If no token in Redux state, try to restore from multiple sources
     if (!token) {
+      console.log('No token in Redux state, checking storage locations...');
+      
+      // Check localStorage first
       const storedToken = localStorage.getItem('auth_token');
-      console.log('Stored token in localStorage:', !!storedToken);
-      console.log('Stored token length:', storedToken ? storedToken.length : 0);
+      console.log('localStorage token:', !!storedToken);
+      console.log('localStorage token length:', storedToken ? storedToken.length : 0);
       
       if (storedToken) {
         console.log('Restoring token from localStorage to Redux state');
         dispatch(restoreToken(storedToken));
-      } else {
-        console.log('No token found in localStorage to restore');
+        return;
       }
+      
+      // Check sessionStorage
+      const sessionToken = sessionStorage.getItem('auth_token');
+      console.log('sessionStorage token:', !!sessionToken);
+      console.log('sessionStorage token length:', sessionToken ? sessionToken.length : 0);
+      
+      if (sessionToken) {
+        console.log('Restoring token from sessionStorage to Redux state');
+        // Also store in localStorage for future use
+        localStorage.setItem('auth_token', sessionToken);
+        dispatch(restoreToken(sessionToken));
+        return;
+      }
+      
+      // Check user object
+      const userString = localStorage.getItem('user');
+      if (userString) {
+        try {
+          const user = JSON.parse(userString);
+          const userToken = user.token;
+          console.log('user object token:', !!userToken);
+          console.log('user object token length:', userToken ? userToken.length : 0);
+          
+          if (userToken) {
+            console.log('Restoring token from user object to Redux state');
+            // Also store in localStorage for future use
+            localStorage.setItem('auth_token', userToken);
+            dispatch(restoreToken(userToken));
+            return;
+          }
+        } catch (e) {
+          console.log('Error parsing user object:', e);
+        }
+      }
+      
+      console.log('No token found in any storage location to restore');
     } else {
       console.log('Token already exists in Redux state');
     }

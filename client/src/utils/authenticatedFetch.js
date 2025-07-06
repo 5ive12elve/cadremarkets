@@ -15,49 +15,79 @@ const getApiUrl = (endpoint = '') => {
   }
 };
 
-export const authenticatedFetch = async (endpoint, options = {}) => {
-  const url = getApiUrl(endpoint);
+// Enhanced token retrieval with multiple fallbacks
+const getAuthToken = () => {
+  console.log('=== ENHANCED TOKEN RETRIEVAL ===');
   
-  // Get stored token from localStorage
+  // Method 1: Direct localStorage
   const storedToken = localStorage.getItem('auth_token');
-  console.log('=== AUTHENTICATED FETCH TOKEN RETRIEVAL ===');
-  console.log('Direct localStorage.getItem("auth_token"):', !!storedToken);
-  console.log('Stored token length:', storedToken ? storedToken.length : 0);
-  console.log('Stored token preview:', storedToken ? storedToken.substring(0, 20) + '...' : 'N/A');
+  console.log('1. Direct localStorage token:', !!storedToken);
+  console.log('   Token length:', storedToken ? storedToken.length : 0);
   
-  // Also check for token in user object (fallback)
-  const userString = localStorage.getItem('user');
-  let userToken = null;
-  if (userString) {
-    try {
-      const user = JSON.parse(userString);
-      userToken = user.token;
-      console.log('User token from localStorage found:', !!userToken);
-    } catch (e) {
-      console.log('Error parsing user from localStorage:', e);
-    }
-  } else {
-    console.log('No user object in localStorage');
+  if (storedToken) {
+    return storedToken;
   }
   
-  // Check Redux state for token (if available)
-  let reduxToken = null;
+  // Method 2: Redux state
   if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
     try {
       const state = window.__REDUX_STORE__.getState();
-      reduxToken = state.user?.token;
-      console.log('Redux token found:', !!reduxToken);
+      const reduxToken = state.user?.token;
+      console.log('2. Redux state token:', !!reduxToken);
+      console.log('   Token length:', reduxToken ? reduxToken.length : 0);
+      
+      if (reduxToken) {
+        // Store in localStorage for future use
+        localStorage.setItem('auth_token', reduxToken);
+        console.log('   Token restored to localStorage from Redux');
+        return reduxToken;
+      }
     } catch (e) {
       console.log('Error accessing Redux state:', e);
     }
-  } else {
-    console.log('Redux store not available');
   }
   
-  // Use storedToken first, then Redux token, then userToken
-  const token = storedToken || reduxToken || userToken;
-  console.log('Final token selected:', !!token);
-  console.log('Final token source:', token === storedToken ? 'localStorage' : token === reduxToken ? 'Redux' : token === userToken ? 'user object' : 'none');
+  // Method 3: User object in localStorage
+  const userString = localStorage.getItem('user');
+  if (userString) {
+    try {
+      const user = JSON.parse(userString);
+      const userToken = user.token;
+      console.log('3. User object token:', !!userToken);
+      console.log('   Token length:', userToken ? userToken.length : 0);
+      
+      if (userToken) {
+        // Store in localStorage for future use
+        localStorage.setItem('auth_token', userToken);
+        console.log('   Token restored to localStorage from user object');
+        return userToken;
+      }
+    } catch (e) {
+      console.log('Error parsing user from localStorage:', e);
+    }
+  }
+  
+  // Method 4: Session storage (as additional fallback)
+  const sessionToken = sessionStorage.getItem('auth_token');
+  console.log('4. Session storage token:', !!sessionToken);
+  console.log('   Token length:', sessionToken ? sessionToken.length : 0);
+  
+  if (sessionToken) {
+    // Store in localStorage for future use
+    localStorage.setItem('auth_token', sessionToken);
+    console.log('   Token restored to localStorage from session storage');
+    return sessionToken;
+  }
+  
+  console.log('No token found in any storage location');
+  return null;
+};
+
+export const authenticatedFetch = async (endpoint, options = {}) => {
+  const url = getApiUrl(endpoint);
+  
+  // Get token using enhanced retrieval
+  const token = getAuthToken();
   
   // Default options
   const defaultOptions = {
@@ -85,9 +115,6 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   console.log('Constructed URL:', url);
   console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
   console.log('Current location:', window.location.href);
-  console.log('Stored token available:', !!storedToken);
-  console.log('Redux token available:', !!reduxToken);
-  console.log('User token available:', !!userToken);
   console.log('Final token available:', !!token);
   console.log('Token length:', token ? token.length : 0);
   console.log('Token preview:', token ? token.substring(0, 20) + '...' : 'N/A');
@@ -113,6 +140,7 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
         console.error('Token is expired');
         localStorage.removeItem('auth_token');
         localStorage.removeItem('user');
+        sessionStorage.removeItem('auth_token');
         throw new Error('Token expired');
       }
       
@@ -121,6 +149,7 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
       console.error('Token validation failed:', error);
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user');
+      sessionStorage.removeItem('auth_token');
       throw new Error('Invalid or expired token');
     }
   }
@@ -139,6 +168,7 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
       console.log('401 Unauthorized - clearing auth data');
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user');
+      sessionStorage.removeItem('auth_token');
       
       // Redirect to sign-in page if we're not already there
       if (typeof window !== 'undefined' && !window.location.pathname.includes('/sign-in')) {

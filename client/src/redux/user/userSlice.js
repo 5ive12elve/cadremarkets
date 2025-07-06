@@ -26,14 +26,31 @@ const userSlice = createSlice({
       state.error = null;
       
       if (typeof window !== 'undefined' && action.payload.token) {
-        console.log('Storing token in localStorage from Redux');
+        console.log('Storing token in multiple locations from Redux');
+        
+        // Store in localStorage (primary)
         localStorage.setItem('auth_token', action.payload.token);
+        console.log('✓ Token stored in localStorage');
+        
+        // Store in sessionStorage (backup)
+        sessionStorage.setItem('auth_token', action.payload.token);
+        console.log('✓ Token stored in sessionStorage');
+        
+        // Store in user object (legacy support)
+        const userWithToken = { ...action.payload.user, token: action.payload.token };
+        localStorage.setItem('user', JSON.stringify(userWithToken));
+        console.log('✓ Token stored in user object');
         
         // Verify storage
         const storedToken = localStorage.getItem('auth_token');
-        console.log('Token stored successfully:', !!storedToken);
-        console.log('Stored token length:', storedToken ? storedToken.length : 0);
-        console.log('Tokens match:', storedToken === action.payload.token);
+        const sessionToken = sessionStorage.getItem('auth_token');
+        const userToken = JSON.parse(localStorage.getItem('user') || '{}').token;
+        
+        console.log('=== REDUX STORAGE VERIFICATION ===');
+        console.log('localStorage token stored:', !!storedToken);
+        console.log('sessionStorage token stored:', !!sessionToken);
+        console.log('user object token stored:', !!userToken);
+        console.log('All tokens match:', storedToken === sessionToken && sessionToken === userToken);
       }
     },
     signInFailure: (state, action) => {
@@ -75,6 +92,9 @@ const userSlice = createSlice({
       state.error = null;
       if (typeof window !== 'undefined') {
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+        sessionStorage.removeItem('auth_token');
+        console.log('All auth data cleared from storage');
       }
     },
     signOutUserFailure: (state, action) => {
