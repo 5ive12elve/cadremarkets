@@ -149,12 +149,47 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     }
   };
   
+  // CRITICAL FIX: Always try to get token from multiple sources for cross-origin requests
+  let finalToken = token;
+  if (!finalToken) {
+    console.log('⚠️ No token from getAuthToken(), trying direct retrieval...');
+    
+    // Direct localStorage check
+    finalToken = localStorage.getItem('auth_token');
+    if (finalToken) {
+      console.log('✅ Found token in direct localStorage check');
+    } else {
+      // Direct sessionStorage check
+      finalToken = sessionStorage.getItem('auth_token');
+      if (finalToken) {
+        console.log('✅ Found token in direct sessionStorage check');
+      } else {
+        // Direct user object check
+        const userString = localStorage.getItem('user');
+        if (userString) {
+          try {
+            const user = JSON.parse(userString);
+            finalToken = user.token;
+            if (finalToken) {
+              console.log('✅ Found token in direct user object check');
+            }
+          } catch (e) {
+            console.log('Error parsing user object in direct check:', e);
+          }
+        }
+      }
+    }
+  }
+  
   // Add Authorization header if token is available
-  if (token) {
-    defaultOptions.headers['Authorization'] = `Bearer ${token}`;
+  if (finalToken) {
+    defaultOptions.headers['Authorization'] = `Bearer ${finalToken}`;
     console.log('✓ Authorization header set with Bearer token');
+    console.log('Token length:', finalToken.length);
+    console.log('Token preview:', finalToken.substring(0, 20) + '...');
   } else {
     console.log('⚠️ No token available - request will be made without Authorization header');
+    console.log('This will likely result in a 401 Unauthorized error');
   }
   
   // If body is FormData, remove Content-Type header to let browser set it
@@ -169,9 +204,9 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   console.log('Constructed URL:', url);
   console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
   console.log('Current location:', window.location.href);
-  console.log('Final token available:', !!token);
-  console.log('Token length:', token ? token.length : 0);
-  console.log('Token preview:', token ? token.substring(0, 20) + '...' : 'N/A');
+  console.log('Final token available:', !!finalToken);
+  console.log('Token length:', finalToken ? finalToken.length : 0);
+  console.log('Token preview:', finalToken ? finalToken.substring(0, 20) + '...' : 'N/A');
   console.log('Authorization header set:', !!finalOptions.headers['Authorization']);
   console.log('Authorization header value:', finalOptions.headers['Authorization'] ? finalOptions.headers['Authorization'].substring(0, 30) + '...' : 'undefined');
   console.log('All localStorage keys:', Object.keys(localStorage));
@@ -179,10 +214,10 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   console.log('Request headers being sent:', finalOptions.headers);
   
   // Enhanced token validation
-  if (token) {
+  if (finalToken) {
     try {
       // Basic JWT structure validation
-      const parts = token.split('.');
+      const parts = finalToken.split('.');
       if (parts.length !== 3) {
         console.error('Invalid JWT token structure');
         throw new Error('Invalid token format');

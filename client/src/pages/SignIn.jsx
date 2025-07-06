@@ -94,16 +94,27 @@ export default function SignIn() {
         localStorage.setItem('user', JSON.stringify(userWithToken));
         console.log('✓ Token stored in user object');
         
-        // Immediate verification
-        const storedToken = localStorage.getItem('auth_token');
-        const sessionToken = sessionStorage.getItem('auth_token');
-        const userToken = JSON.parse(localStorage.getItem('user') || '{}').token;
+        // IMMEDIATE VERIFICATION - Check if token was actually stored
+        const immediateAuthToken = localStorage.getItem('auth_token');
+        const immediateSessionToken = sessionStorage.getItem('auth_token');
+        const immediateUserToken = JSON.parse(localStorage.getItem('user') || '{}').token;
         
-        console.log('=== STORAGE VERIFICATION ===');
-        console.log('localStorage token exists:', !!storedToken);
-        console.log('sessionStorage token exists:', !!sessionToken);
-        console.log('user object token exists:', !!userToken);
-        console.log('All tokens match:', storedToken === sessionToken && sessionToken === userToken);
+        console.log('=== IMMEDIATE STORAGE VERIFICATION ===');
+        console.log('localStorage token exists:', !!immediateAuthToken);
+        console.log('localStorage token length:', immediateAuthToken ? immediateAuthToken.length : 0);
+        console.log('sessionStorage token exists:', !!immediateSessionToken);
+        console.log('sessionStorage token length:', immediateSessionToken ? immediateSessionToken.length : 0);
+        console.log('user object token exists:', !!immediateUserToken);
+        console.log('user object token length:', immediateUserToken ? immediateUserToken.length : 0);
+        console.log('All tokens match:', immediateAuthToken === immediateSessionToken && immediateSessionToken === immediateUserToken);
+        
+        // CRITICAL: Verify token is actually accessible
+        if (!immediateAuthToken) {
+          console.error('❌ CRITICAL ERROR: Token not found in localStorage after storage attempt!');
+          throw new Error('Token storage failed');
+        }
+        
+        console.log('✅ Token storage verification passed');
         
         // Test if we can access the token immediately
         console.log('=== TOKEN ACCESS TEST ===');
