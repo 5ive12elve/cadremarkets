@@ -56,16 +56,19 @@ export default function OAuth() {
       console.log('Token in response:', !!data.token);
       
       if (data.success) {
-        // Store token in localStorage as fallback for cross-origin cookie issues
+        // Store token in all locations (localStorage, sessionStorage, user object)
         if (data.token) {
           localStorage.setItem('auth_token', data.token);
-          console.log('Token stored in localStorage for cross-origin fallback');
+          sessionStorage.setItem('auth_token', data.token);
+          const userWithToken = { ...data.user, token: data.token };
+          localStorage.setItem('user', JSON.stringify(userWithToken));
+          console.log('Token stored in localStorage, sessionStorage, and user object for cross-origin fallback');
           console.log('Stored token length:', data.token.length);
         } else {
           console.log('No token received in Google auth response');
         }
-        
-        dispatch(signInSuccess(data.user));
+        // Dispatch with both user and token (fix)
+        dispatch(signInSuccess({ user: data.user, token: data.token }));
         navigate('/');
       } else {
         throw new Error(data.message || 'Authentication failed');
