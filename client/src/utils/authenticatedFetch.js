@@ -18,14 +18,30 @@ const getApiUrl = (endpoint = '') => {
 // Enhanced token retrieval with multiple fallbacks
 const getAuthToken = () => {
   console.log('=== ENHANCED TOKEN RETRIEVAL ===');
+  console.log('Current URL:', window.location.href);
+  console.log('Current domain:', window.location.hostname);
   
   // Method 1: Direct localStorage
   const storedToken = localStorage.getItem('auth_token');
   console.log('1. Direct localStorage token:', !!storedToken);
   console.log('   Token length:', storedToken ? storedToken.length : 0);
+  console.log('   Token preview:', storedToken ? storedToken.substring(0, 20) + '...' : 'N/A');
   
   if (storedToken) {
-    return storedToken;
+    // Validate token format before returning
+    try {
+      const parts = storedToken.split('.');
+      if (parts.length === 3) {
+        console.log('   Token format validation: PASSED');
+        return storedToken;
+      } else {
+        console.log('   Token format validation: FAILED - removing invalid token');
+        localStorage.removeItem('auth_token');
+      }
+    } catch {
+      console.log('   Token format validation: FAILED - removing invalid token');
+      localStorage.removeItem('auth_token');
+    }
   }
   
   // Method 2: Redux state
@@ -35,12 +51,23 @@ const getAuthToken = () => {
       const reduxToken = state.user?.token;
       console.log('2. Redux state token:', !!reduxToken);
       console.log('   Token length:', reduxToken ? reduxToken.length : 0);
+      console.log('   Token preview:', reduxToken ? reduxToken.substring(0, 20) + '...' : 'N/A');
       
       if (reduxToken) {
-        // Store in localStorage for future use
-        localStorage.setItem('auth_token', reduxToken);
-        console.log('   Token restored to localStorage from Redux');
-        return reduxToken;
+        // Validate token format before storing
+        try {
+          const parts = reduxToken.split('.');
+          if (parts.length === 3) {
+            // Store in localStorage for future use
+            localStorage.setItem('auth_token', reduxToken);
+            console.log('   Token restored to localStorage from Redux');
+            return reduxToken;
+          } else {
+            console.log('   Redux token format validation: FAILED');
+          }
+        } catch {
+          console.log('   Redux token format validation: FAILED');
+        }
       }
     } catch (e) {
       console.log('Error accessing Redux state:', e);
@@ -55,12 +82,23 @@ const getAuthToken = () => {
       const userToken = user.token;
       console.log('3. User object token:', !!userToken);
       console.log('   Token length:', userToken ? userToken.length : 0);
+      console.log('   Token preview:', userToken ? userToken.substring(0, 20) + '...' : 'N/A');
       
       if (userToken) {
-        // Store in localStorage for future use
-        localStorage.setItem('auth_token', userToken);
-        console.log('   Token restored to localStorage from user object');
-        return userToken;
+        // Validate token format before storing
+        try {
+          const parts = userToken.split('.');
+          if (parts.length === 3) {
+            // Store in localStorage for future use
+            localStorage.setItem('auth_token', userToken);
+            console.log('   Token restored to localStorage from user object');
+            return userToken;
+          } else {
+            console.log('   User object token format validation: FAILED');
+          }
+        } catch {
+          console.log('   User object token format validation: FAILED');
+        }
       }
     } catch (e) {
       console.log('Error parsing user from localStorage:', e);
@@ -71,15 +109,28 @@ const getAuthToken = () => {
   const sessionToken = sessionStorage.getItem('auth_token');
   console.log('4. Session storage token:', !!sessionToken);
   console.log('   Token length:', sessionToken ? sessionToken.length : 0);
+  console.log('   Token preview:', sessionToken ? sessionToken.substring(0, 20) + '...' : 'N/A');
   
   if (sessionToken) {
-    // Store in localStorage for future use
-    localStorage.setItem('auth_token', sessionToken);
-    console.log('   Token restored to localStorage from session storage');
-    return sessionToken;
+    // Validate token format before storing
+    try {
+      const parts = sessionToken.split('.');
+      if (parts.length === 3) {
+        // Store in localStorage for future use
+        localStorage.setItem('auth_token', sessionToken);
+        console.log('   Token restored to localStorage from session storage');
+        return sessionToken;
+      } else {
+        console.log('   Session token format validation: FAILED');
+      }
+    } catch {
+      console.log('   Session token format validation: FAILED');
+    }
   }
   
-  console.log('No token found in any storage location');
+  console.log('No valid token found in any storage location');
+  console.log('All localStorage keys:', Object.keys(localStorage));
+  console.log('All sessionStorage keys:', Object.keys(sessionStorage));
   return null;
 };
 
@@ -101,6 +152,9 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   // Add Authorization header if token is available
   if (token) {
     defaultOptions.headers['Authorization'] = `Bearer ${token}`;
+    console.log('✓ Authorization header set with Bearer token');
+  } else {
+    console.log('⚠️ No token available - request will be made without Authorization header');
   }
   
   // If body is FormData, remove Content-Type header to let browser set it
@@ -122,6 +176,7 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   console.log('Authorization header value:', finalOptions.headers['Authorization'] ? finalOptions.headers['Authorization'].substring(0, 30) + '...' : 'undefined');
   console.log('All localStorage keys:', Object.keys(localStorage));
   console.log('Final options:', finalOptions);
+  console.log('Request headers being sent:', finalOptions.headers);
   
   // Enhanced token validation
   if (token) {
