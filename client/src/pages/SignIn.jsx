@@ -66,8 +66,14 @@ export default function SignIn() {
       });
       
       console.log('=== SIGNIN RESPONSE DEBUG ===');
-      console.log('Signin response:', data);
+      console.log('Full signin response:', data);
+      console.log('Response type:', typeof data);
+      console.log('Response keys:', Object.keys(data));
       console.log('Token in response:', !!data.token);
+      console.log('Token value:', data.token);
+      console.log('User in response:', !!data.user);
+      console.log('User value:', data.user);
+      console.log('Success flag:', data.success);
       
       if (data.success === false) {
         dispatch(signInFailure(data.message));
