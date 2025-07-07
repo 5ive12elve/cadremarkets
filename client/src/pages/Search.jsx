@@ -4,6 +4,7 @@ import ListingItem from '../components/ListingItem';
 import GE02Loader from '../components/GE02Loader';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import { authenticatedFetch } from '../utils/authenticatedFetch';
 
 export default function Search() {
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ export default function Search() {
       const searchQuery = urlParams.toString();
 
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get?${searchQuery}`);
+        const res = await authenticatedFetch(`/api/listing/get?${searchQuery}`);
         if (!res.ok) {
           throw new Error('Failed to fetch listings.');
         }
@@ -156,7 +157,7 @@ export default function Search() {
     urlParams.set('startIndex', startIndex);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get?${urlParams.toString()}`);
+      const res = await authenticatedFetch(`/api/listing/get?${urlParams.toString()}`);
       if (!res.ok) {
         throw new Error('Failed to fetch additional listings.');
       }

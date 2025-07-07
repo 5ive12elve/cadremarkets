@@ -8,6 +8,7 @@ import AlertDialog from '../components/ui/AlertDialog';
 import OrderSuccessPopup from '../components/ui/OrderSuccessPopup';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import { authenticatedFetch } from '../utils/authenticatedFetch';
 
 const cairoDistricts = [
   'Maadi',
@@ -176,7 +177,7 @@ export default function Checkout() {
     };
   
     try {
-              const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/orders`, {
+      const res = await authenticatedFetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),

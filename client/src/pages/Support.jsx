@@ -4,6 +4,7 @@ import { FiBook, FiMessageSquare, FiPhone } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import { authenticatedFetch } from '../utils/authenticatedFetch';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -127,7 +128,7 @@ export default function Support() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/support`, {
+      const response = await authenticatedFetch('/api/support', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

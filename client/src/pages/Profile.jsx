@@ -27,6 +27,7 @@ import ProfileUpdateSuccessPopup from '../components/ui/ProfileUpdateSuccessPopu
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
 import { authenticatedFetch } from '../utils/authenticatedFetch';
+import { getApiUrl } from '../utils/apiConfig';
 
 
 export default function Profile() {
