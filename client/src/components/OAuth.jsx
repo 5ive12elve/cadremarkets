@@ -86,6 +86,20 @@ export default function OAuth() {
         console.log('Token object:', !!data.token);
         dispatch(signInSuccess({ user: data.user, token: data.token }));
         
+        // CRITICAL FIX: Wait for Redux state to update before navigation
+        console.log('=== WAITING FOR REDUX UPDATE (OAUTH) ===');
+        await new Promise(resolve => setTimeout(resolve, 200)); // Wait 200ms for Redux to update
+        
+        // Verify Redux state before navigation
+        if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
+          const state = window.__REDUX_STORE__.getState();
+          console.log('Redux state before OAuth navigation:', {
+            hasUser: !!state.user?.currentUser,
+            hasToken: !!state.user?.token,
+            tokenLength: state.user?.token ? state.user.token.length : 0
+          });
+        }
+        
         // Add delay before navigation to ensure Redux state is updated
         setTimeout(() => {
           console.log('=== OAUTH PRE-NAVIGATION CHECK ===');
@@ -101,7 +115,7 @@ export default function OAuth() {
           
           console.log('About to navigate to homepage from OAuth...');
           navigate('/');
-        }, 100);
+        }, 300); // Increased delay to 300ms
       } else {
         throw new Error(data.message || 'Authentication failed');
       }

@@ -193,6 +193,20 @@ export default function SignIn() {
         position: 'top-center',
       });
 
+      // CRITICAL FIX: Wait for Redux state to update before navigation
+      console.log('=== WAITING FOR REDUX UPDATE ===');
+      await new Promise(resolve => setTimeout(resolve, 200)); // Wait 200ms for Redux to update
+      
+      // Verify Redux state before navigation
+      if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
+        const state = window.__REDUX_STORE__.getState();
+        console.log('Redux state before navigation:', {
+          hasUser: !!state.user?.currentUser,
+          hasToken: !!state.user?.token,
+          tokenLength: state.user?.token ? state.user.token.length : 0
+        });
+      }
+      
       // Add a small delay to ensure token is properly stored before navigation
       setTimeout(() => {
         console.log('=== PRE-NAVIGATION TOKEN CHECK (FIXED ORDER) ===');
@@ -229,12 +243,12 @@ export default function SignIn() {
         
         console.log('About to navigate to homepage...');
         navigate('/');
-      }, 100);
-
+      }, 300); // Increased delay to 300ms
+      
     } catch (error) {
       console.error('Signin error:', error);
-      dispatch(signInFailure(error.message));
-      toast.error(error.message);
+      dispatch(signInFailure(error.message || 'Sign in failed'));
+      toast.error(error.message || 'Sign in failed');
     }
   };
   return (

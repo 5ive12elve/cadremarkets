@@ -120,90 +120,160 @@ export const testTokenFlow = async () => {
   console.log('   Session token length:', sessionToken ? sessionToken.length : 0);
   console.log('   Session token preview:', sessionToken ? sessionToken.substring(0, 20) + '...' : 'N/A');
   
-  // Test API health first
-  try {
-    console.log('5. Testing API health...');
-    const healthResponse = await fetch('/api/health');
-    console.log('   Health check status:', healthResponse.status);
-    const healthData = await healthResponse.json();
-    console.log('   Health check data:', healthData);
-  } catch (error) {
-    console.error('   Health check failed:', error);
-  }
-  
-  // Test basic API endpoint
-  try {
-    console.log('6. Testing basic API endpoint...');
-    const testResponse = await fetch('/api/test');
-    console.log('   Basic API status:', testResponse.status);
-    const testData = await testResponse.json();
-    console.log('   Basic API data:', testData);
-  } catch (error) {
-    console.error('   Basic API test failed:', error);
-  }
-  
-  // Test authenticatedFetch
-  try {
-    console.log('7. Testing authenticatedFetch...');
-    const response = await fetch('/api/user/test', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'Content-Type': 'application/json'
-      },
-      credentials: 'include'
-    });
-    
-    console.log('   Response status:', response.status);
-    const data = await response.json();
-    console.log('   Response data:', data);
-  } catch (error) {
-    console.error('   Test request failed:', error);
-  }
-  
-  // Test the actual endpoint that's failing
-  try {
-    console.log('8. Testing user listings endpoint...');
-    
-    // Get current user ID from token
-    let currentUserId = null;
+  // Test API call
+  if (authToken) {
+    console.log('5. Testing API call with token...');
     try {
-      const parts = authToken.split('.');
-      if (parts.length === 3) {
-        const payload = JSON.parse(atob(parts[1]));
-        currentUserId = payload.id;
-        console.log('   Current user ID from token:', currentUserId);
-      }
-    } catch {
-      console.log('   Could not extract user ID from token');
+      const response = await fetch('https://api.cadremarkets.com/api/user/auth-test', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
+      
+      console.log('   API response status:', response.status);
+      const data = await response.json();
+      console.log('   API response data:', data);
+    } catch (error) {
+      console.log('   API call failed:', error);
     }
-    
-    if (!currentUserId) {
-      console.log('   ❌ No user ID found in token, cannot test listings endpoint');
-      return;
-    }
-    
-    // Use proper API URL construction
-    const apiUrl = import.meta.env.VITE_API_URL || 'https://api.cadremarkets.com';
-    const endpoint = `/api/user/listings/${currentUserId}`;
-    const fullUrl = `${apiUrl}${endpoint}`;
-    
-    console.log('   Using API URL:', fullUrl);
-    
-    const response = await fetch(fullUrl, {
+  }
+  
+  // Test cross-origin cookie
+  console.log('6. Testing cross-origin cookie...');
+  try {
+    const cookieResponse = await fetch('https://api.cadremarkets.com/api/user/auth-test', {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'Content-Type': 'application/json'
-      },
       credentials: 'include'
     });
     
-    console.log('   Response status:', response.status);
-    const data = await response.json();
-    console.log('   Response data:', data);
+    console.log('   Cookie response status:', cookieResponse.status);
+    const cookieData = await cookieResponse.json();
+    console.log('   Cookie response data:', cookieData);
   } catch (error) {
-    console.error('   User listings test failed:', error);
+    console.log('   Cookie test failed:', error);
+  }
+};
+
+// New function to test the complete authentication flow
+export const testCompleteAuthFlow = async () => {
+  console.log('=== TESTING COMPLETE AUTHENTICATION FLOW ===');
+  
+  // Step 1: Check current state
+  console.log('\n1. Current authentication state:');
+  const currentToken = localStorage.getItem('auth_token');
+  console.log('   Current token exists:', !!currentToken);
+  console.log('   Current token length:', currentToken ? currentToken.length : 0);
+  
+  // Step 2: Test signin (if no token)
+  if (!currentToken) {
+    console.log('\n2. No token found, testing signin...');
+    try {
+      const signinResponse = await fetch('https://api.cadremarkets.com/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Origin': 'https://www.cadremarkets.com'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email: 'test@example.com', // Replace with actual test credentials
+          password: 'testpassword'
+        })
+      });
+      
+      console.log('   Signin response status:', signinResponse.status);
+      const signinData = await signinResponse.json();
+      console.log('   Signin response data:', signinData);
+      
+      if (signinData.success && signinData.token) {
+        console.log('   Signin successful, token received');
+        
+        // Step 3: Store token
+        console.log('\n3. Storing token...');
+        localStorage.setItem('auth_token', signinData.token);
+        sessionStorage.setItem('auth_token', signinData.token);
+        const userWithToken = { ...signinData.user, token: signinData.token };
+        localStorage.setItem('user', JSON.stringify(userWithToken));
+        console.log('   Token stored in all locations');
+        
+        // Step 4: Test API call immediately
+        console.log('\n4. Testing immediate API call...');
+        const immediateResponse = await fetch('https://api.cadremarkets.com/api/user/auth-test', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${signinData.token}`,
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        });
+        
+        console.log('   Immediate API response status:', immediateResponse.status);
+        const immediateData = await immediateResponse.json();
+        console.log('   Immediate API response data:', immediateData);
+        
+        // Step 5: Test after a delay
+        console.log('\n5. Testing delayed API call...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const delayedResponse = await fetch('https://api.cadremarkets.com/api/user/auth-test', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${signinData.token}`,
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        });
+        
+        console.log('   Delayed API response status:', delayedResponse.status);
+        const delayedData = await delayedResponse.json();
+        console.log('   Delayed API response data:', delayedData);
+        
+      } else {
+        console.log('   Signin failed:', signinData.message);
+      }
+    } catch (error) {
+      console.log('   Signin error:', error);
+    }
+  } else {
+    console.log('\n2. Token found, testing API call...');
+    try {
+      const response = await fetch('https://api.cadremarkets.com/api/user/auth-test', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${currentToken}`,
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
+      
+      console.log('   API response status:', response.status);
+      const data = await response.json();
+      console.log('   API response data:', data);
+    } catch (error) {
+      console.log('   API call failed:', error);
+    }
+  }
+  
+  // Step 6: Final verification
+  console.log('\n6. Final verification:');
+  const finalToken = localStorage.getItem('auth_token');
+  const finalUser = localStorage.getItem('user');
+  const finalSession = sessionStorage.getItem('auth_token');
+  
+  console.log('   localStorage token:', !!finalToken);
+  console.log('   localStorage user:', !!finalUser);
+  console.log('   sessionStorage token:', !!finalSession);
+  
+  if (finalUser) {
+    try {
+      const user = JSON.parse(finalUser);
+      console.log('   User object token:', !!user.token);
+    } catch (e) {
+      console.log('   Error parsing user object:', e);
+    }
   }
 };
 
@@ -360,6 +430,7 @@ if (typeof window !== 'undefined') {
   window.debugProductionToken = debugProductionToken;
   window.monitorTokenJourney = monitorTokenJourney;
   window.testCurrentToken = testCurrentToken;
+  window.testCompleteAuthFlow = testCompleteAuthFlow;
   
   // Simple inline debug function for immediate use
   window.debugTokenNow = () => {
@@ -413,64 +484,27 @@ if (typeof window !== 'undefined') {
   
   // Simple test function for immediate use
   window.testTokenNow = async () => {
-    console.log('=== TESTING CURRENT TOKEN ===');
-    
-    const authToken = localStorage.getItem('auth_token');
-    if (!authToken) {
-      console.log('❌ No token found in localStorage');
-      return;
-    }
-    
-    console.log('✅ Token found, testing API request...');
-    console.log('Token length:', authToken.length);
-    console.log('Token preview:', authToken.substring(0, 20) + '...');
-    
-    try {
-      // Test the exact endpoint that's failing
-      // Get current user ID from token
-      let currentUserId = null;
+    console.log('=== QUICK TOKEN TEST ===');
+    const token = localStorage.getItem('auth_token');
+    if (token) {
       try {
-        const parts = authToken.split('.');
-        if (parts.length === 3) {
-          const payload = JSON.parse(atob(parts[1]));
-          currentUserId = payload.id;
-          console.log('Current user ID from token:', currentUserId);
-        }
-      } catch {
-        console.log('Could not extract user ID from token');
+        const response = await fetch('https://api.cadremarkets.com/api/user/auth-test', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        });
+        
+        console.log('API test status:', response.status);
+        const data = await response.json();
+        console.log('API test response:', data);
+      } catch (error) {
+        console.error('API test failed:', error);
       }
-      
-      if (!currentUserId) {
-        console.log('❌ No user ID found in token, cannot test listings endpoint');
-        return;
-      }
-      
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://api.cadremarkets.com';
-      const endpoint = `/api/user/listings/${currentUserId}`;
-      const fullUrl = `${apiUrl}${endpoint}`;
-      
-      console.log('Using API URL:', fullUrl);
-      
-      const response = await fetch(fullUrl, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-      });
-      
-      console.log('Response status:', response.status);
-      const data = await response.json();
-      console.log('Response data:', data);
-      
-      if (response.ok) {
-        console.log('✅ API request successful!');
-      } else {
-        console.log('❌ API request failed');
-      }
-    } catch (error) {
-      console.error('❌ API request error:', error);
+    } else {
+      console.log('No token found for testing');
     }
   };
   

@@ -74,6 +74,7 @@ export const signin = async (req, res, next) => {
   console.log('NODE_ENV:', process.env.NODE_ENV);
   console.log('Request host:', req.get('host'));
   console.log('Request origin:', req.get('origin'));
+  console.log('Request headers:', req.headers);
   
   // Input validation
   if (!email || !password) {
@@ -95,14 +96,21 @@ export const signin = async (req, res, next) => {
                         req.get('host')?.includes('cadremarkets.com') ||
                         req.get('origin')?.includes('cadremarkets.com');
     
-    // Define cookie options
+    // CRITICAL FIX: Improved cookie options for cross-origin compatibility
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction, // Force secure in production
-      sameSite: 'none',
+      sameSite: 'none', // Required for cross-origin
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
       // Remove domain restriction to allow cross-origin requests
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      path: '/', // Ensure cookie is available for all paths
     };
+    
+    // Add domain only in production and only if it's a subdomain
+    if (isProduction && req.get('host')?.includes('cadremarkets.com')) {
+      // For cross-origin setup, don't set domain to allow the browser to handle it
+      console.log('Production environment detected, not setting domain for cross-origin compatibility');
+    }
     
     console.log('Setting cookie with token:', token.substring(0, 20) + '...');
     console.log('Cookie options:', cookieOptions);
@@ -110,16 +118,18 @@ export const signin = async (req, res, next) => {
     console.log('Host check:', req.get('host')?.includes('cadremarkets.com'));
     console.log('Origin check:', req.get('origin')?.includes('cadremarkets.com'));
     
-    res
-      .cookie('access_token', token, cookieOptions)
-      .status(200)
-      .json({
-        success: true,
-        user: rest,
-        token: token // Include token in response for cross-origin fallback
-      });
+    // Set the cookie
+    res.cookie('access_token', token, cookieOptions);
+    
+    // Send response with token in body for cross-origin fallback
+    res.status(200).json({
+      success: true,
+      user: rest,
+      token: token // Include token in response for cross-origin fallback
+    });
       
-    console.log('Signin successful, cookie set');
+    console.log('Signin successful, cookie set and token included in response');
+    console.log('Response headers:', res.getHeaders());
   } catch (error) {
     console.log('Signin error:', error);
     next(error);
@@ -129,6 +139,12 @@ export const signin = async (req, res, next) => {
 export const google = async (req, res, next) => {
   try {
     const { email, name, photo, tokenId } = req.body;
+    
+    console.log('=== GOOGLE AUTH DEBUG ===');
+    console.log('Google auth attempt for email:', email);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('Request host:', req.get('host'));
+    console.log('Request origin:', req.get('origin'));
     
     // Input validation
     if (!tokenId) {
@@ -144,26 +160,38 @@ export const google = async (req, res, next) => {
                         req.get('host')?.includes('cadremarkets.com') ||
                         req.get('origin')?.includes('cadremarkets.com');
     
+    // CRITICAL FIX: Improved cookie options for cross-origin compatibility
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction, // Force secure in production
-      sameSite: 'none',
-      // Remove domain restriction to allow cross-origin requests
-      maxAge: 24 * 60 * 60 * 1000
+      sameSite: 'none', // Required for cross-origin
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      path: '/', // Ensure cookie is available for all paths
     };
+    
+    // Add domain only in production and only if it's a subdomain
+    if (isProduction && req.get('host')?.includes('cadremarkets.com')) {
+      // For cross-origin setup, don't set domain to allow the browser to handle it
+      console.log('Production environment detected, not setting domain for cross-origin compatibility');
+    }
+    
+    console.log('Google auth cookie options:', cookieOptions);
+    console.log('Is production?', isProduction);
     
     const user = await User.findOne({ email });
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
-      res
-        .cookie('access_token', token, cookieOptions)
-        .status(200)
-        .json({
-          success: true,
-          user: rest,
-          token: token // Include token in response for cross-origin fallback
-        });
+      
+      // Set the cookie
+      res.cookie('access_token', token, cookieOptions);
+      
+      // Send response with token in body for cross-origin fallback
+      res.status(200).json({
+        success: true,
+        user: rest,
+        token: token // Include token in response for cross-origin fallback
+      });
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
@@ -180,16 +208,21 @@ export const google = async (req, res, next) => {
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
-      res
-        .cookie('access_token', token, cookieOptions)
-        .status(200)
-        .json({ 
-          success: true, 
-          user: rest,
-          token: token // Include token in response for cross-origin fallback
-        });
+      
+      // Set the cookie
+      res.cookie('access_token', token, cookieOptions);
+      
+      // Send response with token in body for cross-origin fallback
+      res.status(200).json({ 
+        success: true, 
+        user: rest,
+        token: token // Include token in response for cross-origin fallback
+      });
     }
+    
+    console.log('Google auth successful, cookie set and token included in response');
   } catch (error) {
+    console.log('Google auth error:', error);
     next(error);
   }
 };

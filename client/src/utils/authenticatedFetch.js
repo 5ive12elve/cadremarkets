@@ -249,33 +249,101 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     }
   }
   
-  const response = await fetch(url, finalOptions);
+  // CRITICAL FIX: Add retry logic for cross-origin issues
+  const maxRetries = 2;
+  let lastError = null;
   
-  console.log('Response status:', response.status);
-  console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-  
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'An error occurred' }));
-    console.log('Error response:', error);
-    
-    // Handle specific error cases
-    if (response.status === 401) {
-      console.log('401 Unauthorized - clearing auth data');
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user');
-      sessionStorage.removeItem('auth_token');
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`=== FETCH ATTEMPT ${attempt + 1}/${maxRetries + 1} ===`);
       
-      // Redirect to sign-in page if we're not already there
-      if (typeof window !== 'undefined' && !window.location.pathname.includes('/sign-in')) {
-        window.location.href = '/sign-in';
-        return;
+      const response = await fetch(url, finalOptions);
+      
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ message: 'An error occurred' }));
+        console.log('Error response:', error);
+        
+        // Handle specific error cases
+        if (response.status === 401) {
+          console.log('401 Unauthorized - clearing auth data');
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('user');
+          sessionStorage.removeItem('auth_token');
+          
+          // On first 401, try to refresh token from other sources
+          if (attempt === 0) {
+            console.log('First 401, trying to refresh token from other sources...');
+            
+            // Try to get token from Redux state
+            if (typeof window !== 'undefined' && window.__REDUX_STORE__) {
+              const state = window.__REDUX_STORE__.getState();
+              const reduxToken = state.user?.token;
+              if (reduxToken && reduxToken !== finalToken) {
+                console.log('Found different token in Redux, retrying...');
+                finalOptions.headers['Authorization'] = `Bearer ${reduxToken}`;
+                continue; // Retry with new token
+              }
+            }
+            
+            // Try to get token from user object
+            const userString = localStorage.getItem('user');
+            if (userString) {
+              try {
+                const user = JSON.parse(userString);
+                if (user.token && user.token !== finalToken) {
+                  console.log('Found different token in user object, retrying...');
+                  finalOptions.headers['Authorization'] = `Bearer ${user.token}`;
+                  continue; // Retry with new token
+                }
+              } catch (e) {
+                console.log('Error parsing user object during retry:', e);
+              }
+            }
+          }
+          
+          // Redirect to sign-in page if we're not already there
+          if (typeof window !== 'undefined' && !window.location.pathname.includes('/sign-in')) {
+            window.location.href = '/sign-in';
+            return;
+          }
+        }
+        
+        lastError = new Error(error.message || `HTTP error! status: ${response.status}`);
+        
+        // If this is not the last attempt, wait before retrying
+        if (attempt < maxRetries) {
+          console.log(`Waiting ${(attempt + 1) * 1000}ms before retry...`);
+          await new Promise(resolve => setTimeout(resolve, (attempt + 1) * 1000));
+          continue;
+        }
+        
+        throw lastError;
       }
+      
+      // Success - return the response
+      return response.json();
+      
+    } catch (error) {
+      console.error(`Fetch attempt ${attempt + 1} failed:`, error);
+      lastError = error;
+      
+      // If this is not the last attempt, wait before retrying
+      if (attempt < maxRetries) {
+        console.log(`Waiting ${(attempt + 1) * 1000}ms before retry...`);
+        await new Promise(resolve => setTimeout(resolve, (attempt + 1) * 1000));
+        continue;
+      }
+      
+      // This is the last attempt, throw the error
+      throw error;
     }
-    
-    throw new Error(error.message || `HTTP error! status: ${response.status}`);
   }
   
-  return response.json();
+  // This should never be reached, but just in case
+  throw lastError || new Error('All fetch attempts failed');
 };
 
 export default authenticatedFetch; 
