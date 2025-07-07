@@ -79,7 +79,25 @@ export const testProductionApi = async () => {
 export const testUrlConstructionMethods = async () => {
   console.log('=== URL CONSTRUCTION METHODS TEST ===');
   
-  const endpoint = '/api/user/listings/68687724b9bb2ebe001621de';
+  // Get current user ID from token for testing
+  let currentUserId = null;
+  const authToken = localStorage.getItem('auth_token');
+  if (authToken) {
+    try {
+      const parts = authToken.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        currentUserId = payload.id;
+        console.log('Current user ID from token:', currentUserId);
+      }
+    } catch {
+      console.log('Could not extract user ID from token');
+    }
+  }
+  
+  // Use dynamic user ID or fallback to a test ID
+  const testUserId = currentUserId || 'test1234567890123456789012';
+  const endpoint = `/api/user/listings/${testUserId}`;
   
   // Method 1: Direct construction
   const method1 = `https://api.cadremarkets.com${endpoint}`;

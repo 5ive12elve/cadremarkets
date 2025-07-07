@@ -17,6 +17,7 @@ import {
   signOutUserStart,
   signOutUserSuccess,
   signOutUserFailure,
+  updateCurrentUser,
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -27,7 +28,6 @@ import ProfileUpdateSuccessPopup from '../components/ui/ProfileUpdateSuccessPopu
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
 import { authenticatedFetch } from '../utils/authenticatedFetch';
-import { getApiUrl } from '../utils/apiConfig';
 
 
 export default function Profile() {
@@ -100,6 +100,32 @@ export default function Profile() {
     
     console.log('=== PROFILE PAGE TOKEN STATUS END ===');
   }, [currentUser]);
+
+  // Fetch current user profile from backend to ensure we have the correct user ID
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        console.log('=== FETCHING CURRENT USER PROFILE ===');
+        const response = await authenticatedFetch('/api/user/me');
+        console.log('Current user profile from backend:', response);
+        
+        // Update Redux state with the correct user data
+        if (response && response._id) {
+          console.log('Updating Redux with correct user ID:', response._id);
+          dispatch(updateCurrentUser(response));
+        }
+      } catch (error) {
+        console.error('Error fetching current user profile:', error);
+      }
+    };
+
+    // Only fetch if we have a token but the user ID looks suspicious
+    const authToken = localStorage.getItem('auth_token');
+    if (authToken && currentUser?._id === '68687724b9bb2ebe001621de') {
+      console.log('Suspicious user ID detected, fetching fresh user profile');
+      fetchCurrentUser();
+    }
+  }, [currentUser?._id]);
 
   const handleFileUpload = async (file) => {
     try {

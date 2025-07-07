@@ -107,6 +107,11 @@ const userSlice = createSlice({
       console.log('Token length:', action.payload ? action.payload.length : 0);
       state.token = action.payload;
     },
+    updateCurrentUser: (state, action) => {
+      console.log('=== REDUX UPDATE CURRENT USER ===');
+      console.log('New user data:', action.payload);
+      state.currentUser = action.payload;
+    },
   },
 });
 
@@ -124,6 +129,7 @@ export const {
   signOutUserSuccess,
   signOutUserStart,
   restoreToken,
+  updateCurrentUser,
 } = userSlice.actions;
 
 export default userSlice.reducer;
