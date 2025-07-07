@@ -164,7 +164,33 @@ export const testTokenFlow = async () => {
   // Test the actual endpoint that's failing
   try {
     console.log('8. Testing user listings endpoint...');
-    const response = await fetch('/api/user/listings/68687724b9bb2ebe001621de', {
+    
+    // Get current user ID from token
+    let currentUserId = null;
+    try {
+      const parts = authToken.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        currentUserId = payload.id;
+        console.log('   Current user ID from token:', currentUserId);
+      }
+    } catch {
+      console.log('   Could not extract user ID from token');
+    }
+    
+    if (!currentUserId) {
+      console.log('   ❌ No user ID found in token, cannot test listings endpoint');
+      return;
+    }
+    
+    // Use proper API URL construction
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://api.cadremarkets.com';
+    const endpoint = `/api/user/listings/${currentUserId}`;
+    const fullUrl = `${apiUrl}${endpoint}`;
+    
+    console.log('   Using API URL:', fullUrl);
+    
+    const response = await fetch(fullUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${authToken}`,
@@ -279,7 +305,31 @@ export const testCurrentToken = async () => {
   
   try {
     // Test the exact endpoint that's failing
-    const response = await fetch('/api/user/listings/68687724b9bb2ebe001621de', {
+    // Get current user ID from token
+    let currentUserId = null;
+    try {
+      const parts = authToken.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(atob(parts[1]));
+        currentUserId = payload.id;
+        console.log('Current user ID from token:', currentUserId);
+      }
+    } catch {
+      console.log('Could not extract user ID from token');
+    }
+    
+    if (!currentUserId) {
+      console.log('❌ No user ID found in token, cannot test listings endpoint');
+      return;
+    }
+    
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://api.cadremarkets.com';
+    const endpoint = `/api/user/listings/${currentUserId}`;
+    const fullUrl = `${apiUrl}${endpoint}`;
+    
+    console.log('Using API URL:', fullUrl);
+    
+    const response = await fetch(fullUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${authToken}`,
@@ -377,7 +427,31 @@ if (typeof window !== 'undefined') {
     
     try {
       // Test the exact endpoint that's failing
-      const response = await fetch('/api/user/listings/68687724b9bb2ebe001621de', {
+      // Get current user ID from token
+      let currentUserId = null;
+      try {
+        const parts = authToken.split('.');
+        if (parts.length === 3) {
+          const payload = JSON.parse(atob(parts[1]));
+          currentUserId = payload.id;
+          console.log('Current user ID from token:', currentUserId);
+        }
+      } catch {
+        console.log('Could not extract user ID from token');
+      }
+      
+      if (!currentUserId) {
+        console.log('❌ No user ID found in token, cannot test listings endpoint');
+        return;
+      }
+      
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://api.cadremarkets.com';
+      const endpoint = `/api/user/listings/${currentUserId}`;
+      const fullUrl = `${apiUrl}${endpoint}`;
+      
+      console.log('Using API URL:', fullUrl);
+      
+      const response = await fetch(fullUrl, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${authToken}`,

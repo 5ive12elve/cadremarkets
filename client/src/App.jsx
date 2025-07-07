@@ -6,6 +6,13 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import ErrorBoundary from './components/ErrorBoundary';
 
+// Debug utilities (only in development)
+if (import.meta.env.DEV) {
+  import('./utils/debug-token.js');
+  import('./utils/test-api-url.js');
+  import('./utils/test-production-api.js');
+}
+
 // Components
 import Header from './components/Header';
 import TopBar from './components/TopBar';
