@@ -7,6 +7,11 @@ const getApiUrl = (endpoint = '') => {
   // Remove leading slash from endpoint if present
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
   
+  // In production, always use the API domain
+  if (window.location.hostname === 'www.cadremarkets.com' || window.location.hostname === 'cadremarkets.com') {
+    return `https://api.cadremarkets.com/${cleanEndpoint}`;
+  }
+  
   // In development, use relative URLs. In production, use the full API URL
   if (baseUrl) {
     return `${baseUrl}/${cleanEndpoint}`;
