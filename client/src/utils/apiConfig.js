@@ -25,7 +25,7 @@ export const publicApiCall = async (endpoint, options = {}) => {
   
   // Default options for public endpoints
   const defaultOptions = {
-    credentials: 'include',
+    credentials: 'omit', // Don't include credentials for public endpoints
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'no-cache', // Prevent caching for public endpoints
