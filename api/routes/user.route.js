@@ -35,6 +35,23 @@ const router = express.Router();
  *         description: Test successful
  */
 router.get('/test', test);
+
+/**
+ * @swagger
+ * /api/user/auth-test:
+ *   get:
+ *     tags:
+ *       - User
+ *     summary: Test authentication
+ *     description: Test endpoint to verify authentication is working
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Authentication successful
+ *       401:
+ *         description: Authentication failed
+ */
 router.get('/auth-test', verifyToken, testAuth);
 
 /**

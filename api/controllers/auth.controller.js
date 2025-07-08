@@ -102,15 +102,9 @@ export const signin = async (req, res, next) => {
       secure: isProduction, // Force secure in production
       sameSite: 'none', // Required for cross-origin
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      // Remove domain restriction to allow cross-origin requests
       path: '/', // Ensure cookie is available for all paths
+      // Don't set domain for cross-origin compatibility
     };
-    
-    // Add domain only in production and only if it's a subdomain
-    if (isProduction && req.get('host')?.includes('cadremarkets.com')) {
-      // For cross-origin setup, don't set domain to allow the browser to handle it
-      console.log('Production environment detected, not setting domain for cross-origin compatibility');
-    }
     
     console.log('Setting cookie with token:', token.substring(0, 20) + '...');
     console.log('Cookie options:', cookieOptions);
@@ -121,11 +115,13 @@ export const signin = async (req, res, next) => {
     // Set the cookie
     res.cookie('access_token', token, cookieOptions);
     
-    // Send response with token in body for cross-origin fallback
+    // CRITICAL FIX: Always include token in response body for cross-origin fallback
+    // This ensures the frontend can access the token even if cookies fail
     res.status(200).json({
       success: true,
       user: rest,
-      token: token // Include token in response for cross-origin fallback
+      token: token, // Always include token in response
+      message: 'Sign in successful'
     });
       
     console.log('Signin successful, cookie set and token included in response');
@@ -167,13 +163,8 @@ export const google = async (req, res, next) => {
       sameSite: 'none', // Required for cross-origin
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       path: '/', // Ensure cookie is available for all paths
+      // Don't set domain for cross-origin compatibility
     };
-    
-    // Add domain only in production and only if it's a subdomain
-    if (isProduction && req.get('host')?.includes('cadremarkets.com')) {
-      // For cross-origin setup, don't set domain to allow the browser to handle it
-      console.log('Production environment detected, not setting domain for cross-origin compatibility');
-    }
     
     console.log('Google auth cookie options:', cookieOptions);
     console.log('Is production?', isProduction);
@@ -186,11 +177,12 @@ export const google = async (req, res, next) => {
       // Set the cookie
       res.cookie('access_token', token, cookieOptions);
       
-      // Send response with token in body for cross-origin fallback
+      // CRITICAL FIX: Always include token in response body for cross-origin fallback
       res.status(200).json({
         success: true,
         user: rest,
-        token: token // Include token in response for cross-origin fallback
+        token: token, // Always include token in response
+        message: 'Google sign in successful'
       });
     } else {
       const generatedPassword =
@@ -212,11 +204,12 @@ export const google = async (req, res, next) => {
       // Set the cookie
       res.cookie('access_token', token, cookieOptions);
       
-      // Send response with token in body for cross-origin fallback
+      // CRITICAL FIX: Always include token in response body for cross-origin fallback
       res.status(200).json({ 
         success: true, 
         user: rest,
-        token: token // Include token in response for cross-origin fallback
+        token: token, // Always include token in response
+        message: 'Google sign in successful'
       });
     }
     

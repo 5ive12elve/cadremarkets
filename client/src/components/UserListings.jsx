@@ -94,6 +94,23 @@ export default function UserListings({ userId }) {
                 return;
             }
             
+            // CRITICAL FIX: Test authentication first before making the actual request
+            try {
+                console.log('Testing authentication before fetching listings...');
+                const authTest = await authenticatedFetch('/api/user/auth-test');
+                console.log('Auth test successful:', authTest);
+            } catch (authError) {
+                console.error('Auth test failed:', authError);
+                if (retryCount < 2) {
+                    console.log(`Auth test failed, retrying in 1000ms (attempt ${retryCount + 1}/3)`);
+                    setTimeout(() => fetchListings(retryCount + 1), 1000);
+                    return;
+                }
+                setError('Authentication failed. Please sign in again.');
+                clearAuth();
+                return;
+            }
+            
             console.log('Calling authenticatedFetch with endpoint:', `/api/user/listings/${userId}`);
             const data = await authenticatedFetch(`/api/user/listings/${userId}`);
             console.log('authenticatedFetch completed successfully');

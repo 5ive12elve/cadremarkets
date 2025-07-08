@@ -20,15 +20,19 @@ export const test = (req, res) => {
 
 export const testAuth = (req, res) => {
   console.log('=== AUTH TEST DEBUG ===');
-  console.log('User object:', req.user);
-  console.log('Request headers:', req.headers);
   console.log('Request cookies:', req.cookies);
+  console.log('Request headers:', req.headers);
+  console.log('User object:', req.user);
   
   res.json({
     success: true,
     message: 'Authentication successful',
     user: req.user,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    cookies: req.cookies,
+    hasAccessToken: !!req.cookies.access_token,
+    hasAuthHeader: !!req.headers.authorization,
+    authHeaderValue: req.headers.authorization ? req.headers.authorization.substring(0, 30) + '...' : 'None'
   });
 };
 

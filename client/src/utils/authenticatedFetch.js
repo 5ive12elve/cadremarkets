@@ -186,6 +186,22 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     }
   }
   
+  // CRITICAL FIX: Additional fallback - check Redux state
+  if (!finalToken && typeof window !== 'undefined' && window.__REDUX_STORE__) {
+    try {
+      const state = window.__REDUX_STORE__.getState();
+      const reduxToken = state.user?.token;
+      if (reduxToken) {
+        console.log('✅ Found token in Redux state');
+        finalToken = reduxToken;
+        // Store it for future use
+        localStorage.setItem('auth_token', reduxToken);
+      }
+    } catch (e) {
+      console.log('Error accessing Redux state:', e);
+    }
+  }
+  
   // Add Authorization header if token is available
   if (finalToken) {
     defaultOptions.headers['Authorization'] = `Bearer ${finalToken}`;
