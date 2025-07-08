@@ -1,4 +1,5 @@
 // Centralized API configuration
+// Cache-busting update 6.3.1 - Force new deployment
 export const getApiUrl = (endpoint = '') => {
   const baseUrl = import.meta.env.VITE_API_URL || '';
   
