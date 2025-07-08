@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ListingItem from '../ListingItem';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useTranslation } from '../../locales/translations';
-import { getApiUrl } from '../../utils/apiConfig';
+import { publicApiCall } from '../../utils/apiConfig';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -49,14 +49,8 @@ export default function MarketplacePreview() {
         setLoading(true);
         setError(null);
 
-        // Fetch listings with cadremarketsService: true
-        const res = await fetch(getApiUrl(`api/listing/get?limit=1000&cadremarketsService=true`));
-        
-        if (!res.ok) {
-          throw new Error('Failed to fetch listings');
-        }
-
-        const data = await res.json();
+        // Fetch listings with cadremarketsService: true using publicApiCall
+        const data = await publicApiCall(`api/listing/get?limit=1000&cadremarketsService=true`);
         setListings(data);
       } catch (err) {
         setError(err.message);

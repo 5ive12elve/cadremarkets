@@ -280,7 +280,7 @@ router.post('/update/:id', verifyToken, updateListing);
  * @swagger
  * /api/listing/get/{id}:
  *   get:
- *     summary: Get a specific listing
+ *     summary: Get a specific listing by ID
  *     tags: [Listings]
  *     parameters:
  *       - in: path
@@ -651,5 +651,45 @@ router.get('/clothing/sizes', getClothingSizes);
  *         description: Unauthorized
  */
 router.get('/backoffice/statistics', getListingStatistics);
+
+/**
+ * @swagger
+ * /api/listing:
+ *   get:
+ *     summary: Legacy endpoint - redirects to /api/listing/get
+ *     tags: [Listings]
+ *     responses:
+ *       301:
+ *         description: Redirects to correct endpoint
+ */
+router.get('/', (req, res) => {
+  res.status(301).json({
+    success: false,
+    message: 'This endpoint has been moved. Please use /api/listing/get instead.',
+    correctEndpoint: '/api/listing/get',
+    requestId: req.id,
+    timestamp: new Date().toISOString()
+  });
+});
+
+/**
+ * @swagger
+ * /api/listing/public:
+ *   get:
+ *     summary: Legacy endpoint - redirects to /api/listing/get
+ *     tags: [Listings]
+ *     responses:
+ *       301:
+ *         description: Redirects to correct endpoint
+ */
+router.get('/public', (req, res) => {
+  res.status(301).json({
+    success: false,
+    message: 'This endpoint has been moved. Please use /api/listing/get instead.',
+    correctEndpoint: '/api/listing/get',
+    requestId: req.id,
+    timestamp: new Date().toISOString()
+  });
+});
 
 export default router;
