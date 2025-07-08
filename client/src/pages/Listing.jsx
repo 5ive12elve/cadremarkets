@@ -21,7 +21,7 @@ import { toast } from 'react-hot-toast';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
 import { processImageUrls } from '../utils/imageUtils';
-import { authenticatedFetch } from '../utils/authenticatedFetch';
+import { getApiUrl } from '../utils/apiConfig';
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -63,7 +63,7 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await authenticatedFetch(`/api/listing/get/${params.listingId}`);
+        const res = await fetch(getApiUrl(`api/listing/get/${params.listingId}`));
         const data = await res.json();
         if (!data || data.error) {
           setError(true);
