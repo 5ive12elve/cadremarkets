@@ -4,7 +4,7 @@ import ListingItem from '../components/ListingItem';
 import GE02Loader from '../components/GE02Loader';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
-import { authenticatedFetch } from '../utils/authenticatedFetch';
+import { getApiUrl } from '../utils/apiConfig';
 
 export default function Search() {
   const navigate = useNavigate();
@@ -109,7 +109,7 @@ export default function Search() {
       const searchQuery = urlParams.toString();
 
       try {
-        const res = await authenticatedFetch(`/api/listing/get?${searchQuery}`);
+        const res = await fetch(getApiUrl(`api/listing/get?${searchQuery}`));
         if (!res.ok) {
           throw new Error('Failed to fetch listings.');
         }
@@ -157,7 +157,7 @@ export default function Search() {
     urlParams.set('startIndex', startIndex);
 
     try {
-      const res = await authenticatedFetch(`/api/listing/get?${urlParams.toString()}`);
+      const res = await fetch(getApiUrl(`api/listing/get?${urlParams.toString()}`));
       if (!res.ok) {
         throw new Error('Failed to fetch additional listings.');
       }
@@ -240,155 +240,4 @@ export default function Search() {
                       ) : (
                         <div className="flex flex-col items-center space-y-1">
                           <div className="w-12 h-12 flex items-center justify-center">
-                            <div className={`w-8 h-8 rounded-full border-2 ${
-                              sidebardata.type === category.value
-                                ? 'border-[#db2b2e] bg-[#db2b2e]/20'
-                                : 'border-gray-400 dark:border-white/40'
-                            }`} />
-                          </div>
-                          <span className={`text-[8px] md:text-[9px] text-center font-medium leading-tight px-1 ${
-                            isArabic ? 'font-noto' : 'font-nt'
-                          } ${
-                            sidebardata.type === category.value
-                              ? 'text-[#db2b2e]'
-                              : 'text-gray-700 dark:text-white/80'
-                          } break-words overflow-hidden`}>
-                            {category.name}
-                          </span>
-                        </div>
-                      )}
-                      
-                      {/* Selected indicator */}
-                      {sidebardata.type === category.value && (
-                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#db2b2e] rounded-full flex items-center justify-center">
-                          <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        </div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-6">
-                <div className="space-y-2 md:space-y-3">
-                  <label className={`text-xs md:text-sm font-semibold block text-gray-700 dark:text-white/80 ${
-                    isArabic ? 'font-noto' : 'font-nt'
-                  }`}>
-                    {search}
-                  </label>
-                  <input
-                    type="text"
-                    id="searchTerm"
-                    placeholder={searchPlaceholder}
-                    value={sidebardata.searchTerm}
-                    onChange={handleChange}
-                    className={`w-full p-2 md:p-3 text-sm md:text-base border border-[#db2b2e] dark:border-white/20 bg-white dark:bg-black/50 text-black dark:text-white focus:border-primary transition-colors ${
-                      isArabic ? 'font-noto' : 'font-nt'
-                    }`}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className={`w-full bg-primary text-black font-bold py-2 md:py-3 px-4 text-sm md:text-base hover:opacity-90 transition-opacity mt-3 md:mt-4 ${
-                    isArabic ? 'font-amiri' : 'font-nt'
-                  }`}
-                >
-                  {applyFilters}
-                </button>
-              </form>
-            </div>
-          </aside>
-
-          {/* Results Section */}
-          <div className="flex-1">
-            {/* Sort & Count */}
-            <div className="bg-gray-100/90 dark:bg-black/30 backdrop-blur border border-[#db2b2e] dark:border-white/10 p-4 md:p-6 mb-6 md:mb-8">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-                  <label className={`text-xs md:text-sm font-semibold text-gray-700 dark:text-white/80 ${
-                    isArabic ? 'font-noto' : 'font-nt'
-                  }`}>
-                    {sortBy}
-                  </label>
-                  <select
-                    id="sort_order"
-                    value={`${sidebardata.sort}_${sidebardata.order}`}
-                    onChange={(e) => {
-                      const [sort, order] = e.target.value.split('_');
-                      setSidebardata((prev) => ({ ...prev, sort, order }));
-                    }}
-                    className={`p-2 text-sm md:text-base bg-white dark:bg-black/50 text-black dark:text-white border border-[#db2b2e] dark:border-white/20 focus:border-primary transition-colors ${
-                      isArabic ? 'font-noto' : 'font-nt'
-                    }`}
-                  >
-                    <option value="regularPrice_desc">{priceHighToLow}</option>
-                    <option value="regularPrice_asc">{priceLowToHigh}</option>
-                    <option value="createdAt_desc">{latest}</option>
-                    <option value="createdAt_asc">{oldest}</option>
-                  </select>
-                </div>
-                <p className={`text-xs md:text-sm text-gray-600 dark:text-white/60 ${
-                  isArabic ? 'font-noto' : 'font-nt'
-                }`}>
-                  {listings.length} {listings.length === 1 ? product : products} {productsFound}
-                </p>
-              </div>
-            </div>
-
-            {/* Listings Grid */}
-            <div className="bg-gray-100/90 dark:bg-black/30 backdrop-blur border border-[#db2b2e] dark:border-white/10 p-4 md:p-6">
-              {loading ? (
-                <div className="flex justify-center items-center min-h-[300px]">
-                  <GE02Loader size="large" message="Searching listings..." />
-                </div>
-              ) : listings.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="mb-6">
-                    <img 
-                      src="/mediassets/Filter03.png" 
-                      alt="" 
-                      className="w-32 h-32 mx-auto opacity-20 mb-4"
-                    />
-                  </div>
-                  <p className={`text-lg text-gray-600 dark:text-white/60 ${
-                    isArabic ? 'font-noto' : 'font-nt'
-                  }`}>
-                    {noResults}
-                  </p>
-                  <p className={`text-sm text-gray-500 dark:text-white/40 mt-2 ${
-                    isArabic ? 'font-noto' : 'font-nt'
-                  }`}>
-                    {noResultsSubtitle}
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 md:gap-6">
-                  {listings.map((listing) => (
-                    <ListingItem key={listing._id} listing={listing} />
-                  ))}
-                </div>
-              )}
-
-              {/* Load More */}
-              {showMore && (
-                <div className="flex justify-center mt-8">
-                  <button
-                    onClick={onShowMoreClick}
-                    className={`bg-primary text-black font-bold py-3 px-6 hover:opacity-90 transition-opacity ${
-                      isArabic ? 'font-amiri' : 'font-nt'
-                    }`}
-                  >
-                    {loadMore}
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+                            <div className={`
