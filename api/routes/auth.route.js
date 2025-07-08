@@ -1,8 +1,18 @@
 import express from 'express';
 import { google, signOut, signin, signup } from '../controllers/auth.controller.js';
 import { verifyToken } from '../middleware/auth.js';
+import rateLimit from 'express-rate-limit';
 
 const router = express.Router();
+
+// Rate limiting for sensitive auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit auth attempts
+  message: {
+    error: 'Too many authentication attempts, please try again later'
+  }
+});
 
 /**
  * @swagger
@@ -42,7 +52,7 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
-router.post("/signup", signup);
+router.post("/signup", authLimiter, signup);
 
 /**
  * @swagger
@@ -78,7 +88,7 @@ router.post("/signup", signup);
  *       500:
  *         description: Server error
  */
-router.post("/signin", signin);
+router.post("/signin", authLimiter, signin);
 
 /**
  * @swagger
