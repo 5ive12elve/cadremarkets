@@ -63,6 +63,15 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
+        console.log('🔍 Listing page: params.listingId =', params.listingId);
+        
+        if (!params.listingId || params.listingId === 'undefined') {
+          console.error('❌ Listing page: No valid listing ID provided');
+          setError(true);
+          setLoading(false);
+          return;
+        }
+        
         const res = await fetch(getApiUrl(`api/listing/get/${params.listingId}`));
         const data = await res.json();
         if (!data || data.error) {
@@ -80,7 +89,8 @@ export default function Listing() {
         setListing(processedListing);
         setLoading(false);
         setError(false);
-      } catch {
+      } catch (error) {
+        console.error('❌ Listing page: Error fetching listing:', error);
         setError(true);
         setLoading(false);
       }

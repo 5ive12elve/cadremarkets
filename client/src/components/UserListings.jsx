@@ -464,7 +464,11 @@ export default function UserListings({ userId }) {
                             <div className="p-3 sm:p-4 border-t border-[#db2b2e]/20 mt-auto">
                                 <div className="flex gap-1.5 sm:gap-2">
                                     <button
-                                        onClick={() => navigate(`/listing/${listing._id}`)}
+                                        onClick={() => {
+                                          console.log('🔍 UserListings: View button clicked for listing:', listing);
+                                          console.log('🔍 UserListings: listing._id =', listing._id);
+                                          navigate(`/listing/${listing._id}`);
+                                        }}
                                         className={`${listing.status === 'Pending' || listing.status === 'Confirmed' ? 'flex-1' : 'w-full'} bg-[#db2b2e] text-white py-1.5 sm:py-2 px-2 sm:px-3 hover:bg-[#db2b2e]/90 transition-colors flex items-center justify-center gap-1 text-[10px] sm:text-xs font-medium`}
                                     >
                                         <FiEye className="text-xs" />
