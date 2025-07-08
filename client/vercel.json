@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "cadremarkets.com"
+        }
+      ],
+      "destination": "https://www.cadremarkets.com/$1",
+      "permanent": true
+    }
+  ]
+} 
