@@ -49,12 +49,17 @@ export default function MarketplacePreview() {
         setLoading(true);
         setError(null);
 
+        console.log('🔍 MarketplacePreview: Fetching listings...');
+        const endpoint = `api/listing/get?limit=1000&cadremarketsService=true`;
+        console.log('🔍 Endpoint:', endpoint);
+        
         // Fetch listings with cadremarketsService: true using publicApiCall
-        const data = await publicApiCall(`api/listing/get?limit=1000&cadremarketsService=true`);
+        const data = await publicApiCall(endpoint);
+        console.log('✅ MarketplacePreview: Successfully fetched', data.length, 'listings');
         setListings(data);
       } catch (err) {
+        console.error('❌ MarketplacePreview: Error fetching listings:', err);
         setError(err.message);
-        console.error('Error fetching listings:', err);
       } finally {
         setLoading(false);
       }
