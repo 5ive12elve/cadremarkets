@@ -41,13 +41,16 @@ export default function OAuth() {
       setIsLoading(true);
       dispatch(signInStart());
 
+      // Get the Firebase ID token for server verification
+      const idToken = await result.user.getIdToken();
+      
       const data = await apiCall('/api/auth/google', {
         method: 'POST',
         body: JSON.stringify({
           name: result.user.displayName,
           email: result.user.email,
           photo: result.user.photoURL,
-          tokenId: result.user.accessToken || 'google-oauth',
+          tokenId: idToken, // Send the Firebase ID token for server verification
         }),
       });
       

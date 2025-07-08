@@ -15,7 +15,21 @@ CLIENT_URL=https://www.cadremarkets.com
 PORT=3000
 ADMIN_USERNAME=your-secure-admin-username
 ADMIN_PASSWORD=your-secure-admin-password
+
+# Firebase Admin SDK (Required for Google OAuth)
+FIREBASE_TYPE=service_account
+FIREBASE_PROJECT_ID=cadremarkets-fce26
+FIREBASE_PRIVATE_KEY_ID=your-private-key-id
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@cadremarkets-fce26.iam.gserviceaccount.com
+FIREBASE_CLIENT_ID=your-client-id
+FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token
+FIREBASE_AUTH_PROVIDER_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+FIREBASE_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-xxxxx%40cadremarkets-fce26.iam.gserviceaccount.com
 ```
+
+**📖 For detailed Firebase setup instructions, see `FIREBASE_ADMIN_SETUP.md`**
 
 #### **Frontend Environment Variables (Vercel)**
 Set this in your Vercel dashboard:

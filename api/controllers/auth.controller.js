@@ -2,6 +2,7 @@ import User from '../models/user.model.js';
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
+import { verifyFirebaseToken } from '../config/firebase.js';
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -147,8 +148,28 @@ export const google = async (req, res, next) => {
       return next(errorHandler(400, 'Google token is required'));
     }
     
-    if (!email || !name) {
-      return next(errorHandler(400, 'Invalid Google token'));
+    // CRITICAL FIX: Verify Firebase token on the server side
+    console.log('Verifying Firebase token...');
+    const firebaseResult = await verifyFirebaseToken(tokenId);
+    
+    if (!firebaseResult.success) {
+      console.log('Firebase token verification failed:', firebaseResult.error);
+      return next(errorHandler(401, 'Invalid Google token'));
+    }
+    
+    console.log('Firebase token verified successfully:', {
+      uid: firebaseResult.uid,
+      email: firebaseResult.email,
+      email_verified: firebaseResult.email_verified
+    });
+    
+    // Use verified data from Firebase instead of trusting frontend data
+    const verifiedEmail = firebaseResult.email;
+    const verifiedName = firebaseResult.name || name;
+    const verifiedPhoto = firebaseResult.picture || photo;
+    
+    if (!verifiedEmail || !verifiedName) {
+      return next(errorHandler(400, 'Invalid Google token data'));
     }
     
     // Determine if we're in production based on host or NODE_ENV
@@ -169,7 +190,7 @@ export const google = async (req, res, next) => {
     console.log('Google auth cookie options:', cookieOptions);
     console.log('Is production?', isProduction);
     
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: verifiedEmail });
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = user._doc;
@@ -191,11 +212,11 @@ export const google = async (req, res, next) => {
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUser = new User({
         username:
-          name.split(' ').join('').toLowerCase() +
+          verifiedName.split(' ').join('').toLowerCase() +
           Math.random().toString(36).slice(-4),
-        email: email,
+        email: verifiedEmail,
         password: hashedPassword,
-        avatar: photo,
+        avatar: verifiedPhoto,
       });
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
