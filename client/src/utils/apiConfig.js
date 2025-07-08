@@ -18,6 +18,37 @@ export const getApiUrl = (endpoint = '') => {
   }
 };
 
+// Helper function for making public API calls (no authentication required)
+export const publicApiCall = async (endpoint, options = {}) => {
+  const url = getApiUrl(endpoint);
+  
+  // Default options for public endpoints
+  const defaultOptions = {
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache', // Prevent caching for public endpoints
+      ...options.headers
+    }
+  };
+  
+  // If body is FormData, remove Content-Type header to let browser set it
+  if (options.body instanceof FormData) {
+    delete defaultOptions.headers['Content-Type'];
+  }
+  
+  const finalOptions = { ...defaultOptions, ...options };
+  
+  const response = await fetch(url, finalOptions);
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: 'An error occurred' }));
+    throw new Error(error.message || `HTTP error! status: ${response.status}`);
+  }
+  
+  return response.json();
+};
+
 // Helper function for making API calls with proper URL
 export const apiCall = async (endpoint, options = {}) => {
   const url = getApiUrl(endpoint);
@@ -59,4 +90,4 @@ export const apiCall = async (endpoint, options = {}) => {
   return response.json();
 };
 
-export default { getApiUrl, apiCall }; 
+export default { getApiUrl, apiCall, publicApiCall }; 
