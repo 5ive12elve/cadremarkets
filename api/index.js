@@ -201,7 +201,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Mount routes
 app.use('/api/user', userRouter);
-app.use('/api/auth', authLimiter, authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/services', serviceRouter);
