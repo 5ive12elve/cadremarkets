@@ -4,7 +4,7 @@ import ListingItem from '../components/ListingItem';
 import GE02Loader from '../components/GE02Loader';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
-import { getApiUrl } from '../utils/apiConfig';
+import { smartFetch } from '../utils/apiConfig';
 
 export default function Search() {
   const navigate = useNavigate();
@@ -109,11 +109,7 @@ export default function Search() {
       const searchQuery = urlParams.toString();
 
       try {
-        const res = await fetch(getApiUrl(`api/listing/get?${searchQuery}`));
-        if (!res.ok) {
-          throw new Error('Failed to fetch listings.');
-        }
-        const data = await res.json();
+        const data = await smartFetch(`api/listing/get?${searchQuery}`);
         setListings(data);
         setShowMore(data.length === 9);
       } catch (error) {
