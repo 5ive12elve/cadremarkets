@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: cadremarkets-api
+    env: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    rootDir: api
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: CLIENT_URL
+        value: https://www.cadremarkets.com
+      - key: MONGO
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+    healthCheckPath: /api/health
+    autoDeploy: true 
