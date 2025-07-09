@@ -128,6 +128,8 @@ export default function Search() {
         setShowMore(listings.length === 9);
       } catch (error) {
         console.error('❌ Search: Error fetching listings:', error);
+        console.error('❌ Search: Error stack:', error.stack);
+        console.error('❌ Search: Error message:', error.message);
         setListings([]);
       } finally {
         setLoading(false);
