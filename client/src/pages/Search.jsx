@@ -7,6 +7,7 @@ import { useTranslation } from '../locales/translations';
 import { smartFetch, getApiUrl } from '../utils/apiConfig';
 
 export default function Search() {
+  console.log('🔍 Search component rendered');
   const navigate = useNavigate();
   const location = useLocation();
   const { isArabic, currentLang } = useLanguage();
@@ -109,7 +110,9 @@ export default function Search() {
       const searchQuery = urlParams.toString();
 
       try {
+        console.log('🔍 Search: About to call smartFetch...');
         const data = await smartFetch(`api/listing/get?${searchQuery}`);
+        console.log('🔍 Search: smartFetch completed successfully');
         console.log('🔍 RAW listings response:', data);
         console.log('💡 Listings data:', data);
         console.log('✅ Is Array:', Array.isArray(data));
