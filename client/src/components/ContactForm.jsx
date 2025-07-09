@@ -97,7 +97,7 @@ const ContactForm = () => {
         body: JSON.stringify({
           ...formData,
           type: 'contact',
-          priority: 'normal',
+          priority: 'medium',
           status: 'new'
         }),
       });
