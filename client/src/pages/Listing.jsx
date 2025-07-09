@@ -63,16 +63,16 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        console.log('🔍 Listing page: params.listingId =', params.listingId);
+        console.log('🔍 Listing page: params.id =', params.id);
         
-        if (!params.listingId || params.listingId === 'undefined') {
+        if (!params.id || params.id === 'undefined') {
           console.error('❌ Listing page: No valid listing ID provided');
           setError(true);
           setLoading(false);
           return;
         }
         
-        const res = await fetch(getApiUrl(`api/listing/get/${params.listingId}`));
+        const res = await fetch(getApiUrl(`api/listing/get/${params.id}`));
         const data = await res.json();
         if (!data || data.error) {
           setError(true);
@@ -96,7 +96,7 @@ export default function Listing() {
       }
     };
     fetchListing();
-  }, [params.listingId]);
+  }, [params.id]);
 
   const handleAddToCart = () => {
     if (!listing) return;
