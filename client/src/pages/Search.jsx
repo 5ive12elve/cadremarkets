@@ -25,17 +25,10 @@ export default function Search() {
   const homeDecor = useTranslation('search', 'homeDecor', currentLang);
   const accessories = useTranslation('search', 'accessories', currentLang);
   const printsPoster = useTranslation('search', 'printsPoster', currentLang);
-  const search = useTranslation('search', 'search', currentLang);
-  const searchPlaceholder = useTranslation('search', 'searchPlaceholder', currentLang);
   const applyFilters = useTranslation('search', 'applyFilters', currentLang);
   const sortBy = useTranslation('search', 'sortBy', currentLang);
-  const priceHighToLow = useTranslation('search', 'priceHighToLow', currentLang);
-  const priceLowToHigh = useTranslation('search', 'priceLowToHigh', currentLang);
   const latest = useTranslation('search', 'latest', currentLang);
   const oldest = useTranslation('search', 'oldest', currentLang);
-  const product = useTranslation('search', 'product', currentLang);
-  const products = useTranslation('search', 'products', currentLang);
-  const productsFound = useTranslation('search', 'productsFound', currentLang);
   const noResults = useTranslation('search', 'noResults', currentLang);
   const noResultsSubtitle = useTranslation('search', 'noResultsSubtitle', currentLang);
   const loadMore = useTranslation('search', 'loadMore', currentLang);
@@ -252,4 +245,106 @@ export default function Search() {
                       ) : (
                         <div className="flex flex-col items-center space-y-1">
                           <div className="w-12 h-12 flex items-center justify-center">
-                            <div className={`
+                            <div className={`w-12 h-12 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center`}>
+                              <span className="text-gray-500 dark:text-gray-400 text-lg">
+                                {category.name.charAt(0)}
+                              </span>
+                            </div>
+                          </div>
+                          <span className={`text-[8px] md:text-[9px] text-center font-medium leading-tight px-1 ${
+                            isArabic ? 'font-noto' : 'font-nt'
+                          } ${
+                            sidebardata.type === category.value
+                              ? 'text-[#db2b2e]'
+                              : 'text-gray-700 dark:text-white/80'
+                          } break-words overflow-hidden`}>
+                            {category.name}
+                          </span>
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sort and Apply Filters */}
+              <div className="mt-6">
+                <h3 className={`text-xs md:text-sm font-semibold mb-3 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {sortBy}
+                </h3>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => handleChange({ id: 'sort', value: 'createdAt' })}
+                    className={`p-2 border-2 transition-all duration-300 hover:scale-105 ${
+                      sidebardata.sort === 'createdAt'
+                        ? 'border-[#db2b2e] bg-[#db2b2e]/10 dark:bg-[#db2b2e]/20'
+                        : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
+                    }`}
+                  >
+                    {latest}
+                  </button>
+                  <button
+                    onClick={() => handleChange({ id: 'sort', value: 'createdAt', order: 'asc' })}
+                    className={`p-2 border-2 transition-all duration-300 hover:scale-105 ${
+                      sidebardata.sort === 'createdAt' && sidebardata.order === 'asc'
+                        ? 'border-[#db2b2e] bg-[#db2b2e]/10 dark:bg-[#db2b2e]/20'
+                        : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
+                    }`}
+                  >
+                    {oldest}
+                  </button>
+                </div>
+
+                <button
+                  onClick={handleSubmit}
+                  className="mt-6 w-full p-3 bg-[#db2b2e] text-white rounded-md hover:bg-[#c02629] transition-colors duration-300"
+                >
+                  {applyFilters}
+                </button>
+              </div>
+            </div>
+          </aside>
+
+          {/* Listings Grid */}
+          <main className="flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {loading ? (
+                <GE02Loader />
+              ) : listings.length === 0 ? (
+                <div className="col-span-full text-center py-12">
+                  <h3 className={`text-lg md:text-xl font-bold mb-4 ${
+                    isArabic ? 'font-amiri' : 'font-nt-bold'
+                  }`}>
+                    {noResults}
+                  </h3>
+                  <p className={`text-gray-600 dark:text-white/80 text-sm md:text-lg ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}>
+                    {noResultsSubtitle}
+                  </p>
+                </div>
+              ) : (
+                listings.map((listing) => (
+                  <ListingItem key={listing._id} listing={listing} />
+                ))
+              )}
+            </div>
+
+            {showMore && (
+              <div className="text-center py-8">
+                <button
+                  onClick={onShowMoreClick}
+                  className="p-3 bg-[#db2b2e] text-white rounded-md hover:bg-[#c02629] transition-colors duration-300"
+                >
+                  {loadMore}
+                </button>
+              </div>
+            )}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
