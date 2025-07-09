@@ -111,9 +111,16 @@ export default function Search() {
       try {
         const data = await smartFetch(`api/listing/get?${searchQuery}`);
         console.log('🔍 RAW listings response:', data);
+        console.log('💡 Listings data:', data);
+        console.log('✅ Is Array:', Array.isArray(data));
+        console.log('📊 Data type:', typeof data);
+        console.log('🔢 Data length:', data?.length || 'N/A');
         
         // Handle both array and object responses
         const listings = Array.isArray(data) ? data : (data.listings || []);
+        console.log('🎯 Final listings to set:', listings);
+        console.log('🎯 Final listings is array:', Array.isArray(listings));
+        
         setListings(listings);
         setShowMore(listings.length === 9);
       } catch (error) {

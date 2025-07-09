@@ -55,8 +55,16 @@ export default function MarketplacePreview() {
         
         // Fetch listings with cadremarketsService: true using publicApiCall
         const data = await publicApiCall(endpoint);
-        console.log('✅ MarketplacePreview: Successfully fetched', data.length, 'listings');
-        setListings(data);
+        console.log('💡 MarketplacePreview data:', data);
+        console.log('✅ MarketplacePreview Is Array:', Array.isArray(data));
+        console.log('📊 MarketplacePreview Data type:', typeof data);
+        console.log('🔢 MarketplacePreview Data length:', data?.length || 'N/A');
+        
+        // Handle both array and object responses
+        const listings = Array.isArray(data) ? data : (data.listings || []);
+        console.log('🎯 MarketplacePreview Final listings:', listings);
+        console.log('✅ MarketplacePreview Successfully fetched', listings.length, 'listings');
+        setListings(listings);
       } catch (err) {
         console.error('❌ MarketplacePreview: Error fetching listings:', err);
         setError(err.message);
