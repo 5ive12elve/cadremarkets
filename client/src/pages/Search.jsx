@@ -4,7 +4,7 @@ import ListingItem from '../components/ListingItem';
 import GE02Loader from '../components/GE02Loader';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
-import { smartFetch } from '../utils/apiConfig';
+import { smartFetch, getApiUrl } from '../utils/apiConfig';
 
 export default function Search() {
   const navigate = useNavigate();
@@ -110,8 +110,9 @@ export default function Search() {
 
       try {
         const data = await smartFetch(`api/listing/get?${searchQuery}`);
+        console.log('🔍 RAW listings response:', data);
         setListings(data);
-        setShowMore(data.length === 9);
+        setShowMore(Array.isArray(data) && data.length === 9);
       } catch (error) {
         console.error(error);
         setListings([]);
