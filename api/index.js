@@ -181,6 +181,9 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
       return callback(null, true);
     }
+    logger.warn(`CORS blocked origin: ${origin}`);
+    logger.debug(`Allowed origins: ${allowedOrigins.join(', ')}`);
+    logger.debug(`Vercel regex test for ${origin}: ${vercelPreviewRegex.test(origin)}`);
     return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
