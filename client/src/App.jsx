@@ -202,13 +202,13 @@ export default function App() {
                   <Route path="edit-profile" element={<EditProfile />} />
                   <Route path="create-listing" element={<CreateListing />} />
                   <Route path="update-listing/:id" element={<UpdateListing />} />
-                  <Route path="cart" element={<Cart />} />
                   <Route path="checkout" element={<Checkout />} />
                 </Route>
                 
                 {/* Public routes that don't need authentication */}
                 <Route path="listing/:id" element={<Listing />} />
                 <Route path="search" element={<Search />} />
+                <Route path="cart" element={<Cart />} />
               </Route>
 
               {/* Back office routes */}
