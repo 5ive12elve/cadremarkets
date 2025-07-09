@@ -52,12 +52,17 @@ export const smartFetch = async (endpoint, options = {}) => {
   
   const response = await fetch(url, finalOptions);
   
+  console.log(`🔍 SmartFetch Response: ${response.status} ${response.statusText}`);
+  console.log(`🔍 SmartFetch Headers:`, Object.fromEntries(response.headers.entries()));
+  
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'An error occurred' }));
     throw new Error(error.message || `HTTP error! status: ${response.status}`);
   }
   
-  return response.json();
+  const data = await response.json();
+  console.log(`🔍 SmartFetch Data:`, data);
+  return data;
 };
 
 // Helper function for making public API calls (no authentication required)

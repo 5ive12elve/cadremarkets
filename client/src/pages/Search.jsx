@@ -111,10 +111,13 @@ export default function Search() {
       try {
         const data = await smartFetch(`api/listing/get?${searchQuery}`);
         console.log('🔍 RAW listings response:', data);
-        setListings(data);
-        setShowMore(Array.isArray(data) && data.length === 9);
+        
+        // Handle both array and object responses
+        const listings = Array.isArray(data) ? data : (data.listings || []);
+        setListings(listings);
+        setShowMore(listings.length === 9);
       } catch (error) {
-        console.error(error);
+        console.error('❌ Search: Error fetching listings:', error);
         setListings([]);
       } finally {
         setLoading(false);
