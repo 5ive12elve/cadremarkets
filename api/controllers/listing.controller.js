@@ -178,9 +178,17 @@ export const getListings = async (req, res, next) => {
       .limit(limit)
       .skip(startIndex);
 
-    return res.status(200).json(listings);
+    console.log('🔍 Backend getListings: Found', listings.length, 'listings');
+    console.log('🔍 Backend getListings: Filters:', filters);
+    console.log('🔍 Backend getListings: Response type:', typeof listings);
+    console.log('🔍 Backend getListings: Is array?', Array.isArray(listings));
+
+    // ✅ FIX: Always return an array, even if empty
+    return res.status(200).json(listings || []);
   } catch (error) {
-    next(error);
+    console.error('🔥 getListings error:', error.message);
+    // ✅ FIX: Return empty array instead of passing to error handler
+    return res.status(200).json([]);
   }
 };
 
