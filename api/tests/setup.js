@@ -99,11 +99,40 @@ global.testUtils = {
     height: 150,
     price: 2000,
     contactPreference: 'Email',
-    imageUrls: ['https://example.com/image1.jpg']
+    imageUrls: ['https://example.com/image1.jpg'],
+    status: 'For Sale',
+    listingType: 'unique',
+    initialQuantity: 1,
+    currentQuantity: 1,
+    soldQuantity: 0
   }),
   
   // Helper to create test order
   createTestOrder: () => ({
+    _id: 'test-order-123',
+    orderItems: [
+      {
+        name: 'Test Art Piece',
+        description: 'A beautiful test art piece',
+        price: 2000,
+        type: 'Paintings & Drawings',
+        quantity: 1,
+        dimensions: '2D',
+        width: 100,
+        height: 150,
+        sellerInfo: {
+          username: 'testuser',
+          email: 'test@example.com',
+          phoneNumber: '1234567890',
+          city: 'Test City',
+          district: 'Test District',
+          address: '123 Test Street',
+          contactPreference: 'Email'
+        },
+        profit: 1800, // 90% of price
+        _id: new mongoose.Types.ObjectId()
+      }
+    ],
     customerInfo: {
       name: 'Test Customer',
       phoneNumber: '1234567890',
@@ -111,7 +140,9 @@ global.testUtils = {
       city: 'Customer City',
       district: 'Customer District',
       paymentMethod: 'cash'
-    }
+    },
+    totalPrice: 2085, // 2000 + 85 shipping
+    cadreProfit: 200 // 10% of 2000
   }),
   
   // Helper to generate JWT token for testing
@@ -126,6 +157,17 @@ global.testUtils = {
     return jwt.sign(payload, secret);
   }
 };
+
+// Mock Firebase Admin
+jest.mock('../config/firebase.js', () => ({
+  initializeFirebaseAdmin: jest.fn(),
+  getAuth: jest.fn(() => ({
+    verifyIdToken: jest.fn().mockResolvedValue({
+      uid: 'test-uid',
+      email: 'test@example.com'
+    })
+  }))
+}));
 
 // Mock console methods to reduce noise in tests
 const originalConsole = console;
