@@ -4,7 +4,7 @@ import { FiBook, FiMessageSquare, FiPhone } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
-import { authenticatedFetch } from '../utils/authenticatedFetch';
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -89,6 +89,7 @@ export default function Support() {
   const needImmediateHelp = useTranslation('support', 'needImmediateHelp', currentLang);
   const urgentMatters = useTranslation('support', 'urgentMatters', currentLang);
   const responseTime = useTranslation('support', 'responseTime', currentLang);
+  const failedToSubmitRequest = useTranslation('common', 'failedToSubmitRequest', currentLang);
 
   const [activeGuide, setActiveGuide] = useState(null);
   const [formData, setFormData] = useState({
@@ -128,7 +129,7 @@ export default function Support() {
     setIsSubmitting(true);
 
     try {
-      const response = await authenticatedFetch('/api/support', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/support`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +158,7 @@ export default function Support() {
       }
     } catch (error) {
       console.error('Error submitting support request:', error);
-              toast.error(useTranslation('common', 'failedToSubmitRequest', currentLang));
+      toast.error(failedToSubmitRequest);
     } finally {
       setIsSubmitting(false);
     }
