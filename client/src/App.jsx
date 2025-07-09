@@ -53,7 +53,6 @@ import CadreBackCustomerService from './cadreBack/cadreBackCustomerService';
 
 // Route protection components
 import PrivateRoute from './components/PrivateRoute';
-import ProtectedRoute from './components/ProtectedRoute';
 
 // Error pages
 import Error404 from './pages/Error404';
@@ -214,16 +213,14 @@ export default function App() {
 
               {/* Back office routes */}
               <Route path="/cadreBack" element={<CadreBackLogin />} />
-              <Route path="/cadreBack/*" element={<ProtectedRoute />}>
-                <Route element={<BackOfficeLayout />}>
-                  <Route path="dashboard" element={<CadreBackDashboard />} />
-                  <Route path="orders" element={<CadreBackOrders />} />
-                  <Route path="listings" element={<CadreBackListings />} />
-                  <Route path="artists" element={<CadreBackArtists />} />
-                  <Route path="users" element={<CadreBackUsers />} />
-                  <Route path="services" element={<CadreBackServices />} />
-                  <Route path="customer-service" element={<CadreBackCustomerService />} />
-                </Route>
+              <Route path="/cadreBack/*" element={<BackOfficeLayout />}>
+                <Route path="dashboard" element={<CadreBackDashboard />} />
+                <Route path="orders" element={<CadreBackOrders />} />
+                <Route path="listings" element={<CadreBackListings />} />
+                <Route path="artists" element={<CadreBackArtists />} />
+                <Route path="users" element={<CadreBackUsers />} />
+                <Route path="services" element={<CadreBackServices />} />
+                <Route path="customer-service" element={<CadreBackCustomerService />} />
               </Route>
 
               {/* Error pages */}
