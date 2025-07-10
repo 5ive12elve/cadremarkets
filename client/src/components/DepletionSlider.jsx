@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight, FiMaximize, FiMinimize } from 'react-icons/fi';
 import { useLanguage } from '../contexts/LanguageContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from '../locales/translations';
 import GE02Loader from './GE02Loader';
 
@@ -78,7 +77,6 @@ const swipePower = (offset, velocity) => {
 
 export default function DepletionSlider() {
   const { isArabic, currentLang } = useLanguage();
-  const { isDarkMode } = useTheme();
   
   // Get translations
   const depletionTitle = useTranslation('projects', 'depletionTitle', currentLang);
@@ -170,61 +168,66 @@ export default function DepletionSlider() {
 
   return (
     <div ref={sliderRef} className="relative w-full bg-black" dir={isArabic ? 'rtl' : 'ltr'}>
-      {/* Text Overlay */}
-      <div className="absolute inset-0 z-20 bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none">
-        <div className={`absolute bottom-4 md:bottom-8 ${isArabic ? 'right-3 md:right-6 left-3 md:left-auto' : 'left-3 md:left-6 right-3 md:right-auto'} md:max-w-md`}>
-          <h1 className={`text-primary text-xl md:text-3xl font-bold mb-1 md:mb-2 ${
-            isArabic ? 'font-amiri text-right' : 'font-nt-bold text-left'
+      {/* Mobile-Optimized Text Overlay */}
+      <div className="absolute inset-0 z-20 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+        <div className={`absolute bottom-0 left-0 right-0 p-4 md:p-8 ${isArabic ? 'text-right' : 'text-left'}`}>
+          {/* Mobile Title */}
+          <h1 className={`text-primary text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4 leading-tight ${
+            isArabic ? 'font-amiri' : 'font-nt-bold'
           }`}>
             {depletionTitle}
           </h1>
-          <div className={`space-y-1 md:space-y-1.5 text-white/90 ${
+          
+          {/* Mobile Description */}
+          <div className={`space-y-2 md:space-y-3 text-white/95 ${
             isArabic ? 'text-right' : 'text-left'
           }`}>
-            <p className={`text-[10px] md:text-xs leading-relaxed ${
+            <p className={`text-sm sm:text-base md:text-lg leading-relaxed ${
               isArabic ? 'font-noto' : 'font-nt'
             }`}>
               {depletionDesc1}
             </p>
-            <p className={`text-[10px] md:text-xs leading-relaxed hidden md:block ${
+            <p className={`text-sm sm:text-base md:text-lg leading-relaxed ${
               isArabic ? 'font-noto' : 'font-nt'
             }`}>
               {depletionDesc2}
             </p>
-            <div className={`flex flex-col md:flex-row gap-2 md:gap-3 mt-2 md:mt-3 ${
+            
+            {/* Mobile Project Details */}
+            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-4 md:mt-6 ${
               isArabic ? 'text-right' : 'text-left'
             }`}>
-              <div>
-                <span className={`text-primary text-[8px] md:text-[10px] font-medium block mb-0.5 ${
-                  isArabic ? 'font-noto' : 'font-nt'
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-3 md:p-4 border border-primary/20">
+                <span className={`text-primary text-xs md:text-sm font-bold block mb-1 ${
+                  isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
                   {typeLabel}
                 </span>
-                <span className={`text-white text-[10px] md:text-xs ${
+                <span className={`text-white text-sm md:text-base ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
                   {typeValue}
                 </span>
               </div>
-              <div>
-                <span className={`text-primary text-[8px] md:text-[10px] font-medium block mb-0.5 ${
-                  isArabic ? 'font-noto' : 'font-nt'
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-3 md:p-4 border border-primary/20">
+                <span className={`text-primary text-xs md:text-sm font-bold block mb-1 ${
+                  isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
                   {venueLabel}
                 </span>
-                <span className={`text-white text-[10px] md:text-xs ${
+                <span className={`text-white text-sm md:text-base ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
                   {venueValue}
                 </span>
               </div>
-              <div>
-                <span className={`text-primary text-[8px] md:text-[10px] font-medium block mb-0.5 ${
-                  isArabic ? 'font-noto' : 'font-nt'
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-3 md:p-4 border border-primary/20">
+                <span className={`text-primary text-xs md:text-sm font-bold block mb-1 ${
+                  isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
                   {categoryLabel}
                 </span>
-                <span className={`text-white text-[10px] md:text-xs ${
+                <span className={`text-white text-sm md:text-base ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
                   {categoryValue}
@@ -235,14 +238,22 @@ export default function DepletionSlider() {
         </div>
       </div>
 
-      {/* Top Bar */}
-      <div className="absolute top-0 left-0 right-0 z-30 bg-gradient-to-b from-black/80 to-transparent p-2 md:p-4">
+      {/* Mobile-Optimized Top Bar */}
+      <div className="absolute top-0 left-0 right-0 z-30 bg-gradient-to-b from-black/90 via-black/50 to-transparent p-3 md:p-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1 md:gap-2">
-            {/* Video controls removed for iframe implementation */}
+          {/* Mobile Slide Counter */}
+          <div className="flex items-center gap-2">
+            <span className={`text-white/80 text-sm md:text-base ${
+              isArabic ? 'font-noto' : 'font-nt'
+            }`}>
+              {currentIndex + 1} / {validMedia.length}
+            </span>
           </div>
-          <div className="flex items-center gap-2 md:gap-4">
-            <div className="flex gap-1 md:gap-2">
+          
+          {/* Mobile Controls */}
+          <div className="flex items-center gap-3 md:gap-4">
+            {/* Mobile Slide Indicators */}
+            <div className="flex gap-2 md:gap-3">
               {validMedia.map((_, index) => (
                 <button
                   key={index}
@@ -252,24 +263,31 @@ export default function DepletionSlider() {
                       clearTimeout(autoplayTimeoutRef.current);
                     }
                   }}
-                  className={`w-1 h-1 md:w-1.5 md:h-1.5 transition-all ${
-                    index === currentIndex ? 'bg-primary w-2 md:w-3' : 'bg-white/50'
+                  className={`transition-all duration-300 rounded-full ${
+                    index === currentIndex 
+                      ? 'bg-primary w-3 h-3 md:w-4 md:h-4' 
+                      : 'bg-white/40 w-2 h-2 md:w-3 md:h-3 hover:bg-white/60'
                   }`}
                 />
               ))}
             </div>
+            
+            {/* Fullscreen Button */}
             <button
               onClick={toggleFullscreen}
-              className="p-1.5 md:p-2 text-white hover:text-primary transition-colors"
+              className="p-2 md:p-3 text-white/80 hover:text-primary transition-colors bg-black/20 rounded-lg backdrop-blur-sm"
             >
-              {isFullscreen ? <FiMinimize size={16} className="md:w-5 md:h-5" /> : <FiMaximize size={16} className="md:w-5 md:h-5" />}
+              {isFullscreen ? 
+                <FiMinimize size={18} className="md:w-5 md:h-5" /> : 
+                <FiMaximize size={18} className="md:w-5 md:h-5" />
+              }
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="relative h-[60vh] md:h-[80vh] overflow-hidden">
+      {/* Mobile-Optimized Main Content */}
+      <div className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] overflow-hidden">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={page}
@@ -292,7 +310,7 @@ export default function DepletionSlider() {
               currentMedia.type === 'video' ? (
                 <iframe
                   src={currentMedia.src}
-                  className="w-full h-full"
+                  className="w-full h-full rounded-lg"
                   frameBorder="0"
                   allowFullScreen
                   allow="autoplay; encrypted-media"
@@ -302,7 +320,7 @@ export default function DepletionSlider() {
                 <img
                   src={currentMedia.src}
                   alt={currentMedia.alt}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover md:object-contain rounded-lg"
                 />
               )
             ) : (
@@ -312,15 +330,31 @@ export default function DepletionSlider() {
             )}
           </motion.div>
         </AnimatePresence>
+        
+        {/* Mobile Swipe Indicator */}
+        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 md:hidden">
+          <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
+            <div className="w-1 h-1 bg-white/60 rounded-full animate-pulse"></div>
+            <span className={`text-white/80 text-xs ${
+              isArabic ? 'font-noto' : 'font-nt'
+            }`}>
+              Swipe to navigate
+            </span>
+            <div className="w-1 h-1 bg-white/60 rounded-full animate-pulse"></div>
+          </div>
+        </div>
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Mobile-Optimized Navigation Arrows */}
       <button
         onClick={() => paginate(-1)}
-        className={`absolute ${isArabic ? 'right-2 md:right-4' : 'left-2 md:left-4'} top-1/2 -translate-y-1/2 group p-2 md:p-4 ${isDarkMode ? 'text-white/50 hover:text-white' : 'text-white/70 hover:text-white'} transition-colors transform hover:scale-110 flex items-center z-30`}
+        className={`absolute ${isArabic ? 'right-3 md:right-4' : 'left-3 md:left-4'} top-1/2 -translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
       >
-        {isArabic ? <FiChevronRight size={24} className="md:w-8 md:h-8" /> : <FiChevronLeft size={24} className="md:w-8 md:h-8" />}
-        <span className={`opacity-0 group-hover:opacity-100 transition-opacity ${isArabic ? 'mr-2' : 'ml-2'} text-xs md:text-sm bg-black/50 px-2 py-1 hidden md:block ${
+        {isArabic ? 
+          <FiChevronRight size={20} className="md:w-8 md:h-8 text-white/90 group-hover:text-white" /> : 
+          <FiChevronLeft size={20} className="md:w-8 md:h-8 text-white/90 group-hover:text-white" />
+        }
+        <span className={`opacity-0 group-hover:opacity-100 transition-opacity ${isArabic ? 'mr-2' : 'ml-2'} text-xs md:text-sm bg-black/70 px-2 py-1 rounded hidden md:block ${
           isArabic ? 'font-noto' : 'font-nt'
         } text-white`}>
           {previous}
@@ -328,14 +362,17 @@ export default function DepletionSlider() {
       </button>
       <button
         onClick={() => paginate(1)}
-        className={`absolute ${isArabic ? 'left-2 md:left-4' : 'right-2 md:right-4'} top-1/2 -translate-y-1/2 group p-2 md:p-4 ${isDarkMode ? 'text-white/50 hover:text-white' : 'text-white/70 hover:text-white'} transition-colors transform hover:scale-110 flex items-center z-30`}
+        className={`absolute ${isArabic ? 'left-3 md:left-4' : 'right-3 md:right-4'} top-1/2 -translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
       >
-        <span className={`opacity-0 group-hover:opacity-100 transition-opacity ${isArabic ? 'ml-2' : 'mr-2'} text-xs md:text-sm bg-black/50 px-2 py-1 hidden md:block ${
+        <span className={`opacity-0 group-hover:opacity-100 transition-opacity ${isArabic ? 'ml-2' : 'mr-2'} text-xs md:text-sm bg-black/70 px-2 py-1 rounded hidden md:block ${
           isArabic ? 'font-noto' : 'font-nt'
         } text-white`}>
           {next}
         </span>
-        {isArabic ? <FiChevronLeft size={24} className="md:w-8 md:h-8" /> : <FiChevronRight size={24} className="md:w-8 md:h-8" />}
+        {isArabic ? 
+          <FiChevronLeft size={20} className="md:w-8 md:h-8 text-white/90 group-hover:text-white" /> : 
+          <FiChevronRight size={20} className="md:w-8 md:h-8 text-white/90 group-hover:text-white" />
+        }
       </button>
     </div>
   );
