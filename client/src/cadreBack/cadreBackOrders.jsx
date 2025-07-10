@@ -55,6 +55,7 @@ const CadreBackOrders = () => {
       const response = await fetch(getApiUrl(`api/listing/get/${listingId}`));
       if (!response.ok) throw new Error('Failed to fetch listing details');
       const data = await response.json();
+      console.log('🔍 Listing details for', listingId, ':', data);
       setListingDetails(prev => ({
         ...prev,
         [listingId]: data
