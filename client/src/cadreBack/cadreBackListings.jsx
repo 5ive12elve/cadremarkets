@@ -10,6 +10,8 @@ import pdfExporter from '../utils/pdfExporter';
 import toast from 'react-hot-toast';
 import { getMainImageUrl, processImageUrls } from '../utils/imageUtils';
 import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
+import useConfirmDialog from '../hooks/useConfirmDialog';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 
 const LISTING_STATUSES = {
     PENDING: 'Pending',
@@ -27,6 +29,7 @@ const CadreBackListings = () => {
         }
     }, []);
 
+    const { confirm, dialogProps } = useConfirmDialog();
     const [listings, setListings] = useState([]);
     const [filteredListings, setFilteredListings] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -146,6 +149,16 @@ const CadreBackListings = () => {
     };
 
     const handleDeleteListing = async (listingId) => {
+        const confirmed = await confirm(
+            'Are you sure you want to delete this listing? This action cannot be undone.',
+            'Delete Listing',
+            'danger'
+        );
+        
+        if (!confirmed) {
+            return;
+        }
+
         try {
             const response = await backofficeApiRequest(`/delete/${listingId}`, {
                 method: 'DELETE',
@@ -619,11 +632,7 @@ const CadreBackListings = () => {
                                 Close
                                 </button>
                             <button
-                                onClick={() => {
-                                    if (window.confirm('Are you sure you want to delete this listing? This action cannot be undone.')) {
-                                        handleDeleteListing(selectedListing._id);
-                                    }
-                                }}
+                                onClick={() => handleDeleteListing(selectedListing._id)}
                                 className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition"
                             >
                                 Delete Listing
@@ -632,6 +641,8 @@ const CadreBackListings = () => {
                     </div>
                 </div>
             )}
+
+      <ConfirmDialog {...dialogProps} />
         </div>
     );
 };

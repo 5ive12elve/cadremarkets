@@ -9,6 +9,8 @@ import OrderStatistics from '../components/shared/OrderStatistics';
 import GE02Loader from '../components/GE02Loader';
 import pdfExporter from '../utils/pdfExporter';
 import { getApiUrl } from '../utils/apiConfig';
+import useConfirmDialog from '../hooks/useConfirmDialog';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 
 const ORDER_STATUSES = {
   PLACED: 'placed',
@@ -25,6 +27,7 @@ const CadreBackOrders = () => {
         }
     }, []);
 
+    const { confirm, dialogProps } = useConfirmDialog();
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -244,7 +247,13 @@ const CadreBackOrders = () => {
   };
 
   const handleDeleteOrder = async (orderId) => {
-    if (!window.confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+    const confirmed = await confirm(
+      'Are you sure you want to delete this order? This action cannot be undone.',
+      'Delete Order',
+      'danger'
+    );
+    
+    if (!confirmed) {
       return;
     }
 
@@ -270,7 +279,13 @@ const CadreBackOrders = () => {
   };
 
   const handleDeleteOrderItem = async (orderId, itemId, itemName) => {
-    if (!window.confirm(`Are you sure you want to delete "${itemName}" from this order? This action cannot be undone.`)) {
+    const confirmed = await confirm(
+      `Are you sure you want to delete "${itemName}" from this order? This action cannot be undone.`,
+      'Delete Order Item',
+      'danger'
+    );
+    
+    if (!confirmed) {
       return;
     }
 
@@ -372,6 +387,24 @@ const CadreBackOrders = () => {
     setIsLoading(true);
     fetchOrders();
     toast.success('Orders refreshed successfully');
+  };
+
+  const handleStatusChangeWithConfirm = async (orderId, newStatus, confirmMessage, confirmTitle) => {
+    const confirmed = await confirm(confirmMessage, confirmTitle, 'warning');
+    if (confirmed) {
+      handleStatusChange(orderId, newStatus);
+    }
+  };
+
+  const handleDeleteOrderWithConfirm = async (orderId) => {
+    const confirmed = await confirm(
+      'Are you sure you want to delete this order? This action cannot be undone.',
+      'Delete Order',
+      'danger'
+    );
+    if (confirmed) {
+      handleDeleteOrder(orderId);
+    }
   };
 
   const handleExportPDF = async () => {
@@ -608,9 +641,7 @@ const CadreBackOrders = () => {
                           return;
                         }
 
-                        if (window.confirm('Are you sure you want to mark this order as Placed?')) {
-                          handleStatusChange(selectedOrder._id, 'placed');
-                        }
+                        handleStatusChangeWithConfirm(selectedOrder._id, 'placed', 'Are you sure you want to mark this order as Placed?', 'Mark as Placed');
                       }}
                       disabled={isLoading}
                       className={`px-3 sm:px-4 py-2 border transition-colors text-sm sm:text-base ${
@@ -635,9 +666,7 @@ const CadreBackOrders = () => {
                           return;
                         }
 
-                        if (window.confirm('Are you sure you want to mark this order as Out for Delivery?')) {
-                          handleStatusChange(selectedOrder._id, 'out for delivery');
-                        }
+                        handleStatusChangeWithConfirm(selectedOrder._id, 'out for delivery', 'Are you sure you want to mark this order as Out for Delivery?', 'Mark as Out for Delivery');
                       }}
                       disabled={isLoading || selectedOrder.status === 'delivered' || selectedOrder.status === 'cancelled'}
                       className={`px-3 sm:px-4 py-2 border transition-colors text-sm sm:text-base ${
@@ -662,9 +691,7 @@ const CadreBackOrders = () => {
                           return;
                         }
 
-                        if (window.confirm('Are you sure you want to mark this order as Delivered?')) {
-                          handleStatusChange(selectedOrder._id, 'delivered');
-                        }
+                        handleStatusChangeWithConfirm(selectedOrder._id, 'delivered', 'Are you sure you want to mark this order as Delivered?', 'Mark as Delivered');
                       }}
                       disabled={isLoading || selectedOrder.status === 'cancelled'}
                       className={`px-4 py-2 border transition-colors ${
@@ -682,9 +709,7 @@ const CadreBackOrders = () => {
                           return;
                         }
 
-                        if (window.confirm('Are you sure you want to cancel this order? This will restore all items to their original state.')) {
-                          handleStatusChange(selectedOrder._id, 'cancelled');
-                        }
+                        handleStatusChangeWithConfirm(selectedOrder._id, 'cancelled', 'Are you sure you want to cancel this order? This will restore all items to their original state.', 'Cancel Order');
                       }}
                       disabled={isLoading || selectedOrder.status === 'cancelled'}
                       className={`px-4 py-2 border transition-colors ${
@@ -697,11 +722,7 @@ const CadreBackOrders = () => {
                     </button>
                   </div>
                   <button
-                    onClick={() => {
-                      if (window.confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
-                        handleDeleteOrder(selectedOrder._id);
-                      }
-                    }}
+                    onClick={() => handleDeleteOrderWithConfirm(selectedOrder._id)}
                     className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition-colors self-end"
                   >
                     Delete Order
@@ -960,6 +981,8 @@ const CadreBackOrders = () => {
             </div>
           </div>
         )}
+
+      <ConfirmDialog {...dialogProps} />
     </div>
   );
 };

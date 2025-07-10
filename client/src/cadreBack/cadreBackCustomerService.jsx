@@ -11,6 +11,8 @@ import GE02Loader from '../components/GE02Loader';
 import pdfExporter from '../utils/pdfExporter';
 import toast from 'react-hot-toast';
 import { getApiUrl } from '../utils/apiConfig';
+import useConfirmDialog from '../hooks/useConfirmDialog';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 
 export default function CadreBackCustomerService() {
   // Check authentication on component mount
@@ -20,6 +22,7 @@ export default function CadreBackCustomerService() {
     }
   }, []);
 
+  const { confirm, dialogProps } = useConfirmDialog();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
@@ -111,7 +114,13 @@ export default function CadreBackCustomerService() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this request? This action cannot be undone.')) {
+    const confirmed = await confirm(
+      'Are you sure you want to delete this request? This action cannot be undone.',
+      'Delete Request',
+      'danger'
+    );
+    
+    if (!confirmed) {
       return;
     }
 
@@ -461,6 +470,8 @@ export default function CadreBackCustomerService() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog {...dialogProps} />
     </div>
   );
 }

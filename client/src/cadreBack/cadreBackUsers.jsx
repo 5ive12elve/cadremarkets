@@ -5,6 +5,8 @@ import Button from '../components/shared/Button';
 import PageHeader from '../components/shared/PageHeader';
 import GE02Loader from '../components/GE02Loader';
 import toast from 'react-hot-toast';
+import useConfirmDialog from '../hooks/useConfirmDialog';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
 
 const CadreBackUsers = () => {
     // Check authentication on component mount
@@ -14,6 +16,7 @@ const CadreBackUsers = () => {
         }
     }, []);
 
+    const { confirm, dialogProps } = useConfirmDialog();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -93,7 +96,13 @@ const CadreBackUsers = () => {
     };
 
     const handleDelete = async (userId) => {
-        if (!window.confirm('Are you sure you want to delete this user?')) return;
+        const confirmed = await confirm(
+            'Are you sure you want to delete this user?',
+            'Delete User',
+            'danger'
+        );
+        
+        if (!confirmed) return;
         
         try {
             const response = await backofficeApiRequest(`/backoffice/users/${userId}`, {
@@ -432,6 +441,8 @@ const CadreBackUsers = () => {
                         </div>
                     </div>
                 )}
+
+      <ConfirmDialog {...dialogProps} />
         </div>
     );
 };
