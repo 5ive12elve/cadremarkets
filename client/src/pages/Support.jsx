@@ -395,7 +395,7 @@ export default function Support() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white focus:border-[#db2b2e] outline-none transition-colors duration-300 ${
+                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     />
@@ -411,7 +411,7 @@ export default function Support() {
                       name="orderNumber"
                       value={formData.orderNumber}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white focus:border-[#db2b2e] outline-none transition-colors duration-300 ${
+                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     />
@@ -430,7 +430,7 @@ export default function Support() {
                       value={formData.category}
                       onChange={handleCategoryChange}
                       required
-                      className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white focus:border-[#db2b2e] outline-none transition-colors duration-300 ${
+                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     >
@@ -453,7 +453,7 @@ export default function Support() {
                       value={formData.priority}
                       onChange={handleChange}
                       required
-                      className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white focus:border-[#db2b2e] outline-none transition-colors duration-300 ${
+                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     >
@@ -476,7 +476,7 @@ export default function Support() {
                       name="specificIssue"
                       value={formData.specificIssue}
                       onChange={handleChange}
-                      className={`w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white focus:border-[#db2b2e] outline-none transition-colors duration-300 ${
+                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     >

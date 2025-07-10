@@ -9,12 +9,12 @@ import GE02Loader from './GE02Loader';
 const media = [
   {
     type: 'video',
-    src: '/mediassets/depscreeningfinal.mov',
+    src: 'https://drive.google.com/uc?export=download&id=122QpS2AeYMWO0twSN41zSSmI-ypV0XRb',
     alt: 'Depletion Screening Final'
   },
   {
     type: 'video',
-    src: '/mediassets/Screening Anouncement.mp4',
+    src: 'https://drive.google.com/uc?export=download&id=1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR',
     alt: 'Screening Announcement'
   },
   {
@@ -130,6 +130,11 @@ export default function DepletionSlider() {
       autoplayTimeoutRef.current = setTimeout(() => {
         paginate(1);
       }, 5000);
+    }
+
+    // Ensure videos autoplay when they become current
+    if (currentMedia && currentMedia.type === 'video' && videoRef.current) {
+      videoRef.current.play().catch(e => console.log('Autoplay prevented:', e));
     }
 
     return () => {
@@ -331,7 +336,13 @@ export default function DepletionSlider() {
                   muted={isMuted}
                   playsInline
                   autoPlay
+                  loop
                   onEnded={handleVideoEnd}
+                  onLoadedData={() => {
+                    if (videoRef.current) {
+                      videoRef.current.play().catch(e => console.log('Autoplay prevented:', e));
+                    }
+                  }}
                 />
               ) : (
                 <img
