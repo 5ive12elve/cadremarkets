@@ -44,7 +44,7 @@ const CadreBackListings = () => {
     const fetchListings = async () => {
         try {
             setLoading(true);
-            const response = await backofficeApiRequest('/listing/backoffice/all');
+            const response = await backofficeApiRequest('/backoffice/all');
             if (!response.ok) {
                 toast.error('Failed to fetch listings');
                 throw new Error('Failed to fetch listings');
@@ -102,7 +102,7 @@ const CadreBackListings = () => {
     const handleStatusChange = async (listingId, newStatus) => {
         try {
             setUpdatingStatus(true);
-            const response = await backofficeApiRequest(`/listing/${listingId}/status`, {
+            const response = await backofficeApiRequest(`/${listingId}/status`, {
                 method: 'PUT',
                 body: JSON.stringify({ status: newStatus }),
             });
@@ -147,7 +147,7 @@ const CadreBackListings = () => {
 
     const handleDeleteListing = async (listingId) => {
         try {
-            const response = await backofficeApiRequest(`/listing/delete/${listingId}`, {
+            const response = await backofficeApiRequest(`/delete/${listingId}`, {
                 method: 'DELETE',
             });
 
@@ -180,7 +180,7 @@ const CadreBackListings = () => {
             // Fetch detailed statistics
             let detailedStats = null;
             try {
-                const response = await backofficeApiRequest('/listing/backoffice/statistics?timeframe=365');
+                const response = await backofficeApiRequest('/backoffice/statistics?timeframe=365');
                 if (response.ok) {
                     detailedStats = await response.json();
                 }
