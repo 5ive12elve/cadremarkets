@@ -1,33 +1,9 @@
-import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ListingItem from '../ListingItem';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useTranslation } from '../../locales/translations';
 import { publicApiCall } from '../../utils/apiConfig';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut",
-    },
-  },
-};
 
 export default function MarketplacePreview() {
   const { currentLang, isArabic } = useLanguage();
@@ -77,16 +53,11 @@ export default function MarketplacePreview() {
   }, []);
 
   return (
-    <motion.section
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ margin: "-50px" }}
-      variants={containerVariants}
+    <section
       className="w-full max-w-7xl mx-auto px-3 py-6 md:py-12"
       dir="ltr" // Keep LTR direction even in Arabic mode
     >
-      <motion.div
-        variants={itemVariants}
+      <div
         className={`mb-8 ${isArabic ? 'text-right' : 'text-left'}`}
       >
         <h2 className={`text-4xl text-black dark:text-white mb-3 ${isArabic ? 'font-amiri font-bold' : 'font-nt-bold'}`}>{marketplaceTitle}</h2>
@@ -96,7 +67,7 @@ export default function MarketplacePreview() {
         <p className={`text-primary text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>
           {marketplaceDescription}
         </p>
-      </motion.div>
+      </div>
 
       {loading ? (
         <div className="flex justify-center items-center min-h-[200px]">
@@ -130,24 +101,20 @@ export default function MarketplacePreview() {
         </div>
       ) : (
         <>
-          <motion.div
-            variants={containerVariants}
+          <div
             className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-items-center md:justify-items-start"
           >
             {listings.map((listing) => (
-              <motion.div
+              <div
                 key={listing._id}
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
               >
                 <ListingItem listing={listing} />
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
 
           {/* See More Listings Button */}
-          <motion.div
-            variants={itemVariants}
+          <div
             className="flex justify-center mt-12"
           >
             <Link
@@ -169,9 +136,9 @@ export default function MarketplacePreview() {
                 />
               </svg>
             </Link>
-          </motion.div>
+          </div>
         </>
       )}
-    </motion.section>
+    </section>
   );
 } 

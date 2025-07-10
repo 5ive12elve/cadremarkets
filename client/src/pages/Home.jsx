@@ -69,22 +69,18 @@ export default function Home() {
     <div className="bg-white dark:bg-black min-h-screen w-full overflow-x-hidden transition-colors duration-300 font-primary" dir={direction}>
       <Hero />
       <MarketplacePreview />
-      
-      <Quote2 
-        text={useTranslation('home', 'quote2Text', currentLang)}
-        author={useTranslation('home', 'quote2Author', currentLang)}
-        image="/mediassets/michaelsamuel01.png"
-      />
-      
-      <WhoIsThisFor />
-      <Services />
-
       <Quote 
         text={useTranslation('home', 'quoteText', currentLang)}
         author={useTranslation('home', 'quoteAuthor', currentLang)}
         image="/mediassets/michaelsamuel.png"
       />
-      
+      <WhoIsThisFor />
+      <Services />
+      <Quote2 
+        text={useTranslation('home', 'quote2Text', currentLang)}
+        author={useTranslation('home', 'quote2Author', currentLang)}
+        image="/mediassets/michaelsamuel01.png"
+      />
       <FeaturedProjects />
       <Contact />
     </div>

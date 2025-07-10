@@ -131,7 +131,7 @@ export default function WhoIsThisFor() {
             </motion.h3>
             <motion.p 
               variants={itemVariants}
-              className="text-black dark:text-white text-[16px] sm:text-[17px] md:text-[18px] font-light mb-4 leading-relaxed min-h-[60px] flex items-center"
+              className="text-black dark:text-white text-[15px] sm:text-[16px] md:text-[15px] font-light mb-3 leading-relaxed min-h-[40px] flex items-center"
             >
               {useTranslation('home', 'artistsDescription', currentLang)}
             </motion.p>
@@ -170,7 +170,7 @@ export default function WhoIsThisFor() {
             </motion.h3>
             <motion.p 
               variants={itemVariants}
-              className="text-black dark:text-white text-[16px] sm:text-[17px] md:text-[18px] font-light mb-4 leading-relaxed min-h-[60px] flex items-center"
+              className="text-black dark:text-white text-[15px] sm:text-[16px] md:text-[15px] font-light mb-3 leading-relaxed min-h-[40px] flex items-center"
             >
               {useTranslation('home', 'brandsDescription', currentLang)}
             </motion.p>

@@ -559,7 +559,7 @@ router.put('/:id/buy', verifyToken, async (req, res) => {
  *       401:
  *         description: Unauthorized
  */
-router.get('/backoffice/all', getAllListingsForBackOffice);
+router.get('/backoffice/all', verifyBackOfficeToken, getAllListingsForBackOffice);
 
 /**
  * @swagger
@@ -650,7 +650,7 @@ router.get('/clothing/sizes', getClothingSizes);
  *       401:
  *         description: Unauthorized
  */
-router.get('/backoffice/statistics', getListingStatistics);
+router.get('/backoffice/statistics', verifyBackOfficeToken, getListingStatistics);
 
 /**
  * @swagger
