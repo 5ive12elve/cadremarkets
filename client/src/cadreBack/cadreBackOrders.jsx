@@ -51,7 +51,7 @@ const CadreBackOrders = () => {
 
   const fetchListingDetails = async (listingId) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get/${listingId}`);
+      const response = await backofficeApiRequest(`/listing/get/${listingId}`);
       if (!response.ok) throw new Error('Failed to fetch listing details');
       const data = await response.json();
       setListingDetails(prev => ({
@@ -115,7 +115,7 @@ const CadreBackOrders = () => {
       if (!order) throw new Error('Order not found');
 
       // Update order status
-      const response = await fetch(`/api/orders/${orderId}/status`, {
+      const response = await backofficeApiRequest(`/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ const CadreBackOrders = () => {
     setIsUpdating(prev => ({ ...prev, [updateKey]: true }));
 
     try {
-      const response = await fetch(`/api/orders/${orderId}/items/${itemId}/status-checks`, {
+      const response = await backofficeApiRequest(`/orders/${orderId}/items/${itemId}/status-checks`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -247,9 +247,8 @@ const CadreBackOrders = () => {
     }
 
     try {
-      const response = await fetch(`/api/orders/${orderId}`, {
-        method: 'DELETE',
-        credentials: 'include'
+      const response = await backofficeApiRequest(`/orders/${orderId}`, {
+        method: 'DELETE'
       });
 
       if (!response.ok) throw new Error('Failed to delete order');
@@ -274,9 +273,8 @@ const CadreBackOrders = () => {
     }
 
     try {
-      const response = await fetch(`/api/orders/${orderId}/items/${itemId}`, {
-        method: 'DELETE',
-        credentials: 'include'
+      const response = await backofficeApiRequest(`/orders/${orderId}/items/${itemId}`, {
+        method: 'DELETE'
       });
 
       if (!response.ok) throw new Error('Failed to delete order item');
@@ -314,12 +312,11 @@ const CadreBackOrders = () => {
 
   const handleUpdateQuantity = async (orderId, itemId, newQuantity) => {
     try {
-      const response = await fetch(`/api/orders/${orderId}/items/${itemId}/quantity`, {
+      const response = await backofficeApiRequest(`/orders/${orderId}/items/${itemId}/quantity`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify({ newQuantity: parseInt(newQuantity) })
       });
 
@@ -382,9 +379,7 @@ const CadreBackOrders = () => {
       // Fetch detailed statistics
       let detailedStats = null;
       try {
-        const response = await fetch('/api/orders/backoffice/statistics?timeframe=365', {
-          credentials: 'include'
-        });
+        const response = await backofficeApiRequest('/orders/backoffice/statistics?timeframe=365');
         if (response.ok) {
           detailedStats = await response.json();
         }
