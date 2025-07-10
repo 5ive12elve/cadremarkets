@@ -10,6 +10,7 @@ import SupportRequestStatistics from '../components/shared/SupportRequestStatist
 import GE02Loader from '../components/GE02Loader';
 import pdfExporter from '../utils/pdfExporter';
 import toast from 'react-hot-toast';
+import { getApiUrl } from '../utils/apiConfig';
 
 export default function CadreBackCustomerService() {
   // Check authentication on component mount
@@ -83,7 +84,7 @@ export default function CadreBackCustomerService() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const response = await fetch(`/api/support/${id}`, {
+      const response = await fetch(getApiUrl(`api/support/${id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -115,7 +116,7 @@ export default function CadreBackCustomerService() {
     }
 
     try {
-      const response = await fetch(`/api/support/${id}`, {
+      const response = await fetch(getApiUrl(`api/support/${id}`), {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -147,7 +148,7 @@ export default function CadreBackCustomerService() {
       // Fetch detailed statistics
       let detailedStats = null;
       try {
-        const response = await fetch('/api/support/backoffice/statistics?timeframe=365', {
+        const response = await fetch(getApiUrl('api/support/backoffice/statistics?timeframe=365'), {
           credentials: 'include'
         });
         if (response.ok) {
