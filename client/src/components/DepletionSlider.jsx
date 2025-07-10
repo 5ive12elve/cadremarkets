@@ -8,13 +8,13 @@ import GE02Loader from './GE02Loader';
 const media = [
   {
     type: 'video',
-    src: 'https://drive.google.com/file/d/122QpS2AeYMWO0twSN41zSSmI-ypV0XRb/preview',
-    alt: 'Depletion Screening Final'
+    src: 'https://drive.google.com/file/d/1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR/preview',
+    alt: 'Screening Announcement'
   },
   {
     type: 'video',
-    src: 'https://drive.google.com/file/d/1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR/preview',
-    alt: 'Screening Announcement'
+    src: 'https://drive.google.com/file/d/122QpS2AeYMWO0twSN41zSSmI-ypV0XRb/preview',
+    alt: 'Depletion Screening Final'
   },
   {
     type: 'image',
@@ -168,66 +168,66 @@ export default function DepletionSlider() {
 
   return (
     <div ref={sliderRef} className="relative w-full bg-black" dir={isArabic ? 'rtl' : 'ltr'}>
-      {/* Mobile-Optimized Text Overlay */}
-      <div className="absolute inset-0 z-20 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
-        <div className={`absolute bottom-0 left-0 right-0 p-4 md:p-8 ${isArabic ? 'text-right' : 'text-left'}`}>
-          {/* Mobile Title */}
-          <h1 className={`text-primary text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-4 leading-tight ${
+      {/* Desktop Text Overlay (hidden on mobile) */}
+      <div className="absolute inset-0 z-20 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none hidden md:block">
+        <div className={`absolute bottom-0 left-0 right-0 p-8 ${isArabic ? 'text-right' : 'text-left'}`}>
+          {/* Desktop Title */}
+          <h1 className={`text-primary text-4xl font-bold mb-4 leading-tight ${
             isArabic ? 'font-amiri' : 'font-nt-bold'
           }`}>
             {depletionTitle}
           </h1>
           
-          {/* Mobile Description */}
-          <div className={`space-y-2 md:space-y-3 text-white/95 ${
+          {/* Desktop Description */}
+          <div className={`space-y-3 text-white/95 ${
             isArabic ? 'text-right' : 'text-left'
           }`}>
-            <p className={`text-sm sm:text-base md:text-lg leading-relaxed ${
+            <p className={`text-lg leading-relaxed ${
               isArabic ? 'font-noto' : 'font-nt'
             }`}>
               {depletionDesc1}
             </p>
-            <p className={`text-sm sm:text-base md:text-lg leading-relaxed ${
+            <p className={`text-lg leading-relaxed ${
               isArabic ? 'font-noto' : 'font-nt'
             }`}>
               {depletionDesc2}
             </p>
             
-            {/* Mobile Project Details */}
-            <div className={`grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-4 md:mt-6 ${
+            {/* Desktop Project Details */}
+            <div className={`grid grid-cols-3 gap-4 mt-6 ${
               isArabic ? 'text-right' : 'text-left'
             }`}>
-              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-3 md:p-4 border border-primary/20">
-                <span className={`text-primary text-xs md:text-sm font-bold block mb-1 ${
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-4 border border-primary/20">
+                <span className={`text-primary text-sm font-bold block mb-1 ${
                   isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
                   {typeLabel}
                 </span>
-                <span className={`text-white text-sm md:text-base ${
+                <span className={`text-white text-base ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
                   {typeValue}
                 </span>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-3 md:p-4 border border-primary/20">
-                <span className={`text-primary text-xs md:text-sm font-bold block mb-1 ${
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-4 border border-primary/20">
+                <span className={`text-primary text-sm font-bold block mb-1 ${
                   isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
                   {venueLabel}
                 </span>
-                <span className={`text-white text-sm md:text-base ${
+                <span className={`text-white text-base ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
                   {venueValue}
                 </span>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-3 md:p-4 border border-primary/20">
-                <span className={`text-primary text-xs md:text-sm font-bold block mb-1 ${
+              <div className="bg-black/30 backdrop-blur-sm rounded-lg p-4 border border-primary/20">
+                <span className={`text-primary text-sm font-bold block mb-1 ${
                   isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
                   {categoryLabel}
                 </span>
-                <span className={`text-white text-sm md:text-base ${
+                <span className={`text-white text-base ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
                   {categoryValue}
@@ -287,7 +287,7 @@ export default function DepletionSlider() {
       </div>
 
       {/* Mobile-Optimized Main Content */}
-      <div className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] overflow-hidden">
+      <div className="relative h-[50vh] sm:h-[60vh] md:h-[80vh] overflow-hidden">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={page}
@@ -332,7 +332,7 @@ export default function DepletionSlider() {
         </AnimatePresence>
         
         {/* Mobile Swipe Indicator */}
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 md:hidden">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 md:hidden">
           <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
             <div className="w-1 h-1 bg-white/60 rounded-full animate-pulse"></div>
             <span className={`text-white/80 text-xs ${
@@ -341,6 +341,76 @@ export default function DepletionSlider() {
               Swipe to navigate
             </span>
             <div className="w-1 h-1 bg-white/60 rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Text Section (below content) */}
+      <div className="md:hidden bg-black p-4">
+        <div className={`${isArabic ? 'text-right' : 'text-left'}`}>
+          {/* Mobile Title */}
+          <h1 className={`text-primary text-2xl font-bold mb-3 leading-tight ${
+            isArabic ? 'font-amiri' : 'font-nt-bold'
+          }`}>
+            {depletionTitle}
+          </h1>
+          
+          {/* Mobile Description */}
+          <div className={`space-y-2 text-white/95 ${
+            isArabic ? 'text-right' : 'text-left'
+          }`}>
+            <p className={`text-sm leading-relaxed ${
+              isArabic ? 'font-noto' : 'font-nt'
+            }`}>
+              {depletionDesc1}
+            </p>
+            <p className={`text-sm leading-relaxed ${
+              isArabic ? 'font-noto' : 'font-nt'
+            }`}>
+              {depletionDesc2}
+            </p>
+            
+            {/* Mobile Project Details */}
+            <div className={`grid grid-cols-1 gap-3 mt-4 ${
+              isArabic ? 'text-right' : 'text-left'
+            }`}>
+              <div className="bg-gray-900 rounded-lg p-3 border border-primary/20">
+                <span className={`text-primary text-xs font-bold block mb-1 ${
+                  isArabic ? 'font-noto' : 'font-nt-bold'
+                }`}>
+                  {typeLabel}
+                </span>
+                <span className={`text-white text-sm ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {typeValue}
+                </span>
+              </div>
+              <div className="bg-gray-900 rounded-lg p-3 border border-primary/20">
+                <span className={`text-primary text-xs font-bold block mb-1 ${
+                  isArabic ? 'font-noto' : 'font-nt-bold'
+                }`}>
+                  {venueLabel}
+                </span>
+                <span className={`text-white text-sm ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {venueValue}
+                </span>
+              </div>
+              <div className="bg-gray-900 rounded-lg p-3 border border-primary/20">
+                <span className={`text-primary text-xs font-bold block mb-1 ${
+                  isArabic ? 'font-noto' : 'font-nt-bold'
+                }`}>
+                  {categoryLabel}
+                </span>
+                <span className={`text-white text-sm ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {categoryValue}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
