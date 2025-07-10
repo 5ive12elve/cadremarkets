@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiVolume2, FiVolumeX, FiChevronLeft, FiChevronRight, FiPlay, FiPause, FiMaximize, FiMinimize } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiMaximize, FiMinimize } from 'react-icons/fi';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from '../locales/translations';
@@ -9,12 +9,12 @@ import GE02Loader from './GE02Loader';
 const media = [
   {
     type: 'video',
-    src: 'https://drive.google.com/uc?export=download&id=122QpS2AeYMWO0twSN41zSSmI-ypV0XRb',
+    src: 'https://drive.google.com/file/d/122QpS2AeYMWO0twSN41zSSmI-ypV0XRb/preview',
     alt: 'Depletion Screening Final'
   },
   {
     type: 'video',
-    src: 'https://drive.google.com/uc?export=download&id=1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR',
+    src: 'https://drive.google.com/file/d/1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR/preview',
     alt: 'Screening Announcement'
   },
   {
@@ -94,10 +94,7 @@ export default function DepletionSlider() {
   const next = useTranslation('projects', 'next', currentLang);
 
   const [[page, direction], setPage] = useState([0, 0]);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isPaused, setIsPaused] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const videoRef = useRef(null);
   const sliderRef = useRef(null);
   const autoplayTimeoutRef = useRef(null);
 
@@ -132,10 +129,7 @@ export default function DepletionSlider() {
       }, 5000);
     }
 
-    // Ensure videos autoplay when they become current
-    if (currentMedia && currentMedia.type === 'video' && videoRef.current) {
-      videoRef.current.play().catch(e => console.log('Autoplay prevented:', e));
-    }
+
 
     return () => {
       if (autoplayTimeoutRef.current) {
@@ -160,27 +154,9 @@ export default function DepletionSlider() {
     setPage([page + newDirection, newDirection]);
   };
 
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
 
-  const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPaused) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
-      setIsPaused(!isPaused);
-    }
-  };
 
-  const handleVideoEnd = () => {
-    paginate(1);
-  };
+
 
   const handleDragEnd = (e, { offset, velocity }) => {
     const swipe = swipePower(offset.x, velocity.x);
@@ -263,22 +239,7 @@ export default function DepletionSlider() {
       <div className="absolute top-0 left-0 right-0 z-30 bg-gradient-to-b from-black/80 to-transparent p-2 md:p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1 md:gap-2">
-            {currentMedia && currentMedia.type === 'video' && (
-              <>
-                <button
-                  onClick={togglePlay}
-                  className="p-1.5 md:p-2 text-white hover:text-primary transition-colors"
-                >
-                  {isPaused ? <FiPlay size={16} className="md:w-5 md:h-5" /> : <FiPause size={16} className="md:w-5 md:h-5" />}
-                </button>
-                <button
-                  onClick={toggleMute}
-                  className="p-1.5 md:p-2 text-white hover:text-primary transition-colors"
-                >
-                  {isMuted ? <FiVolumeX size={16} className="md:w-5 md:h-5" /> : <FiVolume2 size={16} className="md:w-5 md:h-5" />}
-                </button>
-              </>
-            )}
+            {/* Video controls removed for iframe implementation */}
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             <div className="flex gap-1 md:gap-2">
@@ -329,20 +290,13 @@ export default function DepletionSlider() {
           >
             {currentMedia ? (
               currentMedia.type === 'video' ? (
-                <video
-                  ref={videoRef}
+                <iframe
                   src={currentMedia.src}
-                  className="w-full h-full object-contain"
-                  muted={isMuted}
-                  playsInline
-                  autoPlay
-                  loop
-                  onEnded={handleVideoEnd}
-                  onLoadedData={() => {
-                    if (videoRef.current) {
-                      videoRef.current.play().catch(e => console.log('Autoplay prevented:', e));
-                    }
-                  }}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allowFullScreen
+                  allow="autoplay; encrypted-media"
+                  title={currentMedia.alt}
                 />
               ) : (
                 <img
