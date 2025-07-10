@@ -68,6 +68,14 @@ export default function Home() {
   return (
     <div className="bg-white dark:bg-black min-h-screen w-full overflow-x-hidden transition-colors duration-300 font-primary" dir={direction}>
       <Hero />
+      <MarketplacePreview />
+      
+      <Quote2 
+        text={useTranslation('home', 'quote2Text', currentLang)}
+        author={useTranslation('home', 'quote2Author', currentLang)}
+        image="/mediassets/michaelsamuel01.png"
+      />
+      
       <WhoIsThisFor />
       <Services />
 
@@ -75,14 +83,6 @@ export default function Home() {
         text={useTranslation('home', 'quoteText', currentLang)}
         author={useTranslation('home', 'quoteAuthor', currentLang)}
         image="/mediassets/michaelsamuel.png"
-      />
-
-      <MarketplacePreview />
-      
-      <Quote2 
-        text={useTranslation('home', 'quote2Text', currentLang)}
-        author={useTranslation('home', 'quote2Author', currentLang)}
-        image="/mediassets/michaelsamuel01.png"
       />
       
       <FeaturedProjects />

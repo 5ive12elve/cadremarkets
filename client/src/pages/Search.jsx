@@ -207,7 +207,7 @@ export default function Search() {
               
               {/* Visual Filter Categories */}
               <div className="mb-6">
-                <label className={`text-xs md:text-sm font-semibold block text-gray-700 dark:text-white/80 mb-3 ${
+                <label className={`text-sm md:text-sm font-semibold block text-gray-700 dark:text-white/80 mb-3 ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
                   {type}
@@ -217,7 +217,7 @@ export default function Search() {
                     <button
                       key={category.id}
                       onClick={() => handleFilterSelect(category.value)}
-                      className={`relative p-3 border-2 transition-all duration-300 hover:scale-105 h-24 ${
+                      className={`relative p-3 border-2 transition-all duration-300 hover:scale-105 h-28 md:h-24 ${
                         sidebardata.type === category.value
                           ? 'border-[#db2b2e] bg-[#db2b2e]/10 dark:bg-[#db2b2e]/20'
                           : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
@@ -225,14 +225,14 @@ export default function Search() {
                     >
                       {category.image ? (
                         <div className="flex flex-col items-center space-y-1">
-                          <div className="w-12 h-12 flex items-center justify-center">
+                          <div className="w-14 h-14 md:w-12 md:h-12 flex items-center justify-center">
                             <img
                               src={category.image}
                               alt={category.name}
                               className="w-full h-full object-contain"
                             />
                           </div>
-                          <span className={`text-[8px] md:text-[9px] text-center font-medium leading-tight px-1 ${
+                          <span className={`text-[10px] md:text-[9px] text-center font-medium leading-tight px-1 ${
                             isArabic ? 'font-noto' : 'font-nt'
                           } ${
                             sidebardata.type === category.value
@@ -244,14 +244,14 @@ export default function Search() {
                         </div>
                       ) : (
                         <div className="flex flex-col items-center space-y-1">
-                          <div className="w-12 h-12 flex items-center justify-center">
-                            <div className={`w-12 h-12 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center`}>
+                          <div className="w-14 h-14 md:w-12 md:h-12 flex items-center justify-center">
+                            <div className={`w-14 h-14 md:w-12 md:h-12 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center`}>
                               <span className="text-gray-500 dark:text-gray-400 text-lg">
                                 {category.name.charAt(0)}
                               </span>
                             </div>
                           </div>
-                          <span className={`text-[8px] md:text-[9px] text-center font-medium leading-tight px-1 ${
+                          <span className={`text-[10px] md:text-[9px] text-center font-medium leading-tight px-1 ${
                             isArabic ? 'font-noto' : 'font-nt'
                           } ${
                             sidebardata.type === category.value
@@ -269,7 +269,7 @@ export default function Search() {
 
               {/* Sort and Apply Filters */}
               <div className="mt-6">
-                <h3 className={`text-xs md:text-sm font-semibold mb-3 ${
+                <h3 className={`text-sm md:text-sm font-semibold mb-3 ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
                   {sortBy}
@@ -277,7 +277,7 @@ export default function Search() {
                 <div className="flex flex-col gap-2">
                   <button
                     onClick={() => handleChange({ id: 'sort', value: 'createdAt' })}
-                    className={`p-2 border-2 transition-all duration-300 hover:scale-105 ${
+                    className={`p-3 md:p-2 border-2 transition-all duration-300 hover:scale-105 ${
                       sidebardata.sort === 'createdAt'
                         ? 'border-[#db2b2e] bg-[#db2b2e]/10 dark:bg-[#db2b2e]/20'
                         : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
@@ -287,7 +287,7 @@ export default function Search() {
                   </button>
                   <button
                     onClick={() => handleChange({ id: 'sort', value: 'createdAt', order: 'asc' })}
-                    className={`p-2 border-2 transition-all duration-300 hover:scale-105 ${
+                    className={`p-3 md:p-2 border-2 transition-all duration-300 hover:scale-105 ${
                       sidebardata.sort === 'createdAt' && sidebardata.order === 'asc'
                         ? 'border-[#db2b2e] bg-[#db2b2e]/10 dark:bg-[#db2b2e]/20'
                         : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
@@ -299,7 +299,7 @@ export default function Search() {
 
                 <button
                   onClick={handleSubmit}
-                  className="mt-6 w-full p-3 bg-[#db2b2e] text-white rounded-md hover:bg-[#c02629] transition-colors duration-300"
+                  className="mt-6 w-full p-4 md:p-3 bg-[#db2b2e] text-white rounded-md hover:bg-[#c02629] transition-colors duration-300"
                 >
                   {applyFilters}
                 </button>
@@ -309,7 +309,7 @@ export default function Search() {
 
           {/* Listings Grid */}
           <main className="flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {loading ? (
                 <GE02Loader />
               ) : listings.length === 0 ? (

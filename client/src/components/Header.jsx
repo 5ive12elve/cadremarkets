@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaSearch } from 'react-icons/fa';
@@ -16,6 +16,7 @@ export default function Header() {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const mobileMenuRef = useRef(null);
   
   // Language context
   const { currentLang, isArabic } = useLanguage();
@@ -31,6 +32,22 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -49,7 +66,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-[18px] sm:top-[24px] left-0 right-0 z-40">
+    <header className="fixed top-[24px] sm:top-[32px] left-0 right-0 z-40">
       <div className={`bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-[#db2b2e]/20 transition-all duration-300 ${isScrolled ? 'py-1.5 sm:py-2' : 'py-2 sm:py-2.5'}`}>
         <div className="flex justify-between items-center max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
           <motion.button 
@@ -195,7 +212,7 @@ export default function Header() {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-black p-4 sm:p-5 border-t border-primary/10 transition-colors duration-300 shadow-lg">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-black p-4 sm:p-5 border-t border-primary/10 transition-colors duration-300 shadow-lg" ref={mobileMenuRef}>
             <nav>
               <ul className="flex flex-col gap-4">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>

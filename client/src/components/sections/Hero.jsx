@@ -98,7 +98,7 @@ export default function Hero() {
       </section>
       <motion.section 
         variants={itemVariants}
-        className="w-full max-w-7xl mx-auto px-3 flex justify-between items-start mt-4"
+        className="w-full max-w-7xl mx-auto px-3 flex justify-between items-start mt-8 md:mt-12"
       >
         <motion.img
           whileHover={{ rotate: 180 }}
