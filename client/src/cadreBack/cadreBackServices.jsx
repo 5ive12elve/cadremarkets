@@ -8,6 +8,7 @@ import ServiceStatistics from '../components/shared/ServiceStatistics';
 import GE02Loader from '../components/GE02Loader';
 import pdfExporter from '../utils/pdfExporter';
 import toast from 'react-hot-toast';
+import { getApiUrl } from '../utils/apiConfig';
 
 const CadreBackServices = () => {
     // Check authentication on component mount
@@ -70,7 +71,7 @@ const CadreBackServices = () => {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const response = await fetch(`/api/services/${id}/status`, {
+      const response = await fetch(getApiUrl(`api/services/${id}/status`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
