@@ -8,13 +8,15 @@ import GE02Loader from './GE02Loader';
 const media = [
   {
     type: 'video',
-    src: 'https://drive.google.com/file/d/1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR/preview',
-    alt: 'Screening Announcement'
+    src: 'https://drive.google.com/file/d/1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR/preview?autoplay=1&mute=1',
+    alt: 'Screening Announcement',
+    thumbnail: '/mediassets/THUMB1.png'
   },
   {
     type: 'video',
-    src: 'https://drive.google.com/file/d/122QpS2AeYMWO0twSN41zSSmI-ypV0XRb/preview',
-    alt: 'Depletion Screening Final'
+    src: 'https://drive.google.com/file/d/122QpS2AeYMWO0twSN41zSSmI-ypV0XRb/preview?autoplay=1&mute=1',
+    alt: 'Depletion Screening Final',
+    thumbnail: '/mediassets/THUMB2.png'
   },
   {
     type: 'image',
@@ -93,6 +95,7 @@ export default function DepletionSlider() {
 
   const [[page, direction], setPage] = useState([0, 0]);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState({});
   const sliderRef = useRef(null);
   const autoplayTimeoutRef = useRef(null);
 
@@ -308,14 +311,56 @@ export default function DepletionSlider() {
           >
             {currentMedia ? (
               currentMedia.type === 'video' ? (
-                <iframe
-                  src={currentMedia.src}
-                  className="w-full h-full rounded-lg"
-                  frameBorder="0"
-                  allowFullScreen
-                  allow="autoplay; encrypted-media"
-                  title={currentMedia.alt}
-                />
+                <div className="relative w-full h-full">
+                  <iframe
+                    src={currentMedia.src}
+                    className="w-full h-full rounded-lg"
+                    frameBorder="0"
+                    allowFullScreen
+                    allow="autoplay; encrypted-media; fullscreen"
+                    title={currentMedia.alt}
+                    onLoad={() => {
+                      setVideoLoaded(prev => ({ ...prev, [currentIndex]: true }));
+                    }}
+                    onError={() => {
+                      setVideoLoaded(prev => ({ ...prev, [currentIndex]: false }));
+                    }}
+                  />
+                  {/* Thumbnail fallback if video fails to load */}
+                  {!videoLoaded[currentIndex] && currentMedia.thumbnail && (
+                    <div 
+                      className="absolute inset-0 bg-black rounded-lg flex items-center justify-center cursor-pointer"
+                      onClick={() => {
+                        // Force reload the iframe to retry loading
+                        setVideoLoaded(prev => ({ ...prev, [currentIndex]: null }));
+                        const iframe = document.querySelector('iframe');
+                        if (iframe) {
+                          const currentSrc = iframe.src;
+                          iframe.src = '';
+                          setTimeout(() => {
+                            iframe.src = currentSrc;
+                          }, 100);
+                        }
+                      }}
+                    >
+                      <img
+                        src={currentMedia.thumbnail}
+                        alt={`${currentMedia.alt} thumbnail`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                        <div className="text-white text-center">
+                          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-2">
+                            <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <p className="text-sm font-medium">Click to play video</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <img
                   src={currentMedia.src}
@@ -418,7 +463,7 @@ export default function DepletionSlider() {
       {/* Mobile-Optimized Navigation Arrows */}
       <button
         onClick={() => paginate(-1)}
-        className={`absolute ${isArabic ? 'right-3 md:right-4' : 'left-3 md:left-4'} top-1/2 -translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
+        className={`absolute ${isArabic ? 'right-3 md:right-4' : 'left-3 md:left-4'} top-1/2 -translate-y-1/2 md:top-1/2 md:-translate-y-1/2 bottom-4 md:bottom-auto group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
       >
         {isArabic ? 
           <FiChevronRight size={20} className="md:w-8 md:h-8 text-white/90 group-hover:text-white" /> : 
@@ -432,7 +477,7 @@ export default function DepletionSlider() {
       </button>
       <button
         onClick={() => paginate(1)}
-        className={`absolute ${isArabic ? 'left-3 md:left-4' : 'right-3 md:right-4'} top-1/2 -translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
+        className={`absolute ${isArabic ? 'left-3 md:left-4' : 'right-3 md:right-4'} top-1/2 -translate-y-1/2 md:top-1/2 md:-translate-y-1/2 bottom-4 md:bottom-auto group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
       >
         <span className={`opacity-0 group-hover:opacity-100 transition-opacity ${isArabic ? 'ml-2' : 'mr-2'} text-xs md:text-sm bg-black/70 px-2 py-1 rounded hidden md:block ${
           isArabic ? 'font-noto' : 'font-nt'
