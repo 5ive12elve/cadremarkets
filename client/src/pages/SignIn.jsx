@@ -252,17 +252,17 @@ export default function SignIn() {
     }
   };
   return (
-    <div className="bg-white dark:bg-black font-primary transition-colors duration-300" dir={direction}>
-      <div className="grid grid-cols-1 md:grid-cols-2 md:min-h-screen">
+    <div className="bg-white dark:bg-black font-primary transition-colors duration-300 min-h-screen" dir={direction}>
+      <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         {/* Left Graphic - Hidden on mobile, shown on desktop */}
         <div className="bg-white dark:bg-black hidden md:flex items-center justify-center transition-colors duration-300">
           <img src="/mediassets/CMSUP55.png" alt="Phone Cart" className="w-4/5" />
         </div>
 
         {/* Right Form */}
-        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-6 md:p-10 lg:p-20 relative transition-colors duration-300">
+        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300">
           {/* Mobile Background Image */}
-          <div className="md:hidden absolute inset-0 opacity-10">
+          <div className="md:hidden absolute inset-0 opacity-5">
             <img 
               src="/mediassets/CMSUP5.png" 
               alt="Background" 
@@ -271,61 +271,98 @@ export default function SignIn() {
           </div>
           
           {/* Form Content */}
-          <div className="relative z-10">
-        <h1 className={`text-2xl md:text-4xl font-bold mb-2 font-primary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
-          {t.title || 'Sign In'}
-        </h1>
-        <p className={`mb-6 md:mb-8 text-xs md:text-sm text-gray-600 dark:text-white/80 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
-          {common.pleaseEnterDetails || 'Please enter your details'}
-        </p>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3 md:gap-4">
-          <input
-            type="email"
-            placeholder={t.email || 'Email'}
-            className={`border-b border-gray-300 dark:border-white bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-white p-2 md:p-3 text-sm md:text-base focus:outline-none transition-colors duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
-            id="email"
-            onChange={handleChange}
-            dir="auto"
-          />
-          <input
-            type="password"
-            placeholder={t.password || 'Password'}
-            className={`border-b border-gray-300 dark:border-white bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-white p-2 md:p-3 text-sm md:text-base focus:outline-none transition-colors duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
-            id="password"
-            onChange={handleChange}
-            dir="auto"
-          />
-          <button
-            disabled={loading}
-            className="bg-primary text-white font-bold py-2 md:py-3 text-sm md:text-base hover:opacity-90 disabled:opacity-80 flex items-center justify-center gap-2 font-primary"
-          >
-            {loading ? (
-              <>
-                <GE02Loader size="small" />
-                <span className="font-secondary">{common.loading || 'Loading...'}</span>
-              </>
-            ) : (
-              t.signInButton || 'Sign In'
+          <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0">
+            {/* Mobile Logo/Header */}
+            <div className="md:hidden text-center mb-8">
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary to-yellowAccent rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl">CM</span>
+              </div>
+              <h2 className="text-lg font-bold text-gray-800 dark:text-white font-primary">
+                Cadre Markets
+              </h2>
+            </div>
+
+            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-2 font-primary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
+              {t.title || 'Sign In'}
+            </h1>
+            <p className={`mb-8 md:mb-8 text-sm sm:text-base text-gray-600 dark:text-gray-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}>
+              {common.pleaseEnterDetails || 'Please enter your details'}
+            </p>
+            
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-4 space-y-4">
+              <div className="space-y-1">
+                <input
+                  type="email"
+                  placeholder={t.email || 'Email'}
+                  className={`w-full border-b-2 border-gray-300 dark:border-gray-600 bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-3 md:p-3 text-base focus:outline-none focus:border-primary transition-all duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}
+                  id="email"
+                  onChange={handleChange}
+                  dir="auto"
+                />
+              </div>
+              
+              <div className="space-y-1">
+                <input
+                  type="password"
+                  placeholder={t.password || 'Password'}
+                  className={`w-full border-b-2 border-gray-300 dark:border-gray-600 bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-3 md:p-3 text-base focus:outline-none focus:border-primary transition-all duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}
+                  id="password"
+                  onChange={handleChange}
+                  dir="auto"
+                />
+              </div>
+              
+              <button
+                disabled={loading}
+                className="w-full bg-primary text-white font-bold py-4 md:py-3 text-base md:text-base hover:bg-red-700 disabled:opacity-80 disabled:cursor-not-allowed flex items-center justify-center gap-3 font-primary transition-all duration-300 rounded-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {loading ? (
+                  <>
+                    <GE02Loader size="small" />
+                    <span className="font-secondary">{common.loading || 'Loading...'}</span>
+                  </>
+                ) : (
+                  t.signInButton || 'Sign In'
+                )}
+              </button>
+              
+              {/* Divider */}
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white dark:bg-black text-gray-500 dark:text-gray-400 font-secondary">
+                    {t.or || 'or'}
+                  </span>
+                </div>
+              </div>
+              
+              <OAuth />
+            </form>
+            
+            <div className={`flex flex-col sm:flex-row gap-2 mt-8 md:mt-8 text-sm font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
+              <p className="text-gray-600 dark:text-gray-300">{t.noAccount || "Don't have an account?"}</p>
+              <Link to={'/sign-up'} className="text-primary hover:text-red-700 transition-colors duration-300 font-medium">
+                {t.signUp || 'Sign up'}
+              </Link>
+            </div>
+            
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={() => navigate('/cadreBack')}
+                className={`text-sm text-primary hover:text-red-700 transition-colors duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
+              >
+                {t.cadreInternalLogin || 'Cadre Internal Login'}
+              </button>
+            </div>
+            
+            {error && (
+              <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-sm">
+                <p className="text-primary text-sm font-secondary">{error}</p>
+              </div>
             )}
-          </button>
-          <OAuth />
-        </form>
-        <div className={`flex gap-2 mt-6 md:mt-8 text-xs md:text-sm font-secondary ${direction === 'rtl' ? 'justify-end' : 'justify-start'}`}>
-          <p>{t.noAccount || "Don't have an account?"}</p>
-          <Link to={'/sign-up'}>
-            <span className="text-primary hover:underline">{t.signUp || 'Sign up'}</span>
-          </Link>
-        </div>
-        <div className="mt-3 md:mt-4">
-          <button
-            type="button"
-            onClick={() => navigate('/cadreBack')}
-            className={`text-xs md:text-sm text-primary hover:underline font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
-          >
-            {t.cadreInternalLogin || 'Cadre Internal Login'}
-          </button>
-          </div>
-          {error && <p className="text-primary mt-5 text-sm font-secondary">{error}</p>}
           </div>
         </div>
       </div>

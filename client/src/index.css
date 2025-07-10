@@ -147,6 +147,30 @@
     font-family: 'Noto Sans Arabic', sans-serif;
   }
 
+  /* Mobile-specific utilities */
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .mobile-safe-area {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Improved focus states for mobile */
+  .mobile-focus:focus {
+    outline: 2px solid #db2b2e;
+    outline-offset: 2px;
+  }
+
+  /* Smooth transitions for mobile interactions */
+  .mobile-transition {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   /* RTL-specific utilities */
   [dir="rtl"] .rtl\:text-right {
     text-align: right;

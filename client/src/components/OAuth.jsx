@@ -189,19 +189,19 @@ export default function OAuth() {
       onClick={handleGoogleClick}
       disabled={isLoading}
       type='button'
-      className='bg-[#f3eb4b] flex items-center justify-center gap-2 w-full p-3 hover:opacity-95 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200'
+      className='w-full bg-yellowAccent hover:bg-yellow-400 text-primary font-bold py-4 md:py-3 text-base flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 rounded-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] border-2 border-transparent hover:border-primary/20'
     >
       {isLoading ? (
         <>
-          <div className="w-5 h-5 border-t-2 border-r-2 border-[#db2b2e] animate-spin rounded-full"></div>
-          <span className="text-[#db2b2e] font-bold">
+          <div className="w-5 h-5 border-t-2 border-r-2 border-primary animate-spin rounded-full"></div>
+          <span className="font-secondary">
             {t.loading || 'Loading...'}
           </span>
         </>
       ) : (
         <>
-      <FaGoogle className="text-[#db2b2e] text-xl" />
-          <span className="text-[#db2b2e] font-bold">
+      <FaGoogle className="text-primary text-xl" />
+          <span className="font-secondary">
             {t.continueWithGoogle || 'Continue with Google'}
           </span>
         </>
