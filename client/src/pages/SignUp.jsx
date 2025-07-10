@@ -103,16 +103,6 @@ export default function SignUp() {
           
           {/* Form Content */}
           <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0">
-            {/* Mobile Logo/Header */}
-            <div className="md:hidden text-center mb-8">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary to-yellowAccent rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">CM</span>
-              </div>
-              <h2 className="text-lg font-bold text-gray-800 dark:text-white font-primary">
-                Cadre Markets
-              </h2>
-            </div>
-
             <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-2 font-primary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
               {t.title || 'Create an account'}
             </h1>
