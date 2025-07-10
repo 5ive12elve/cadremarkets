@@ -44,7 +44,7 @@ const CadreBackListings = () => {
     const fetchListings = async () => {
         try {
             setLoading(true);
-            const response = await backofficeApiRequest('/backoffice/all');
+            const response = await backofficeApiRequest('/listing/backoffice/all');
             if (!response.ok) {
                 toast.error('Failed to fetch listings');
                 throw new Error('Failed to fetch listings');
@@ -180,7 +180,7 @@ const CadreBackListings = () => {
             // Fetch detailed statistics
             let detailedStats = null;
             try {
-                const response = await backofficeApiRequest('/backoffice/statistics?timeframe=365');
+                const response = await backofficeApiRequest('/listing/backoffice/statistics?timeframe=365');
                 if (response.ok) {
                     detailedStats = await response.json();
                 }
