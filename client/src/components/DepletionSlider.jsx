@@ -444,7 +444,7 @@ export default function DepletionSlider() {
       {/* Mobile-Optimized Navigation Arrows */}
       <button
         onClick={() => paginate(-1)}
-        className={`absolute ${isArabic ? 'right-3 md:right-4' : 'left-3 md:left-4'} bottom-[-2.5rem] md:top-1/2 md:-translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
+        className={`absolute ${isArabic ? 'right-3 md:right-4' : 'left-3 md:left-4'} top-1/2 -translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-40`}
       >
         {isArabic ? 
           <FiChevronRight size={20} className="md:w-8 md:h-8 text-white/90 group-hover:text-white" /> : 
@@ -458,7 +458,7 @@ export default function DepletionSlider() {
       </button>
       <button
         onClick={() => paginate(1)}
-        className={`absolute ${isArabic ? 'left-3 md:left-4' : 'right-3 md:right-4'} bottom-[-2.5rem] md:top-1/2 md:-translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
+        className={`absolute ${isArabic ? 'left-3 md:left-4' : 'right-3 md:right-4'} top-1/2 -translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-40`}
       >
         <span className={`opacity-0 group-hover:opacity-100 transition-opacity ${isArabic ? 'ml-2' : 'mr-2'} text-xs md:text-sm bg-black/70 px-2 py-1 rounded hidden md:block ${
           isArabic ? 'font-noto' : 'font-nt'
