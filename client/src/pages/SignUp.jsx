@@ -83,33 +83,45 @@ export default function SignUp() {
   };
   
   return (
-    <div className="bg-white dark:bg-black font-primary transition-colors duration-300 min-h-screen" dir={direction}>
+    <div className="bg-white dark:bg-black font-primary transition-colors duration-300 min-h-screen overflow-x-hidden" dir={direction}>
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         {/* Left Graphic - Hidden on mobile, shown on desktop */}
-        <div className="bg-white dark:bg-black hidden md:flex items-center justify-center transition-colors duration-300">
-          <img src="/mediassets/CMSUP3.png" alt="Phone Cart" className="w-4/5" />
+        <div className="bg-white dark:bg-black hidden md:flex items-center justify-center transition-colors duration-300 relative overflow-hidden">
+          {/* Accordion background accent */}
+          <img src="/mediassets/CadreMarkets-GraphicalElements-12.png" alt="Accordion Accent" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] opacity-10 pointer-events-none select-none" />
+          <img src="/mediassets/CMSUP3.png" alt="Phone Cart" className="w-4/5 relative z-10" />
         </div>
 
         {/* Right Form */}
-        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300">
-          {/* Mobile Background Image */}
-          <div className="md:hidden absolute inset-0 opacity-5">
+        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300 overflow-hidden">
+          {/* Mobile Background Image + Accordion accent */}
+          <div className="md:hidden absolute inset-0 opacity-5 pointer-events-none select-none">
+            <img 
+              src="/mediassets/CadreMarkets-GraphicalElements-12.png" 
+              alt="Accordion Accent" 
+              className="w-full h-full object-contain object-center absolute z-0 opacity-20" 
+            />
             <img 
               src="/mediassets/CMSUP3.png" 
               alt="Background" 
-              className="w-full h-full object-contain object-center"
+              className="w-full h-full object-contain object-center relative z-10 opacity-60" 
             />
           </div>
-          
+          {/* Corner accents */}
+          <img src="/mediassets/CadreMarkets-GraphicalElements-14.png" alt="Corner TL" className="absolute top-0 left-0 w-12 h-12 opacity-20 z-20" />
+          <img src="/mediassets/CadreMarkets-GraphicalElements-17.png" alt="Corner BR" className="absolute bottom-0 right-0 w-12 h-12 opacity-20 z-20" />
           {/* Form Content */}
-          <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0">
+          <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 bg-white/90 dark:bg-black/90 rounded-lg shadow-none md:shadow-lg p-4 md:p-8">
+            {/* Target/crosshair watermark */}
+            <div className="absolute top-2 right-2 opacity-10 z-20">
+              <img src="/mediassets/CadreMarkets-GraphicalElements-13.png" alt="Target Watermark" className="w-8 h-8" />
+            </div>
             <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-2 font-primary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
               {t.title || 'Create an account'}
             </h1>
             <p className={`mb-8 md:mb-8 text-sm sm:text-base text-gray-600 dark:text-gray-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}>
               {t.enterDetailsBelow || 'Enter your details below'}
             </p>
-            
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-4 space-y-4">
               <div className="space-y-1">
                 <input
@@ -199,8 +211,9 @@ export default function SignUp() {
                 )}
               </button>
               
-              {/* Divider */}
-              <div className="relative my-6">
+              {/* Divider with ruler accent */}
+              <div className="relative my-6 flex flex-col items-center">
+                <img src="/mediassets/CadreMarkets-GraphicalElements-15.png" alt="Ruler Divider" className="w-32 md:w-48 opacity-30 mb-2" />
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
                 </div>
