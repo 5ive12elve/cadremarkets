@@ -8,13 +8,13 @@ import GE02Loader from './GE02Loader';
 const media = [
   {
     type: 'video',
-    src: 'https://drive.google.com/file/d/1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR/preview?autoplay=1&mute=1',
+    src: 'https://drive.google.com/file/d/1mGGGSt5VR419iLtu8zf7iorAH9YmXSHR/preview',
     alt: 'Screening Announcement',
     thumbnail: '/mediassets/THUMB1.png'
   },
   {
     type: 'video',
-    src: 'https://drive.google.com/file/d/122QpS2AeYMWO0twSN41zSSmI-ypV0XRb/preview?autoplay=1&mute=1',
+    src: 'https://drive.google.com/file/d/122QpS2AeYMWO0twSN41zSSmI-ypV0XRb/preview',
     alt: 'Depletion Screening Final',
     thumbnail: '/mediassets/THUMB2.png'
   },
@@ -95,7 +95,8 @@ export default function DepletionSlider() {
 
   const [[page, direction], setPage] = useState([0, 0]);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState({});
+  // Removed unused videoLoaded state
+  const [videoPlayed, setVideoPlayed] = useState({});
   const sliderRef = useRef(null);
   const autoplayTimeoutRef = useRef(null);
 
@@ -312,36 +313,11 @@ export default function DepletionSlider() {
             {currentMedia ? (
               currentMedia.type === 'video' ? (
                 <div className="relative w-full h-full">
-                  <iframe
-                    src={currentMedia.src}
-                    className="w-full h-full rounded-lg"
-                    frameBorder="0"
-                    allowFullScreen
-                    allow="autoplay; encrypted-media; fullscreen"
-                    title={currentMedia.alt}
-                    onLoad={() => {
-                      setVideoLoaded(prev => ({ ...prev, [currentIndex]: true }));
-                    }}
-                    onError={() => {
-                      setVideoLoaded(prev => ({ ...prev, [currentIndex]: false }));
-                    }}
-                  />
-                  {/* Thumbnail fallback if video fails to load */}
-                  {!videoLoaded[currentIndex] && currentMedia.thumbnail && (
+                  {/* Show thumbnail until user clicks play */}
+                  {!videoPlayed[currentIndex] ? (
                     <div 
-                      className="absolute inset-0 bg-black rounded-lg flex items-center justify-center cursor-pointer"
-                      onClick={() => {
-                        // Force reload the iframe to retry loading
-                        setVideoLoaded(prev => ({ ...prev, [currentIndex]: null }));
-                        const iframe = document.querySelector('iframe');
-                        if (iframe) {
-                          const currentSrc = iframe.src;
-                          iframe.src = '';
-                          setTimeout(() => {
-                            iframe.src = currentSrc;
-                          }, 100);
-                        }
-                      }}
+                      className="absolute inset-0 bg-black rounded-lg flex items-center justify-center cursor-pointer z-10"
+                      onClick={() => setVideoPlayed(prev => ({ ...prev, [currentIndex]: true }))}
                     >
                       <img
                         src={currentMedia.thumbnail}
@@ -359,6 +335,15 @@ export default function DepletionSlider() {
                         </div>
                       </div>
                     </div>
+                  ) : (
+                    <iframe
+                      src={currentMedia.src}
+                      className="w-full h-full rounded-lg z-20"
+                      frameBorder="0"
+                      allowFullScreen
+                      allow="autoplay; encrypted-media; fullscreen"
+                      title={currentMedia.alt}
+                    />
                   )}
                 </div>
               ) : (
@@ -377,21 +362,17 @@ export default function DepletionSlider() {
         </AnimatePresence>
         
         {/* Mobile Swipe Indicator */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10 md:hidden">
+        <div className="absolute w-full left-0 right-0 flex justify-center md:hidden" style={{ bottom: '-2.5rem' }}>
           <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
             <div className="w-1 h-1 bg-white/60 rounded-full animate-pulse"></div>
-            <span className={`text-white/80 text-xs ${
-              isArabic ? 'font-noto' : 'font-nt'
-            }`}>
-              Swipe to navigate
-            </span>
+            <span className={`text-white/80 text-xs ${isArabic ? 'font-noto' : 'font-nt'}`}>Swipe to navigate</span>
             <div className="w-1 h-1 bg-white/60 rounded-full animate-pulse"></div>
           </div>
         </div>
       </div>
 
       {/* Mobile Text Section (below content) */}
-      <div className="md:hidden bg-black p-4">
+      <div className="md:hidden bg-black p-4 pt-10">
         <div className={`${isArabic ? 'text-right' : 'text-left'}`}>
           {/* Mobile Title */}
           <h1 className={`text-primary text-2xl font-bold mb-3 leading-tight ${
@@ -419,7 +400,7 @@ export default function DepletionSlider() {
             <div className={`grid grid-cols-1 gap-3 mt-4 ${
               isArabic ? 'text-right' : 'text-left'
             }`}>
-              <div className="bg-gray-900 rounded-lg p-3 border border-primary/20">
+              <div className="bg-gray-900 rounded-lg p-3 border-2 border-primary">
                 <span className={`text-primary text-xs font-bold block mb-1 ${
                   isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
@@ -431,7 +412,7 @@ export default function DepletionSlider() {
                   {typeValue}
                 </span>
               </div>
-              <div className="bg-gray-900 rounded-lg p-3 border border-primary/20">
+              <div className="bg-gray-900 rounded-lg p-3 border-2 border-primary">
                 <span className={`text-primary text-xs font-bold block mb-1 ${
                   isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
@@ -443,7 +424,7 @@ export default function DepletionSlider() {
                   {venueValue}
                 </span>
               </div>
-              <div className="bg-gray-900 rounded-lg p-3 border border-primary/20">
+              <div className="bg-gray-900 rounded-lg p-3 border-2 border-primary">
                 <span className={`text-primary text-xs font-bold block mb-1 ${
                   isArabic ? 'font-noto' : 'font-nt-bold'
                 }`}>
@@ -463,7 +444,7 @@ export default function DepletionSlider() {
       {/* Mobile-Optimized Navigation Arrows */}
       <button
         onClick={() => paginate(-1)}
-        className={`absolute ${isArabic ? 'right-3 md:right-4' : 'left-3 md:left-4'} top-1/2 -translate-y-1/2 md:top-1/2 md:-translate-y-1/2 bottom-4 md:bottom-auto group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
+        className={`absolute ${isArabic ? 'right-3 md:right-4' : 'left-3 md:left-4'} bottom-[-2.5rem] md:top-1/2 md:-translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
       >
         {isArabic ? 
           <FiChevronRight size={20} className="md:w-8 md:h-8 text-white/90 group-hover:text-white" /> : 
@@ -477,7 +458,7 @@ export default function DepletionSlider() {
       </button>
       <button
         onClick={() => paginate(1)}
-        className={`absolute ${isArabic ? 'left-3 md:left-4' : 'right-3 md:right-4'} top-1/2 -translate-y-1/2 md:top-1/2 md:-translate-y-1/2 bottom-4 md:bottom-auto group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
+        className={`absolute ${isArabic ? 'left-3 md:left-4' : 'right-3 md:right-4'} bottom-[-2.5rem] md:top-1/2 md:-translate-y-1/2 group p-3 md:p-4 bg-black/30 backdrop-blur-sm rounded-full hover:bg-black/50 transition-all duration-300 transform hover:scale-110 flex items-center z-30`}
       >
         <span className={`opacity-0 group-hover:opacity-100 transition-opacity ${isArabic ? 'ml-2' : 'mr-2'} text-xs md:text-sm bg-black/70 px-2 py-1 rounded hidden md:block ${
           isArabic ? 'font-noto' : 'font-nt'
