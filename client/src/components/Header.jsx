@@ -102,52 +102,62 @@ export default function Header() {
             )}
           </motion.button>
 
-          {/* Logo - always centered absolutely */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex items-center justify-center pointer-events-none h-full">
-            <Link to="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-105 pointer-events-auto">
-              <img 
-                src={window.innerWidth < 1024 ? "/mediassets/Cadre-su.png" : "/mediassets/CadreBigUse2.png"}
-                alt="Cadre Markets Logo" 
-                className="h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 w-auto object-contain" 
-              />
-            </Link>
+          {/* Desktop: logo on the left before Marketplace, mobile: logo centered */}
+          <div className="relative flex items-center w-full">
+            {/* Desktop logo (left) */}
+            <div className="hidden lg:flex items-center flex-shrink-0">
+              <Link to="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-105">
+                <img 
+                  src="/mediassets/CadreBigUse2.png"
+                  alt="Cadre Markets Logo"
+                  className="h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 w-auto object-contain"
+                />
+              </Link>
+            </div>
+            {/* Desktop nav (after logo) */}
+            <nav className="hidden lg:flex items-center flex-shrink-0 ml-6 xl:ml-8">
+              <ul className="flex gap-4 xl:gap-6">
+                <Link to="/search">
+                  <li className={`relative text-sm xl:text-base font-normal transition-colors duration-200 ${
+                    isActive('/search') ? 'text-primary font-bold' : 'hover:text-primary text-black dark:text-white'
+                  } underline underline-offset-4 decoration-1 hover:decoration-2 font-primary`}>
+                    {t.marketplace || 'Marketplace'}
+                  </li>
+                </Link>
+                <Link to="/projects">
+                  <li className={`relative text-sm xl:text-base font-normal transition-colors duration-200 ${
+                    isActive('/projects') ? 'text-primary font-bold' : 'hover:text-primary text-black dark:text-white'
+                  } underline underline-offset-4 decoration-1 hover:decoration-2 font-primary`}>
+                    {t.projects || 'Projects'}
+                  </li>
+                </Link>
+                <Link to="/services">
+                  <li className={`relative text-sm xl:text-base font-normal transition-colors duration-200 ${
+                    isActive('/services') ? 'text-primary font-bold' : 'hover:text-primary text-black dark:text-white'
+                  } underline underline-offset-4 decoration-1 hover:decoration-2 font-primary`}>
+                    {t.services || 'Services'}
+                  </li>
+                </Link>
+                <Link to="/about">
+                  <li className={`relative text-sm xl:text-base font-normal transition-colors duration-200 ${
+                    isActive('/about') ? 'text-primary font-bold' : 'hover:text-primary text-black dark:text-white'
+                  } underline underline-offset-4 decoration-1 hover:decoration-2 font-primary`}>
+                    {t.about || 'About'}
+                  </li>
+                </Link>
+              </ul>
+            </nav>
+            {/* Centered logo for mobile */}
+            <div className="lg:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex items-center justify-center pointer-events-none h-full">
+              <Link to="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-105 pointer-events-auto">
+                <img 
+                  src="/mediassets/Cadre-su.png"
+                  alt="Cadre Markets Logo"
+                  className="h-12 sm:h-14 md:h-16 w-auto object-contain"
+                />
+              </Link>
+            </div>
           </div>
-
-          {/* Desktop Navigation - Left side after logo */}
-          <nav className={`hidden lg:flex items-center flex-shrink-0 ${
-            isArabic ? 'mr-8 xl:mr-12' : 'ml-6 xl:ml-8'
-          }`}>
-            <ul className="flex gap-4 xl:gap-6">
-              <Link to="/search">
-                <li className={`relative text-sm xl:text-base font-normal transition-colors duration-200 ${
-                  isActive('/search') ? 'text-primary font-bold' : 'hover:text-primary text-black dark:text-white'
-                } underline underline-offset-4 decoration-1 hover:decoration-2 font-primary`}>
-                  {t.marketplace || 'Marketplace'}
-                </li>
-              </Link>
-              <Link to="/projects">
-                <li className={`relative text-sm xl:text-base font-normal transition-colors duration-200 ${
-                  isActive('/projects') ? 'text-primary font-bold' : 'hover:text-primary text-black dark:text-white'
-                } underline underline-offset-4 decoration-1 hover:decoration-2 font-primary`}>
-                  {t.projects || 'Projects'}
-                </li>
-              </Link>
-              <Link to="/services">
-                <li className={`relative text-sm xl:text-base font-normal transition-colors duration-200 ${
-                  isActive('/services') ? 'text-primary font-bold' : 'hover:text-primary text-black dark:text-white'
-                } underline underline-offset-4 decoration-1 hover:decoration-2 font-primary`}>
-                  {t.services || 'Services'}
-                </li>
-              </Link>
-              <Link to="/about">
-                <li className={`relative text-sm xl:text-base font-normal transition-colors duration-200 ${
-                  isActive('/about') ? 'text-primary font-bold' : 'hover:text-primary text-black dark:text-white'
-                } underline underline-offset-4 decoration-1 hover:decoration-2 font-primary`}>
-                  {t.about || 'About'}
-                </li>
-              </Link>
-            </ul>
-          </nav>
 
           {/* Search Bar - Center, takes remaining space */}
           <div className={`hidden lg:flex flex-1 justify-center ${
@@ -213,13 +223,6 @@ export default function Header() {
 
         {isMobileMenuOpen && (
           <div className="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-black p-4 sm:p-5 border-t border-primary/10 transition-colors duration-300 shadow-lg" ref={mobileMenuRef}>
-            <button
-              className="absolute top-3 right-3 text-primary text-2xl z-50"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              &times;
-            </button>
             <nav>
               <ul className="flex flex-col gap-4 mt-8">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
