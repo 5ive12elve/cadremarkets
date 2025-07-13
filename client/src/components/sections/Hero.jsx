@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useTranslation } from '../../locales/translations';
+import { useState, useEffect } from 'react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,11 +28,24 @@ const itemVariants = {
 
 export default function Hero() {
   const { currentLang, isArabic } = useLanguage();
+  const [isMobile, setIsMobile] = useState(false);
   
   // Get translations - but always display in English as requested
   const heroDescription1 = useTranslation('home', 'heroDescription1', currentLang);
   const heroDescription2 = useTranslation('home', 'heroDescription2', currentLang);
   const scrollToExplore = useTranslation('home', 'scrollToExplore', currentLang);
+
+  // Check if screen is mobile
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   return (
     <motion.div
@@ -42,11 +56,11 @@ export default function Hero() {
       <section className="relative flex justify-center items-start h-[50vh] min-h-[300px] md:h-[calc(100vh-300px)] md:min-h-[380px] bg-white dark:bg-black transition-colors duration-300">
         <motion.img
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          animate={{ opacity: isMobile ? 0.6 : 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           src="/mediassets/GE01.png"
           alt="Hero"
-          className="w-[280px] md:w-[360px] h-[278px] md:h-[358px] object-contain absolute top-[70px] z-0 opacity-60 md:opacity-100"
+          className="w-[280px] md:w-[360px] h-[278px] md:h-[358px] object-contain absolute top-[70px] z-0"
         />
         <div className={`relative z-10 w-full max-w-7xl mx-auto flex flex-col ${isArabic ? 'md:flex-row-reverse' : 'md:flex-row'} justify-between items-center md:items-start px-3 gap-[30px] md:gap-[60px]`} dir={isArabic ? 'rtl' : 'ltr'}>
           {/* Image Block */}

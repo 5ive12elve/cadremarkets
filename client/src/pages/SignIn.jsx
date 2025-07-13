@@ -367,18 +367,14 @@ export default function SignIn() {
           {/* Cheerful Cadre content below form on mobile */}
           <div className="md:hidden mt-8 text-center">
             <div className="bg-[#f3eb4b] p-6 rounded-lg">
-              <div className="text-4xl mb-4">🎨✨</div>
+              <div className="h-16 mb-4"></div>
               <h3 className={`text-[#db2b2e] font-bold text-lg mb-2 ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
                 Welcome to Cadre Markets!
               </h3>
               <p className={`text-[#db2b2e] text-sm font-secondary ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}>
                 Where creativity meets opportunity
               </p>
-              <div className="flex justify-center gap-4 mt-4 text-2xl">
-                <span>🚀</span>
-                <span>💡</span>
-                <span>🌟</span>
-              </div>
+              <div className="h-8 mt-4"></div>
             </div>
           </div>
         </div>
