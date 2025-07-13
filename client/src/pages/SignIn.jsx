@@ -252,11 +252,11 @@ export default function SignIn() {
     }
   };
   return (
-    <div className="bg-white dark:bg-black font-primary transition-colors duration-300 min-h-screen" dir={direction}>
+    <div className="bg-[#f3eb4b] font-primary transition-colors duration-300 min-h-screen" dir={direction}>
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         {/* Left Graphic - Hidden on mobile, shown on desktop */}
         <div className="bg-white dark:bg-black hidden md:flex items-center justify-center transition-colors duration-300">
-          <img src="/mediassets/CMSUP55.png" alt="Phone Cart" className="w-4/5" />
+          <img src="/mediassets/CMSUP55.png" alt="Phone Cart" className="h-full w-auto max-h-full object-contain relative z-10 ml-8 lg:ml-16" />
         </div>
 
         {/* Right Form */}
@@ -271,8 +271,8 @@ export default function SignIn() {
           </div>
           
           {/* Form Content */}
-          <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0">
-            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-2 font-primary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
+          <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-4 md:p-8 mr-0 md:mr-8 lg:mr-16">
+            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-2 font-primary text-[#db2b2e] ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
               {t.title || 'Sign In'}
             </h1>
             <p className={`mb-8 md:mb-8 text-sm sm:text-base text-gray-600 dark:text-gray-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}>
