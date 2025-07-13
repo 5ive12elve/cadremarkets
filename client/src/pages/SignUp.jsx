@@ -108,9 +108,10 @@ export default function SignUp() {
             {/* 3-box (element 19) top-left */}
             {/* 2-box (element 20) bottom-right */}
             {/* Target/crosshair watermark */}
-            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-2 font-primary text-[#db2b2e] ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
-              {t.title || 'Create an account'}
-            </h1>
+            <div className="flex items-center justify-between w-full mb-3 md:mb-2">
+              <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold font-primary text-[#db2b2e] ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>{t.title || 'Create an account'}</h1>
+              <img src="/mediassets/cm2025red.png" alt="CM2025 Red" className="h-8 w-auto ml-2" />
+            </div>
             <p className={`mb-8 md:mb-8 text-sm sm:text-base text-gray-600 dark:text-gray-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}>
               {t.enterDetailsBelow || 'Enter your details below'}
             </p>
@@ -218,7 +219,7 @@ export default function SignUp() {
               <OAuth />
             </form>
             
-            <div className={`flex flex-col sm:flex-row gap-2 mt-8 md:mt-8 text-sm font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
+            <div className={`flex flex-row items-center gap-2 mt-8 md:mt-8 text-sm font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
               <p className="text-gray-600 dark:text-gray-300">{t.haveAccount || 'Already have an account?'}</p>
               <Link to={'/sign-in'} className="text-primary hover:text-red-700 transition-colors duration-300 font-medium">
                 {t.logIn || 'Log in'}

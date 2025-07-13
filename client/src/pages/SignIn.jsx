@@ -261,20 +261,14 @@ export default function SignIn() {
 
         {/* Right Form */}
         <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300">
-          {/* Mobile Background Image */}
-          <div className="md:hidden absolute inset-0 opacity-5">
-            <img 
-              src="/mediassets/CMSUP5.png" 
-              alt="Background" 
-              className="w-full h-full object-contain object-center"
-            />
-          </div>
+          {/* Mobile background image removed as requested */}
           
           {/* Form Content */}
           <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-4 md:p-8 mr-0 md:mr-8 lg:mr-16">
-            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-2 font-primary text-[#db2b2e] ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
-              {t.title || 'Sign In'}
-            </h1>
+            <div className="flex items-center justify-between w-full mb-3 md:mb-2">
+              <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold font-primary text-[#db2b2e] ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>{t.title || 'Sign In'}</h1>
+              <img src="/mediassets/cm2025red.png" alt="CM2025 Red" className="h-8 w-auto ml-2" />
+            </div>
             <p className={`mb-8 md:mb-8 text-sm sm:text-base text-gray-600 dark:text-gray-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}>
               {common.pleaseEnterDetails || 'Please enter your details'}
             </p>
@@ -331,7 +325,7 @@ export default function SignIn() {
               <OAuth />
             </form>
             
-            <div className={`flex flex-col sm:flex-row gap-2 mt-8 md:mt-8 text-sm font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
+            <div className={`flex flex-row items-center gap-2 mt-8 md:mt-8 text-sm font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
               <p className="text-gray-600 dark:text-gray-300">{t.noAccount || "Don't have an account?"}</p>
               <Link to={'/sign-up'} className="text-primary hover:text-red-700 transition-colors duration-300 font-medium">
                 {t.signUp || 'Sign up'}
