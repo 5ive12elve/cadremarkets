@@ -125,7 +125,7 @@ export default function WhoIsThisFor() {
           <div className={`text-center ${isArabic ? 'md:text-right' : 'md:text-left'} flex-1 min-w-0 ${isArabic ? 'font-noto' : 'font-nt'}`}>
             <motion.h3 
               variants={itemVariants}
-              className={`text-primary text-[20px] sm:text-[22px] md:text-[24px] font-bold mb-3 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
+              className={`text-primary text-[20px] sm:text-[22px] md:text-[24px] font-bold mb-1 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
             >
               {useTranslation('home', 'forArtists', currentLang)}
             </motion.h3>
@@ -164,7 +164,7 @@ export default function WhoIsThisFor() {
           <div className={`text-center ${isArabic ? 'md:text-right' : 'md:text-left'} flex-1 min-w-0 ${isArabic ? 'font-noto' : 'font-nt'}`}>
             <motion.h3 
               variants={itemVariants}
-              className={`text-primary text-[20px] sm:text-[22px] md:text-[24px] font-bold mb-3 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
+              className={`text-primary text-[20px] sm:text-[22px] md:text-[24px] font-bold mb-1 ${isArabic ? 'font-amiri' : 'font-nt-bold'}`}
             >
               {useTranslation('home', 'forBrandsClients', currentLang)}
             </motion.h3>

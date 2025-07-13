@@ -31,6 +31,7 @@ const calculateSellerProfit = (price, usesCadreService) => {
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const { isArabic, currentLang } = useLanguage();
 
   // Check if user is authenticated
   useEffect(() => {
@@ -38,34 +39,51 @@ export default function CreateListing() {
       navigate('/signin', { state: { from: '/create-listing' } });
     }
   }, [navigate]);
-  const { isArabic } = useLanguage();
   
   // Helper text translations
   const helperText = {
-    images: useTranslation('createListingHelpers', 'images', isArabic ? 'ar' : 'en'),
-    name: useTranslation('createListingHelpers', 'name', isArabic ? 'ar' : 'en'),
-    description: useTranslation('createListingHelpers', 'description', isArabic ? 'ar' : 'en'),
-    type: useTranslation('createListingHelpers', 'type', isArabic ? 'ar' : 'en'),
-    sizes: useTranslation('createListingHelpers', 'sizes', isArabic ? 'ar' : 'en'),
-    dimensions: useTranslation('createListingHelpers', 'dimensions', isArabic ? 'ar' : 'en'),
-    width: useTranslation('createListingHelpers', 'width', isArabic ? 'ar' : 'en'),
-    height: useTranslation('createListingHelpers', 'height', isArabic ? 'ar' : 'en'),
-    depth: useTranslation('createListingHelpers', 'depth', isArabic ? 'ar' : 'en'),
-    address: useTranslation('createListingHelpers', 'address', isArabic ? 'ar' : 'en'),
-    city: useTranslation('createListingHelpers', 'city', isArabic ? 'ar' : 'en'),
-    district: useTranslation('createListingHelpers', 'district', isArabic ? 'ar' : 'en'),
-    price: useTranslation('createListingHelpers', 'price', isArabic ? 'ar' : 'en'),
-    service: useTranslation('createListingHelpers', 'service', isArabic ? 'ar' : 'en'),
-    contact: useTranslation('createListingHelpers', 'contact', isArabic ? 'ar' : 'en'),
-    phone: useTranslation('createListingHelpers', 'phone', isArabic ? 'ar' : 'en'),
-    quantity: useTranslation('createListingHelpers', 'quantity', isArabic ? 'ar' : 'en'),
+    images: useTranslation('createListingHelpers', 'images', currentLang),
+    name: useTranslation('createListingHelpers', 'name', currentLang),
+    description: useTranslation('createListingHelpers', 'description', currentLang),
+    type: useTranslation('createListingHelpers', 'type', currentLang),
+    sizes: useTranslation('createListingHelpers', 'sizes', currentLang),
+    dimensions: useTranslation('createListingHelpers', 'dimensions', currentLang),
+    width: useTranslation('createListingHelpers', 'width', currentLang),
+    height: useTranslation('createListingHelpers', 'height', currentLang),
+    depth: useTranslation('createListingHelpers', 'depth', currentLang),
+    address: useTranslation('createListingHelpers', 'address', currentLang),
+    city: useTranslation('createListingHelpers', 'city', currentLang),
+    district: useTranslation('createListingHelpers', 'district', currentLang),
+    price: useTranslation('createListingHelpers', 'price', currentLang),
+    service: useTranslation('createListingHelpers', 'service', currentLang),
+    contact: useTranslation('createListingHelpers', 'contact', currentLang),
+    phone: useTranslation('createListingHelpers', 'phone', currentLang),
+    quantity: useTranslation('createListingHelpers', 'quantity', currentLang),
   };
 
   // Success toast translations
   const successToastTexts = {
-    listingCreated: isArabic ? 'تم إنشاء الإعلان!' : 'Listing created!',
+    listingCreated: useTranslation('createListing', 'title', currentLang) + '!',
     pendingApproval: isArabic ? 'إعلانك الآن قيد المراجعة' : 'Your listing is now pending approval',
   };
+
+  // Additional translation variables
+  const dropImagesHereText = useTranslation('createListing', 'dropImagesHere', currentLang);
+  const dragDropText = useTranslation('createListing', 'dragDrop', currentLang);
+  const browseText = useTranslation('createListing', 'browse', currentLang);
+  const fileTypesText = useTranslation('createListing', 'fileTypes', currentLang);
+  const maxImagesText = useTranslation('createListing', 'maxImages', currentLang);
+  const selectedFilesText = useTranslation('createListing', 'selectedFiles', currentLang);
+  const uploadText = useTranslation('createListing', 'upload', currentLang);
+  const uploadingText = useTranslation('createListing', 'uploading', currentLang);
+  const uploadedImagesText = useTranslation('createListing', 'uploadedImages', currentLang);
+  const mainImageText = useTranslation('createListing', 'mainImage', currentLang);
+  const firstImageMainText = useTranslation('createListing', 'firstImageMain', currentLang);
+  const basicInfoText = useTranslation('createListing', 'basicInfo', currentLang);
+  const listingNameText = useTranslation('createListing', 'listingName', currentLang);
+  const descriptionText = useTranslation('createListing', 'description', currentLang);
+  const creatingText = useTranslation('createListing', 'creating', currentLang);
+  const submitText = useTranslation('createListing', 'submit', currentLang);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -100,36 +118,36 @@ export default function CreateListing() {
   const [clothingSizes, setClothingSizes] = useState([]);
 
   const artTypes = [
-    'Paintings & Drawings',
-    'Sculptures & 3D Art',
-    'Antiques & Collectibles',
-    'Clothing & Wearables',
-    'Home Décor',
-    'Accessories',
-    'Prints & Posters',
+    useTranslation('createListing', 'paintingsDrawings', currentLang),
+    useTranslation('createListing', 'sculptures3DArt', currentLang),
+    useTranslation('createListing', 'antiquesCollectibles', currentLang),
+    useTranslation('createListing', 'clothingWearables', currentLang),
+    useTranslation('createListing', 'homeDecor', currentLang),
+    useTranslation('createListing', 'accessories', currentLang),
+    useTranslation('createListing', 'printsPoster', currentLang),
   ];
 
   const cairoDistricts = [
-    'Maadi',
-    'Heliopolis',
-    'Nasr City',
-    'New Cairo',
-    'Zamalek',
-    'Garden City',
-    'Downtown Cairo',
-    'Dokki',
-    'Mohandessin',
-    '6th of October',
-    'Sheikh Zayed',
-    'Giza',
-    'Haram',
-    'Shoubra',
-    'Ain Shams',
-    'El Matareya',
-    'Madinaty',
-    'El Rehab',
-    'El Tagamoa El Khames',
-    'Other'
+    useTranslation('createListing', 'maadi', currentLang),
+    useTranslation('createListing', 'heliopolis', currentLang),
+    useTranslation('createListing', 'nasrCity', currentLang),
+    useTranslation('createListing', 'newCairo', currentLang),
+    useTranslation('createListing', 'zamalek', currentLang),
+    useTranslation('createListing', 'gardenCity', currentLang),
+    useTranslation('createListing', 'downtownCairo', currentLang),
+    useTranslation('createListing', 'dokki', currentLang),
+    useTranslation('createListing', 'mohandessin', currentLang),
+    useTranslation('createListing', 'sixthOfOctober', currentLang),
+    useTranslation('createListing', 'sheikhZayed', currentLang),
+    useTranslation('createListing', 'giza', currentLang),
+    useTranslation('createListing', 'haram', currentLang),
+    useTranslation('createListing', 'shoubra', currentLang),
+    useTranslation('createListing', 'ainShams', currentLang),
+    useTranslation('createListing', 'elMatareya', currentLang),
+    useTranslation('createListing', 'madinaty', currentLang),
+    useTranslation('createListing', 'elRehab', currentLang),
+    useTranslation('createListing', 'elTagamoaElKhames', currentLang),
+    useTranslation('createListing', 'other', currentLang)
   ];
 
   // Fetch available clothing sizes on component mount
@@ -502,35 +520,45 @@ export default function CreateListing() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="p-3 max-w-4xl mx-auto min-h-screen py-16 bg-white dark:bg-black text-black dark:text-white transition-colors duration-300"
-      dir="ltr"
+      className={`p-3 max-w-4xl mx-auto min-h-screen py-16 bg-white dark:bg-black text-black dark:text-white transition-colors duration-300 ${
+        isArabic ? 'font-noto' : 'font-nt'
+      }`}
+      dir={isArabic ? 'rtl' : 'ltr'}
     >
       <div className="bg-gray-50 dark:bg-black/50 p-8 border border-[#db2b2e] dark:border-primary">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-8" dir={isArabic ? 'rtl' : 'ltr'}>
           <button
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 px-4 py-2 border border-[#db2b2e] dark:border-primary text-[#db2b2e] dark:text-primary hover:bg-[#db2b2e] dark:hover:bg-primary hover:text-white dark:hover:text-black transition-colors"
           >
-            <FiArrowLeft className="w-4 h-4" />
-            Back
+            <FiArrowLeft className={`w-4 h-4 ${isArabic ? 'rotate-180' : ''}`} />
+            {useTranslation('createListing', 'back', currentLang)}
           </button>
-          <h1 className="text-4xl font-bold font-nt text-black dark:text-white">
-            Create a Listing
+          <h1 className={`text-4xl font-bold text-black dark:text-white ${
+            isArabic ? 'font-amiri' : 'font-nt-bold'
+          }`}>
+            {useTranslation('createListing', 'title', currentLang)}
           </h1>
         </div>
         <div className="border-b border-[#db2b2e] dark:border-primary mb-8"></div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8 text-black dark:text-white font-nt">
+        <form onSubmit={handleSubmit} className={`flex flex-col gap-8 text-black dark:text-white ${
+          isArabic ? 'font-noto' : 'font-nt'
+        }`} dir={isArabic ? 'rtl' : 'ltr'}>
           {/* Enhanced Images Section */}
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
               <FiImage className="text-2xl text-[#db2b2e] dark:text-primary" />
-              <h2 className="text-xl font-semibold">Images</h2>
+              <h2 className={`text-xl font-semibold ${
+                isArabic ? 'font-amiri' : 'font-nt-bold'
+              }`}>
+                {useTranslation('createListing', 'images', currentLang)}
+              </h2>
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 ({formData.imageUrls.length}/6)
               </span>
               {isArabic && (
-                <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60">
+                <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
                   {helperText.images}
                 </span>
               )}
@@ -560,19 +588,30 @@ export default function CreateListing() {
               
               <div className="text-center">
                 <FiUpload className="mx-auto text-4xl text-gray-400 dark:text-gray-500 mb-4" />
-                <p className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {dragActive ? 'Drop images here' : 'Drag & drop images here'}
+                <p className={`text-lg font-medium text-gray-700 dark:text-gray-300 mb-2 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {dragActive 
+                    ? dropImagesHereText
+                    : dragDropText
+                  }
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                  or click to browse files
+                <p className={`text-sm text-gray-500 dark:text-gray-400 mb-4 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {browseText}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 items-center justify-center">
-                  <span className="text-xs text-gray-400 dark:text-gray-500">
-                    PNG, JPG, JPEG up to 2MB each
+                  <span className={`text-xs text-gray-400 dark:text-gray-500 ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}>
+                    {fileTypesText}
                   </span>
                   <span className="hidden sm:inline text-gray-400 dark:text-gray-500">•</span>
-                  <span className="text-xs text-gray-400 dark:text-gray-500">
-                    Maximum 6 images
+                  <span className={`text-xs text-gray-400 dark:text-gray-500 ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}>
+                    {maxImagesText}
                   </span>
                 </div>
               </div>
@@ -582,8 +621,10 @@ export default function CreateListing() {
              {files && files.length > 0 && !uploading && (
                <div className="flex flex-col gap-3">
                  <div className="flex items-center justify-between">
-                   <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                     Selected Files ({files.length})
+                   <h3 className={`text-sm font-medium text-gray-700 dark:text-gray-300 ${
+                     isArabic ? 'font-noto' : 'font-nt'
+                   }`}>
+                     {selectedFilesText} ({files.length})
                    </h3>
                    <button
                      type="button"
@@ -591,7 +632,7 @@ export default function CreateListing() {
                      className="flex items-center gap-2 px-4 py-2 bg-[#db2b2e] dark:bg-primary text-white dark:text-black hover:bg-[#db2b2e]/90 dark:hover:bg-primary/90 transition-colors text-sm font-medium"
                    >
                      <FiUpload className="text-sm" />
-                     Upload {files.length} image{files.length > 1 ? 's' : ''}
+                     {uploadText} {files.length} {files.length > 1 ? 'images' : 'image'}
                    </button>
                  </div>
                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -614,8 +655,10 @@ export default function CreateListing() {
               <div className="bg-gray-50 dark:bg-black/50 p-4 border border-[#db2b2e] dark:border-primary">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-4 h-4 border-2 border-[#db2b2e] dark:border-primary border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-sm font-medium text-[#db2b2e] dark:text-primary">
-                    Uploading images...
+                  <span className={`text-sm font-medium text-[#db2b2e] dark:text-primary ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}>
+                    {uploadingText}...
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -642,8 +685,10 @@ export default function CreateListing() {
             {/* Uploaded Images Preview */}
             {formData.imageUrls.length > 0 && (
               <div className="flex flex-col gap-4">
-                <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300">
-                  Uploaded Images ({formData.imageUrls.length})
+                <h3 className={`text-lg font-medium text-gray-700 dark:text-gray-300 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {uploadedImagesText} ({formData.imageUrls.length})
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {formData.imageUrls.map((url, index) => (
@@ -665,14 +710,16 @@ export default function CreateListing() {
                       </button>
                       {index === 0 && (
                         <div className="absolute bottom-2 left-2 bg-[#db2b2e] dark:bg-primary text-white dark:text-black px-2 py-1 text-xs font-medium rounded">
-                          Main Image
+                          {mainImageText}
                         </div>
                       )}
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  The first image will be used as the main listing image. Drag to reorder.
+                <p className={`text-xs text-gray-500 dark:text-gray-400 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {firstImageMainText}
                 </p>
               </div>
             )}
@@ -680,18 +727,24 @@ export default function CreateListing() {
 
           {/* Basic Information */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-semibold">Basic Information</h2>
+            <h2 className={`text-xl font-semibold ${
+              isArabic ? 'font-amiri' : 'font-nt-bold'
+            }`}>
+              {basicInfoText}
+            </h2>
             <div className="flex flex-col gap-2">
               <input
                 type="text"
-                placeholder="Listing Name"
+                placeholder={listingNameText}
                 id="name"
                 required
                 minLength="4"
                 maxLength="62"
                 value={formData.name}
                 onChange={handleChange}
-                className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
+                className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}
               />
               {isArabic && (
                 <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
@@ -701,12 +754,14 @@ export default function CreateListing() {
             </div>
             <div className="flex flex-col gap-2">
               <textarea
-                placeholder="Description"
+                placeholder={descriptionText}
                 id="description"
                 required
                 value={formData.description}
                 onChange={handleChange}
-                className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light min-h-[150px] text-black dark:text-white"
+                className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light min-h-[150px] text-black dark:text-white ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}
               />
               {isArabic && (
                 <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
@@ -1104,10 +1159,12 @@ export default function CreateListing() {
 
           <button
             type="submit"
-            className="bg-[#db2b2e] dark:bg-primary border border-[#db2b2e] dark:border-primary text-white dark:text-black p-3 uppercase hover:bg-transparent dark:hover:bg-transparent hover:text-[#db2b2e] dark:hover:text-primary transition-colors disabled:opacity-80 disabled:cursor-not-allowed"
+            className={`bg-[#db2b2e] dark:bg-primary border border-[#db2b2e] dark:border-primary text-white dark:text-black p-3 uppercase hover:bg-transparent dark:hover:bg-transparent hover:text-[#db2b2e] dark:hover:text-primary transition-colors disabled:opacity-80 disabled:cursor-not-allowed ${
+              isArabic ? 'font-noto' : 'font-nt'
+            }`}
             disabled={loading}
           >
-            {loading ? 'Creating...' : 'Create Listing'}
+            {loading ? creatingText : submitText}
           </button>
         </form>
       </div>
