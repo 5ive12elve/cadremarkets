@@ -180,7 +180,7 @@ export default function Search() {
     >
       <div className="max-w-7xl mx-auto px-3 md:px-4 py-8 md:py-12">
         {/* Search Bar */}
-        <form onSubmit={handleSubmit} className="mb-6 flex w-full" dir={isArabic ? 'rtl' : 'ltr'}>
+        <form onSubmit={handleSubmit} className="mb-6 flex w-full gap-2" dir={isArabic ? 'rtl' : 'ltr'}>
           <input
             type="text"
             id="searchTerm"

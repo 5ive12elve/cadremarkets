@@ -252,17 +252,32 @@ export default function SignIn() {
     }
   };
   return (
-    <div className="bg-[#f3eb4b] font-primary transition-colors duration-300 min-h-screen" dir={direction}>
-      <div className="grid grid-cols-1 md:grid-cols-2 h-screen items-start">
+    <div className="bg-white dark:bg-black font-primary transition-colors duration-300 min-h-screen" dir={direction}>
+      <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         {/* Left Graphic - Hidden on mobile, shown on desktop */}
-        <div className="bg-white dark:bg-black hidden md:flex items-center justify-center transition-colors duration-300">
+        <div className="bg-[#f3eb4b] hidden md:flex items-center justify-center transition-colors duration-300 relative overflow-hidden">
           <img src="/mediassets/CMSUP55.png" alt="Phone Cart" className="h-full w-auto max-h-full object-contain relative z-10 ml-8 lg:ml-16" />
+          
+          {/* Cheerful Cadre elements overlay */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-10">
+            <div className="text-center">
+              <div className="text-8xl mb-4">🎨</div>
+              <div className="text-6xl mb-2">✨</div>
+              <div className="text-7xl">🚀</div>
+            </div>
+          </div>
+          
+          {/* Floating Cadre branding elements */}
+          <div className="absolute top-10 left-10 text-[#db2b2e] opacity-20">
+            <div className="text-4xl font-bold font-primary">CADRE</div>
+          </div>
+          <div className="absolute bottom-10 right-10 text-[#db2b2e] opacity-20">
+            <div className="text-2xl font-secondary">2025</div>
+          </div>
         </div>
 
         {/* Right Form */}
         <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 relative transition-colors duration-300">
-          {/* Mobile background image removed as requested */}
-          
           {/* Form Content */}
           <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-2 md:p-4 mr-0 md:mr-8 lg:mr-16">
             <div className="flex items-center justify-between w-full mb-3 md:mb-2">
@@ -347,6 +362,24 @@ export default function SignIn() {
                 <p className="text-primary text-sm font-secondary">{error}</p>
               </div>
             )}
+          </div>
+          
+          {/* Cheerful Cadre content below form on mobile */}
+          <div className="md:hidden mt-8 text-center">
+            <div className="bg-[#f3eb4b] p-6 rounded-lg">
+              <div className="text-4xl mb-4">🎨✨</div>
+              <h3 className={`text-[#db2b2e] font-bold text-lg mb-2 ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
+                Welcome to Cadre Markets!
+              </h3>
+              <p className={`text-[#db2b2e] text-sm font-secondary ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}>
+                Where creativity meets opportunity
+              </p>
+              <div className="flex justify-center gap-4 mt-4 text-2xl">
+                <span>🚀</span>
+                <span>💡</span>
+                <span>🌟</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

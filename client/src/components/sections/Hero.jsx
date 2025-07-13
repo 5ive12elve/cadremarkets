@@ -46,7 +46,7 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           src="/mediassets/GE01.png"
           alt="Hero"
-          className="w-[280px] md:w-[360px] h-[278px] md:h-[358px] object-contain absolute top-[70px] z-0"
+          className="w-[280px] md:w-[360px] h-[278px] md:h-[358px] object-contain absolute top-[70px] z-0 opacity-60 md:opacity-100"
         />
         <div className={`relative z-10 w-full max-w-7xl mx-auto flex flex-col ${isArabic ? 'md:flex-row-reverse' : 'md:flex-row'} justify-between items-center md:items-start px-3 gap-[30px] md:gap-[60px]`} dir={isArabic ? 'rtl' : 'ltr'}>
           {/* Image Block */}
