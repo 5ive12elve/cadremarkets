@@ -102,11 +102,11 @@ export default function Header() {
             )}
           </motion.button>
 
-          {/* Logo */}
-          <div className="flex items-center justify-center lg:justify-start flex-shrink-0">
-            <Link to="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-105">
+          {/* Logo - always centered absolutely */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex items-center justify-center pointer-events-none h-full">
+            <Link to="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-105 pointer-events-auto">
               <img 
-                src="/mediassets/CadreBigUse2.png" 
+                src={window.innerWidth < 1024 ? "/mediassets/Cadre-su.png" : "/mediassets/CadreBigUse2.png"}
                 alt="Cadre Markets Logo" 
                 className="h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 w-auto object-contain" 
               />
@@ -213,8 +213,15 @@ export default function Header() {
 
         {isMobileMenuOpen && (
           <div className="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-black p-4 sm:p-5 border-t border-primary/10 transition-colors duration-300 shadow-lg" ref={mobileMenuRef}>
+            <button
+              className="absolute top-3 right-3 text-primary text-2xl z-50"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              &times;
+            </button>
             <nav>
-              <ul className="flex flex-col gap-4">
+              <ul className="flex flex-col gap-4 mt-8">
                 <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
                   <li className={`text-base sm:text-lg font-normal font-primary ${
                     isActive('/') ? 'text-primary font-bold' : 'text-black dark:text-white'
