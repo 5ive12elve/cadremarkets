@@ -252,11 +252,11 @@ export default function SignIn() {
     }
   };
   return (
-    <div className="bg-white dark:bg-black font-primary transition-colors duration-300 min-h-screen" dir={direction}>
+    <div className="bg-[#f3eb4b] font-primary transition-colors duration-300 min-h-screen overflow-x-hidden" dir={direction}>
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         {/* Left Graphic - Hidden on mobile, shown on desktop */}
-        <div className="bg-[#f3eb4b] hidden md:flex items-center justify-center transition-colors duration-300 relative overflow-hidden">
-          <img src="/mediassets/CMSUP55.png" alt="Phone Cart" className={`h-full w-auto max-h-full object-contain relative z-10 ${direction === 'rtl' ? 'mr-8 lg:mr-16' : 'ml-8 lg:ml-16'}`} />
+        <div className="bg-white dark:bg-black hidden md:flex items-center justify-center transition-colors duration-300 relative overflow-hidden">
+          <img src="/mediassets/CMSUP55.png" alt="Phone Cart" className={`h-full w-auto max-h-full object-contain relative z-10 ${direction === 'rtl' ? 'mr-8 lg:mr-16' : 'ml-8 lg:ml-16'}`} style={{ maxWidth: '80%' }} />
           
           {/* Cheerful Cadre elements overlay */}
           <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -277,9 +277,9 @@ export default function SignIn() {
         </div>
 
         {/* Right Form */}
-        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 relative transition-colors duration-300">
+        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300 overflow-hidden">
           {/* Form Content */}
-          <div className={`relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-2 md:p-4 ${direction === 'rtl' ? 'ml-0 md:ml-8 lg:ml-16' : 'mr-0 md:mr-8 lg:mr-16'}`}>
+          <div className={`relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 bg-white/90 dark:bg-black/90 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-4 md:p-8 h-full flex flex-col justify-center ${direction === 'rtl' ? 'ml-0 md:ml-8 lg:ml-16' : 'mr-0 md:mr-8 lg:mr-16'}`}>
             <div className="flex items-center justify-between w-full mb-3 md:mb-2">
               <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold font-primary text-[#db2b2e] ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>{t.title || 'Sign In'}</h1>
               <img src="/mediassets/cm2025red.png" alt="CM2025 Red" className={`h-8 w-auto ${direction === 'rtl' ? 'mr-2' : 'ml-2'}`} />

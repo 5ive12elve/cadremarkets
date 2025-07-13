@@ -88,7 +88,7 @@ export default function SignUp() {
         {/* Left Graphic - Hidden on mobile, shown on desktop */}
         <div className="bg-white dark:bg-black hidden md:flex items-center justify-center transition-colors duration-300 relative overflow-hidden">
           {/* Accordion background accent */}
-          <img src="/mediassets/CMSUP3.png" alt="Phone Cart" className={`h-full w-auto max-h-full object-contain relative z-10 ${direction === 'rtl' ? 'mr-8 lg:mr-16' : 'ml-8 lg:ml-16'}`} />
+          <img src="/mediassets/CMSUP3.png" alt="Phone Cart" className={`h-full w-auto max-h-full object-contain relative z-10 ${direction === 'rtl' ? 'mr-8 lg:mr-16' : 'ml-8 lg:ml-16'}`} style={{ maxWidth: '80%' }} />
         </div>
 
         {/* Right Form */}
