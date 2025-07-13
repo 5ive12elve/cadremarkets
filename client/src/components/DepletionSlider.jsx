@@ -337,13 +337,13 @@ export default function DepletionSlider() {
                     </div>
                   ) : (
                     <iframe
-                      src={currentMedia.src}
+                  src={currentMedia.src}
                       className="w-full h-full rounded-lg z-20"
                       frameBorder="0"
                       allowFullScreen
                       allow="autoplay; encrypted-media; fullscreen"
                       title={currentMedia.alt}
-                    />
+                />
                   )}
                 </div>
               ) : (

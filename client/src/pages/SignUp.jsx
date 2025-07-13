@@ -108,13 +108,13 @@ export default function SignUp() {
             />
           </div>
           {/* Corner accents */}
-          <img src="/mediassets/CadreMarkets-GraphicalElements-17.png" alt="Corner BR" className="absolute bottom-0 right-0 w-12 h-12 opacity-20 z-20" />
-          {/* Form Content */}
+          {/* Remove previous corner accents 14, 17 and ruler 15 */}
+          {/* Add 3-box (19) and 2-box (20) as corner accents */}
           <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 bg-white/90 dark:bg-black/90 rounded-lg shadow-none md:shadow-lg p-4 md:p-8">
             {/* 3-box (element 19) top-left */}
             <img src="/mediassets/CadreMarkets-GraphicalElements-19.png" alt="3-box Corner" className="absolute top-2 left-2 w-10 h-10 opacity-20 z-20" />
-            {/* 2-box (element 21) bottom-right */}
-            <img src="/mediassets/CadreMarkets-GraphicalElements-21.png" alt="2-box Corner" className="absolute bottom-2 right-2 w-10 h-10 opacity-20 z-20" />
+            {/* 2-box (element 20) bottom-right */}
+            <img src="/mediassets/CadreMarkets-GraphicalElements-20.png" alt="2-box Corner" className="absolute bottom-2 right-2 w-10 h-10 opacity-20 z-20" />
             {/* Target/crosshair watermark */}
             <div className="absolute top-2 right-2 opacity-10 z-20">
               <img src="/mediassets/CadreMarkets-GraphicalElements-13.png" alt="Target Watermark" className="w-8 h-8" />
@@ -214,9 +214,9 @@ export default function SignUp() {
                 )}
               </button>
               
-              {/* Divider with 2-box accent (element 21) */}
+              {/* Divider with divider accent (element 21) */}
               <div className="relative my-6 flex flex-col items-center">
-                <img src="/mediassets/CadreMarkets-GraphicalElements-21.png" alt="2-box Divider" className="w-16 md:w-24 opacity-30 mb-2 mx-auto" />
+                <img src="/mediassets/CadreMarkets-GraphicalElements-21.png" alt="Divider" className="w-16 md:w-24 opacity-30 mb-2 mx-auto" />
                 <div className="relative flex justify-center text-sm">
                   <span className="px-4 bg-white dark:bg-black text-gray-500 dark:text-gray-400 font-secondary">
                     {t.or || 'or'}
