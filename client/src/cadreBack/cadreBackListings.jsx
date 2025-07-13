@@ -105,7 +105,7 @@ const CadreBackListings = () => {
     const handleStatusChange = async (listingId, newStatus) => {
         try {
             setUpdatingStatus(true);
-            const response = await backofficeApiRequest(`/${listingId}/status`, {
+            const response = await backofficeApiRequest(`/listing/${listingId}/status`, {
                 method: 'PUT',
                 body: JSON.stringify({ status: newStatus }),
             });
@@ -160,7 +160,7 @@ const CadreBackListings = () => {
         }
 
         try {
-            const response = await backofficeApiRequest(`/delete/${listingId}`, {
+            const response = await backofficeApiRequest(`/listing/delete/${listingId}`, {
                 method: 'DELETE',
             });
 
