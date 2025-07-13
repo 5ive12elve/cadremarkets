@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function TopBar() {
+  const { isArabic } = useLanguage();
   return (
     <div className="bg-primary text-black fixed top-0 z-[60] py-1.5 sm:py-2 px-3 sm:px-4 w-full">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+      <div className={`max-w-7xl mx-auto flex justify-between items-center ${isArabic ? 'flex-row-reverse' : 'flex-row'}`}>
         <img 
           src="/mediassets/Trademark01.png" 
           alt="Trademark" 
