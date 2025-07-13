@@ -26,9 +26,6 @@ export default function Search() {
   const accessories = useTranslation('search', 'accessories', currentLang);
   const printsPoster = useTranslation('search', 'printsPoster', currentLang);
   const applyFilters = useTranslation('search', 'applyFilters', currentLang);
-  const sortBy = useTranslation('search', 'sortBy', currentLang);
-  const latest = useTranslation('search', 'latest', currentLang);
-  const oldest = useTranslation('search', 'oldest', currentLang);
   const noResults = useTranslation('search', 'noResults', currentLang);
   const noResultsSubtitle = useTranslation('search', 'noResultsSubtitle', currentLang);
   const loadMore = useTranslation('search', 'loadMore', currentLang);
@@ -182,6 +179,21 @@ export default function Search() {
       dir={isArabic ? 'rtl' : 'ltr'}
     >
       <div className="max-w-7xl mx-auto px-3 md:px-4 py-8 md:py-12">
+        {/* Search Bar */}
+        <form onSubmit={handleSubmit} className="mb-6 flex items-center gap-2 w-full max-w-2xl">
+          <input
+            type="text"
+            id="searchTerm"
+            value={sidebardata.searchTerm}
+            onChange={handleChange}
+            placeholder="Search..."
+            className="flex-1 border border-gray-300 rounded-md px-4 py-2 text-base focus:outline-none focus:border-[#db2b2e] transition-colors duration-200"
+            dir={isArabic ? 'rtl' : 'ltr'}
+          />
+          <button type="submit" className="bg-[#db2b2e] text-white px-4 py-2 rounded-md hover:bg-[#c02629] transition-colors duration-200">
+            Search
+          </button>
+        </form>
         <div className="max-w-3xl">
           <h1 className={`text-2xl md:text-4xl font-bold mb-2 ${
             isArabic ? 'font-amiri' : 'font-nt-bold'
@@ -272,28 +284,28 @@ export default function Search() {
                 <h3 className={`text-sm md:text-sm font-semibold mb-3 ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
-                  {sortBy}
+                  Sort by Price
                 </h3>
                 <div className="flex flex-col gap-2">
                   <button
-                    onClick={() => handleChange({ id: 'sort', value: 'createdAt' })}
+                    onClick={() => handleChange({ id: 'sort', value: 'price', order: 'asc' })}
                     className={`p-3 md:p-2 border-2 transition-all duration-300 hover:scale-105 ${
-                      sidebardata.sort === 'createdAt'
+                      sidebardata.sort === 'price' && sidebardata.order === 'asc'
                         ? 'border-[#db2b2e] bg-[#db2b2e]/10 dark:bg-[#db2b2e]/20'
                         : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
                     }`}
                   >
-                    {latest}
+                    Lowest Price to Highest
                   </button>
                   <button
-                    onClick={() => handleChange({ id: 'sort', value: 'createdAt', order: 'asc' })}
+                    onClick={() => handleChange({ id: 'sort', value: 'price', order: 'desc' })}
                     className={`p-3 md:p-2 border-2 transition-all duration-300 hover:scale-105 ${
-                      sidebardata.sort === 'createdAt' && sidebardata.order === 'asc'
+                      sidebardata.sort === 'price' && sidebardata.order === 'desc'
                         ? 'border-[#db2b2e] bg-[#db2b2e]/10 dark:bg-[#db2b2e]/20'
                         : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
                     }`}
                   >
-                    {oldest}
+                    Highest Price to Lowest
                   </button>
                 </div>
 
@@ -309,7 +321,8 @@ export default function Search() {
 
           {/* Listings Grid */}
           <main className="flex-1">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="border border-[#db2b2e] rounded-sm p-2 md:p-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {loading ? (
                 <GE02Loader />
               ) : listings.length === 0 ? (
@@ -330,6 +343,7 @@ export default function Search() {
                   <ListingItem key={listing._id} listing={listing} />
                 ))
               )}
+            </div>
             </div>
 
             {showMore && (
