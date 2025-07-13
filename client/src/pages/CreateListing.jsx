@@ -84,6 +84,43 @@ export default function CreateListing() {
   const descriptionText = useTranslation('createListing', 'description', currentLang);
   const creatingText = useTranslation('createListing', 'creating', currentLang);
   const submitText = useTranslation('createListing', 'submit', currentLang);
+  const availableSizesText = useTranslation('createListing', 'sizes', currentLang);
+  const selectSizesText = useTranslation('createListing', 'selectSizes', currentLang);
+  const selectedSizesText = useTranslation('createListing', 'selectedSizes', currentLang);
+  const dimensionsText = useTranslation('createListing', 'dimensions', currentLang);
+  const widthText = useTranslation('createListing', 'width', currentLang);
+  const heightText = useTranslation('createListing', 'height', currentLang);
+  const depthText = useTranslation('createListing', 'depth', currentLang);
+  const locationText = useTranslation('createListing', 'location', currentLang);
+  const addressText = useTranslation('createListing', 'address', currentLang);
+  const selectCityText = useTranslation('createListing', 'selectCity', currentLang);
+  const selectDistrictText = useTranslation('createListing', 'selectDistrict', currentLang);
+  const enterDistrictText = useTranslation('createListing', 'enterDistrict', currentLang);
+  const pricingText = useTranslation('createListing', 'pricing', currentLang);
+  const priceText = useTranslation('createListing', 'price', currentLang);
+  const platformFeeText = useTranslation('createListing', 'platformFee', currentLang);
+  const serviceFeeText = useTranslation('createListing', 'serviceFee', currentLang);
+  const yourProfitText = useTranslation('createListing', 'yourProfit', currentLang);
+  const cadremarketsServiceText = useTranslation('createListing', 'cadremarketsService', currentLang);
+  const enableServiceText = useTranslation('createListing', 'enableService', currentLang);
+  const minimumPriceText = useTranslation('createListing', 'minimumPrice', currentLang);
+  const featuredPlacementText = useTranslation('createListing', 'featuredPlacement', currentLang);
+  const priorityPositioningText = useTranslation('createListing', 'priorityPositioning', currentLang);
+  const professionalPhotoshootText = useTranslation('createListing', 'professionalPhotoshoot', currentLang);
+  const contactText = useTranslation('createListing', 'contact', currentLang);
+  const contactPreferenceText = useTranslation('createListing', 'contactPreference', currentLang);
+  const phoneNumberText = useTranslation('createListing', 'phoneNumber', currentLang);
+  const emailText = useTranslation('createListing', 'email', currentLang);
+  const quantityText = useTranslation('createListing', 'quantity', currentLang);
+  const initialQuantityText = useTranslation('createListing', 'initialQuantity', currentLang);
+  const listingTypeText = useTranslation('createListing', 'listingType', currentLang);
+  const uniqueText = useTranslation('createListing', 'unique', currentLang);
+  const stockText = useTranslation('createListing', 'stock', currentLang);
+  const stockInfoText = useTranslation('createListing', 'stockInfo', currentLang);
+  const currentQuantityText = useTranslation('createListing', 'currentQuantity', currentLang);
+  const soldQuantityText = useTranslation('createListing', 'soldQuantity', currentLang);
+  const cairoText = useTranslation('createListing', 'cairo', currentLang);
+  const otherText = useTranslation('createListing', 'other', currentLang);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -794,10 +831,18 @@ export default function CreateListing() {
           {/* Dimensions or Sizes based on type */}
           {formData.type === 'Clothing & Wearables' ? (
             <div className="flex flex-col gap-4">
-              <h2 className="text-xl font-semibold">Available Sizes</h2>
+              <h2 className={`text-xl font-semibold ${
+                isArabic ? 'font-amiri' : 'font-nt-bold'
+              }`}>
+                {availableSizesText}
+              </h2>
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Select all available sizes for this clothing item:</p>
+                  <p className={`text-sm text-gray-600 dark:text-gray-300 ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}>
+                    {selectSizesText}
+                  </p>
                   {isArabic && (
                     <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
                       {helperText.sizes}
@@ -814,22 +859,28 @@ export default function CreateListing() {
                         formData.availableSizes.includes(size)
                           ? 'bg-[#db2b2e] dark:bg-primary text-white dark:text-black border-[#db2b2e] dark:border-primary'
                           : 'bg-white dark:bg-black/50 text-black dark:text-white border-[#db2b2e] dark:border-primary hover:bg-[#db2b2e]/20 dark:hover:bg-primary/20'
-                      }`}
+                      } ${isArabic ? 'font-noto' : 'font-nt'}`}
                     >
                       {size}
                     </button>
                   ))}
                 </div>
                 {formData.availableSizes.length > 0 && (
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
-                    Selected sizes: {formData.availableSizes.join(', ')}
+                  <div className={`text-sm text-gray-600 dark:text-gray-300 ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}>
+                    {selectedSizesText}: {formData.availableSizes.join(', ')}
                   </div>
                 )}
               </div>
             </div>
           ) : (
           <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-semibold">Dimensions</h2>
+            <h2 className={`text-xl font-semibold ${
+              isArabic ? 'font-amiri' : 'font-nt-bold'
+            }`}>
+              {dimensionsText}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
                 <select
@@ -851,13 +902,15 @@ export default function CreateListing() {
                 <div className="flex flex-col gap-1">
                   <input
                     type="number"
-                    placeholder="Width (cm)"
+                    placeholder={widthText}
                     id="width"
                     required
                     min="1"
                     value={formData.width}
                     onChange={handleChange}
-                    className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
+                    className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                      isArabic ? 'font-noto' : 'font-nt'
+                    }`}
                   />
                   {isArabic && (
                     <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
@@ -868,13 +921,15 @@ export default function CreateListing() {
                 <div className="flex flex-col gap-1">
                   <input
                     type="number"
-                    placeholder="Height (cm)"
+                    placeholder={heightText}
                     id="height"
                     required
                     min="1"
                     value={formData.height}
                     onChange={handleChange}
-                    className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
+                    className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                      isArabic ? 'font-noto' : 'font-nt'
+                    }`}
                   />
                   {isArabic && (
                     <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
@@ -886,13 +941,15 @@ export default function CreateListing() {
                   <div className="flex flex-col gap-1">
                     <input
                       type="number"
-                      placeholder="Depth (cm)"
+                      placeholder={depthText}
                       id="depth"
                       required
                       min="1"
                       value={formData.depth}
                       onChange={handleChange}
-                      className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
+                      className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                        isArabic ? 'font-noto' : 'font-nt'
+                      }`}
                     />
                     {isArabic && (
                       <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
@@ -908,16 +965,22 @@ export default function CreateListing() {
 
           {/* Location */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-semibold">Location</h2>
+            <h2 className={`text-xl font-semibold ${
+              isArabic ? 'font-amiri' : 'font-nt-bold'
+            }`}>
+              {locationText}
+            </h2>
             <div className="flex flex-col gap-2">
               <input
                 type="text"
-                placeholder="Address"
+                placeholder={addressText}
                 id="address"
                 required
                 value={formData.address}
                 onChange={handleChange}
-                className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
+                className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}
               />
               {isArabic && (
                 <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
@@ -931,11 +994,13 @@ export default function CreateListing() {
                 value={formData.city}
                 onChange={handleChange}
                 required
-                className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
+                className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}
               >
-                <option value="">Select City</option>
-                <option value="Cairo">Cairo</option>
-                <option value="Other">Other</option>
+                <option value="">{selectCityText}</option>
+                <option value="Cairo">{cairoText}</option>
+                <option value="Other">{otherText}</option>
               </select>
               {isArabic && (
                 <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
@@ -952,7 +1017,7 @@ export default function CreateListing() {
                   required
                   className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
                 >
-                  <option value="">Select District</option>
+                  <option value="">{selectDistrictText}</option>
                   {cairoDistricts.map((district) => (
                     <option key={district} value={district}>
                       {district}
@@ -970,7 +1035,7 @@ export default function CreateListing() {
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
-                  placeholder="Enter your district"
+                  placeholder={enterDistrictText}
                   id="district"
                   required
                   value={formData.district}
@@ -988,21 +1053,31 @@ export default function CreateListing() {
 
           {/* Price & Service Section */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-semibold border-b border-[#db2b2e] dark:border-primary pb-2">Pricing & Services</h2>
+            <h2 className={`text-xl font-semibold border-b border-[#db2b2e] dark:border-primary pb-2 ${
+              isArabic ? 'font-amiri' : 'font-nt-bold'
+            }`}>
+              {pricingText}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Price Column */}
               <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-600 dark:text-gray-300">Price (EGP)</label>
+                <label className={`text-sm text-gray-600 dark:text-gray-300 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {priceText}
+                </label>
                   <input
                     type="number"
-                    placeholder="Price (EGP)"
+                    placeholder={priceText}
                     id="price"
                     required
                     min="100"
                     value={formData.price}
                     onChange={handleChange}
-                    className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
+                    className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                      isArabic ? 'font-noto' : 'font-nt'
+                    }`}
                   />
                   {isArabic && (
                     <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
@@ -1011,17 +1086,19 @@ export default function CreateListing() {
                   )}
                 </div>
                 
-                <div className="text-sm space-y-2">
+                <div className={`text-sm space-y-2 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
                   <div className="text-gray-600 dark:text-gray-400">
-                    Platform Fee (10%): <span className="text-black dark:text-white">{(formData.price * 0.10).toLocaleString()} EGP</span>
+                    {platformFeeText}: <span className="text-black dark:text-white">{(formData.price * 0.10).toLocaleString()} EGP</span>
                   </div>
                   {formData.cadremarketsService && (
                     <div className="text-gray-600 dark:text-gray-400">
-                      Service Fee: <span className="text-black dark:text-white">400 EGP</span>
+                      {serviceFeeText}: <span className="text-black dark:text-white">400 EGP</span>
                     </div>
                   )}
                   <div className="text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-300 dark:border-gray-700">
-                    Your Profit: <span className="text-black dark:text-white">{calculateSellerProfit(formData.price, formData.cadremarketsService).toLocaleString()} EGP</span>
+                    {yourProfitText}: <span className="text-black dark:text-white">{calculateSellerProfit(formData.price, formData.cadremarketsService).toLocaleString()} EGP</span>
                   </div>
                 </div>
               </div>
@@ -1029,7 +1106,11 @@ export default function CreateListing() {
               {/* CadreMarkets Service Column */}
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-gray-600 dark:text-gray-300">CadreMarkets Service</label>
+                  <label className={`text-sm text-gray-600 dark:text-gray-300 ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}>
+                    {cadremarketsServiceText}
+                  </label>
                 <div className="relative">
                   <label className={`flex items-center ${formData.price < 400 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
                     <div className="relative">
@@ -1050,20 +1131,26 @@ export default function CreateListing() {
                       </div>
                     </div>
                     <div className="ml-3 flex flex-col">
-                        <span className="font-medium">Enable Service</span>
+                        <span className={`font-medium ${
+                          isArabic ? 'font-noto' : 'font-nt'
+                        }`}>
+                          {enableServiceText}
+                        </span>
                       <span className="text-sm text-gray-600 dark:text-gray-400">+400 EGP</span>
                     </div>
                   </label>
                   </div>
                 </div>
                 
-                <div className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                <div className={`text-sm text-gray-600 dark:text-gray-300 space-y-1 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
                   {formData.price < 400 && (
-                    <p className="text-red-500 font-medium">• Service requires minimum price of 400 EGP</p>
+                    <p className="text-red-500 font-medium">• {minimumPriceText}</p>
                   )}
-                  <p>• Featured placement among our 12 homepage slots</p>
-                  <p>• Priority positioning above regular listings</p>
-                  <p>• Professional photoshoot + 5 high-quality images</p>
+                  <p>• {featuredPlacementText}</p>
+                  <p>• {priorityPositioningText}</p>
+                  <p>• {professionalPhotoshootText}</p>
                   {isArabic && (
                     <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto mt-2 block">
                       {helperText.service}
@@ -1076,10 +1163,18 @@ export default function CreateListing() {
 
           {/* Contact Information */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-semibold border-b border-[#db2b2e] dark:border-primary pb-2">Contact Information</h2>
+            <h2 className={`text-xl font-semibold border-b border-[#db2b2e] dark:border-primary pb-2 ${
+              isArabic ? 'font-amiri' : 'font-nt-bold'
+            }`}>
+              {contactText}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-600 dark:text-gray-300">Contact Preference</label>
+                <label className={`text-sm text-gray-600 dark:text-gray-300 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {contactPreferenceText}
+                </label>
                 <select
                   id="contactPreference"
                   value={formData.contactPreference}
@@ -1097,17 +1192,23 @@ export default function CreateListing() {
               </div>
               
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-600 dark:text-gray-300">Phone Number</label>
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  id="phoneNumber"
-                  pattern="[0-9]{10,15}"
-                  required
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
-                />
+                <label className={`text-sm text-gray-600 dark:text-gray-300 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {phoneNumberText}
+                </label>
+                                  <input
+                    type="tel"
+                    placeholder={phoneNumberText}
+                    id="phoneNumber"
+                    pattern="[0-9]{10,15}"
+                    required
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                      isArabic ? 'font-noto' : 'font-nt'
+                    }`}
+                  />
                 {isArabic && (
                   <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
                     {helperText.phone}
@@ -1119,31 +1220,49 @@ export default function CreateListing() {
 
           {/* Quantity Information */}
           <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-semibold border-b border-[#db2b2e] dark:border-primary pb-2">Quantity Information</h2>
+            <h2 className={`text-xl font-semibold border-b border-[#db2b2e] dark:border-primary pb-2 ${
+              isArabic ? 'font-amiri' : 'font-nt-bold'
+            }`}>
+              {quantityText}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-600 dark:text-gray-300">Initial Quantity</label>
+                <label className={`text-sm text-gray-600 dark:text-gray-300 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {initialQuantityText}
+                </label>
                 <input
                   type="number"
-                  placeholder="Initial Quantity"
+                  placeholder={initialQuantityText}
                   id="initialQuantity"
                   min="1"
                   value={formData.initialQuantity}
                   onChange={handleChange}
-                  className="border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white"
+                  className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}
                 />
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Listing Type: <span className="text-black dark:text-white ml-2">{formData.initialQuantity === 1 ? 'Unique' : 'Stock'}</span>
+                <div className={`text-sm text-gray-600 dark:text-gray-400 ${
+                  isArabic ? 'font-noto' : 'font-nt'
+                }`}>
+                  {listingTypeText}: <span className="text-black dark:text-white ml-2">{formData.initialQuantity === 1 ? uniqueText : stockText}</span>
                 </div>
               </div>
               {formData.initialQuantity > 1 && (
                 <div className="flex flex-col gap-2">
                   <div className="p-3 border border-[#db2b2e] dark:border-primary">
-                    <h3 className="font-medium mb-2">Stock Information</h3>
-                    <div className="space-y-1 text-sm">
-                      <p>Initial Quantity: {formData.initialQuantity}</p>
-                      <p>Current Quantity: {formData.initialQuantity}</p>
-                      <p>Sold Quantity: 0</p>
+                    <h3 className={`font-medium mb-2 ${
+                      isArabic ? 'font-noto' : 'font-nt'
+                    }`}>
+                      {stockInfoText}
+                    </h3>
+                    <div className={`space-y-1 text-sm ${
+                      isArabic ? 'font-noto' : 'font-nt'
+                    }`}>
+                      <p>{initialQuantityText}: {formData.initialQuantity}</p>
+                      <p>{currentQuantityText}: {formData.initialQuantity}</p>
+                      <p>{soldQuantityText}: 0</p>
                     </div>
                   </div>
                 </div>
