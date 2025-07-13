@@ -88,7 +88,6 @@ export default function SignUp() {
         {/* Left Graphic - Hidden on mobile, shown on desktop */}
         <div className="bg-white dark:bg-black hidden md:flex items-center justify-center transition-colors duration-300 relative overflow-hidden">
           {/* Accordion background accent */}
-          <img src="/mediassets/CadreMarkets-GraphicalElements-12.png" alt="Accordion Accent" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] opacity-10 pointer-events-none select-none" />
           <img src="/mediassets/CMSUP3.png" alt="Phone Cart" className="w-4/5 relative z-10" />
         </div>
 
@@ -96,11 +95,6 @@ export default function SignUp() {
         <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300 overflow-hidden">
           {/* Mobile Background Image + Accordion accent */}
           <div className="md:hidden absolute inset-0 opacity-5 pointer-events-none select-none">
-            <img 
-              src="/mediassets/CadreMarkets-GraphicalElements-12.png" 
-              alt="Accordion Accent" 
-              className="w-full h-full object-contain object-center absolute z-0 opacity-20" 
-            />
             <img 
               src="/mediassets/CMSUP3.png" 
               alt="Background" 
@@ -112,13 +106,8 @@ export default function SignUp() {
           {/* Add 3-box (19) and 2-box (20) as corner accents */}
           <div className="relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 bg-white/90 dark:bg-black/90 rounded-lg shadow-none md:shadow-lg p-4 md:p-8">
             {/* 3-box (element 19) top-left */}
-            <img src="/mediassets/CadreMarkets-GraphicalElements-19.png" alt="3-box Corner" className="absolute top-2 left-2 w-10 h-10 opacity-20 z-20" />
             {/* 2-box (element 20) bottom-right */}
-            <img src="/mediassets/CadreMarkets-GraphicalElements-20.png" alt="2-box Corner" className="absolute bottom-2 right-2 w-10 h-10 opacity-20 z-20" />
             {/* Target/crosshair watermark */}
-            <div className="absolute top-2 right-2 opacity-10 z-20">
-              <img src="/mediassets/CadreMarkets-GraphicalElements-13.png" alt="Target Watermark" className="w-8 h-8" />
-            </div>
             <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 md:mb-2 font-primary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>
               {t.title || 'Create an account'}
             </h1>
@@ -215,8 +204,10 @@ export default function SignUp() {
               </button>
               
               {/* Divider with divider accent (element 21) */}
-              <div className="relative my-6 flex flex-col items-center">
-                <img src="/mediassets/CadreMarkets-GraphicalElements-21.png" alt="Divider" className="w-16 md:w-24 opacity-30 mb-2 mx-auto" />
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-4 bg-white dark:bg-black text-gray-500 dark:text-gray-400 font-secondary">
                     {t.or || 'or'}
