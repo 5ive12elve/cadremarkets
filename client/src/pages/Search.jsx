@@ -180,17 +180,21 @@ export default function Search() {
     >
       <div className="max-w-7xl mx-auto px-3 md:px-4 py-8 md:py-12">
         {/* Search Bar */}
-        <form onSubmit={handleSubmit} className="mb-6 flex items-center gap-2 w-full max-w-2xl">
+        <form onSubmit={handleSubmit} className="mb-6 flex w-full" dir={isArabic ? 'rtl' : 'ltr'}>
           <input
             type="text"
             id="searchTerm"
             value={sidebardata.searchTerm}
             onChange={handleChange}
             placeholder="Search..."
-            className="flex-1 border border-gray-300 rounded-md px-4 py-2 text-base focus:outline-none focus:border-[#db2b2e] transition-colors duration-200"
-            dir={isArabic ? 'rtl' : 'ltr'}
+            className="flex-1 w-0 min-w-0 border border-gray-300 px-4 py-2 text-base focus:outline-none focus:border-[#db2b2e] transition-colors duration-200 rounded-none"
+            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           />
-          <button type="submit" className="bg-[#db2b2e] text-white px-4 py-2 rounded-md hover:bg-[#c02629] transition-colors duration-200">
+          <button
+            type="submit"
+            className="bg-[#db2b2e] text-white px-4 py-2 rounded-none hover:bg-[#c02629] transition-colors duration-200 flex-shrink-0 h-full w-28 sm:w-32 md:w-36"
+            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+          >
             Search
           </button>
         </form>
