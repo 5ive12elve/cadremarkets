@@ -306,7 +306,7 @@ export default function ServicesPage() {
             <motion.div variants={imageVariants} className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent z-10" />
               <img
-                src="/mediassets/SERV02.jpg"
+                src="/mediassets/CADT02.png"
                 alt="Creative Process"
                 className="w-full h-[400px] object-cover rounded-sm"
               />

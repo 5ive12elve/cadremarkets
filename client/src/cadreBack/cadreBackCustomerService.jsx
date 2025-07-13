@@ -277,7 +277,7 @@ export default function CadreBackCustomerService() {
         title="Customer Service"
         description="Manage support requests and contact form submissions"
         actions={
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <Button
               variant="outline"
               size="sm"
@@ -286,7 +286,7 @@ export default function CadreBackCustomerService() {
               className="flex items-center gap-2"
             >
               {loading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
-              Refresh
+              <span className="hidden sm:inline">Refresh</span>
             </Button>
             <Button
               variant="primary"
@@ -295,20 +295,20 @@ export default function CadreBackCustomerService() {
               className="flex items-center gap-2"
             >
               <FiDownload className="w-4 h-4" />
-              Export PDF
+              <span className="hidden sm:inline">Export PDF</span>
             </Button>
             {stats && (
-              <>
-                <Button variant="secondary" icon={FiMessageSquare} size="sm">
-                  New: {stats.overview.newRequests}
+              <div className="flex flex-wrap gap-2">
+                <Button variant="secondary" icon={FiMessageSquare} size="sm" className="text-xs">
+                  <span className="hidden sm:inline">New: </span>{stats.overview.newRequests}
                 </Button>
-                <Button variant="secondary" icon={FiClock} size="sm">
-                  In Progress: {stats.overview.inProgress}
+                <Button variant="secondary" icon={FiClock} size="sm" className="text-xs">
+                  <span className="hidden sm:inline">In Progress: </span>{stats.overview.inProgress}
                 </Button>
-                <Button variant="secondary" icon={FiStar} size="sm">
-                  Resolved: {stats.overview.resolved}
+                <Button variant="secondary" icon={FiStar} size="sm" className="text-xs">
+                  <span className="hidden sm:inline">Resolved: </span>{stats.overview.resolved}
                 </Button>
-              </>
+              </div>
             )}
           </div>
         }
@@ -317,11 +317,11 @@ export default function CadreBackCustomerService() {
       <SupportRequestStatistics refreshTrigger={refreshTrigger} />
 
       <Card className="mb-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div className="flex flex-col gap-3">
           <Search
             onSearch={handleSearch}
             placeholder="Search by name, email, or message..."
-            className="w-full md:w-96"
+            className="w-full"
           />
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex flex-wrap items-center gap-2">
@@ -329,7 +329,7 @@ export default function CadreBackCustomerService() {
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
-                className="bg-black text-white px-2 py-1 border border-[#db2b2e] text-sm"
+                className="bg-black text-white px-2 py-1 border border-[#db2b2e] text-xs sm:text-sm"
               >
                 <option value="all">All Types</option>
                 <option value="support">Support</option>
@@ -338,7 +338,7 @@ export default function CadreBackCustomerService() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="bg-black text-white px-2 py-1 border border-[#db2b2e] text-sm"
+                className="bg-black text-white px-2 py-1 border border-[#db2b2e] text-xs sm:text-sm"
               >
                 <option value="all">All Status</option>
                 <option value="new">New</option>
@@ -349,7 +349,7 @@ export default function CadreBackCustomerService() {
               <select
                 value={selectedPriority}
                 onChange={(e) => setSelectedPriority(e.target.value)}
-                className="bg-black text-white px-2 py-1 border border-[#db2b2e] text-sm"
+                className="bg-black text-white px-2 py-1 border border-[#db2b2e] text-xs sm:text-sm"
               >
                 <option value="all">All Priorities</option>
                 <option value="high">High</option>
@@ -376,96 +376,90 @@ export default function CadreBackCustomerService() {
 
       {/* Details Modal */}
       {showDetailsModal && selectedRequest && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-4">
           <div className="bg-black p-4 sm:p-6 border border-[#db2b2e] w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <h3 className="text-xl font-bold mb-4 text-[#db2b2e]">
+            <h3 className="text-lg sm:text-xl font-bold mb-4 text-[#db2b2e]">
               {selectedRequest.type === 'support' ? 'Support Request' : 'Contact Form'} Details
             </h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
               <div>
-                <p className="text-[#db2b2e]">Name</p>
-                <p>{selectedRequest.name}</p>
+                <p className="text-[#db2b2e] text-xs sm:text-sm">Name</p>
+                <p className="text-sm sm:text-base">{selectedRequest.name}</p>
               </div>
               <div>
-                <p className="text-[#db2b2e]">Email</p>
-                <p className="break-all">{selectedRequest.email}</p>
+                <p className="text-[#db2b2e] text-xs sm:text-sm">Email</p>
+                <p className="break-all text-sm sm:text-base">{selectedRequest.email}</p>
               </div>
               <div>
-                <p className="text-[#db2b2e]">Phone</p>
-                <p>{selectedRequest.phone || 'Not provided'}</p>
+                <p className="text-[#db2b2e] text-xs sm:text-sm">Phone</p>
+                <p className="text-sm sm:text-base">{selectedRequest.phone || 'Not provided'}</p>
               </div>
               {selectedRequest.orderNumber && (
                 <div>
-                  <p className="text-[#db2b2e]">Order Number</p>
-                  <p>{selectedRequest.orderNumber}</p>
+                  <p className="text-[#db2b2e] text-xs sm:text-sm">Order Number</p>
+                  <p className="text-sm sm:text-base">{selectedRequest.orderNumber}</p>
                 </div>
               )}
               <div>
-                <p className="text-[#db2b2e]">Category</p>
-                <p>{selectedRequest.type === 'contact' ? selectedRequest.reason : selectedRequest.category}</p>
+                <p className="text-[#db2b2e] text-xs sm:text-sm">Type</p>
+                <p className="text-sm sm:text-base">{selectedRequest.type}</p>
               </div>
-              {selectedRequest.specificIssue && (
-                <div>
-                  <p className="text-[#db2b2e]">Specific Issue</p>
-                  <p>{selectedRequest.specificIssue}</p>
-                </div>
-              )}
+              <div>
+                <p className="text-[#db2b2e] text-xs sm:text-sm">Status</p>
+                <p className="text-sm sm:text-base">{selectedRequest.status}</p>
+              </div>
+              <div>
+                <p className="text-[#db2b2e] text-xs sm:text-sm">Priority</p>
+                <p className="text-sm sm:text-base">{selectedRequest.priority}</p>
+              </div>
+              <div>
+                <p className="text-[#db2b2e] text-xs sm:text-sm">Date</p>
+                <p className="text-sm sm:text-base">{new Date(selectedRequest.createdAt).toLocaleString()}</p>
+              </div>
             </div>
 
             <div className="mb-4">
-              <p className="text-[#db2b2e]">Message</p>
-              <p className="bg-black border border-[#db2b2e] p-3 whitespace-pre-wrap">{selectedRequest.message}</p>
+              <p className="text-[#db2b2e] text-xs sm:text-sm mb-2">Message</p>
+              <div className="bg-black/20 p-3 sm:p-4 rounded">
+                <p className="text-sm sm:text-base whitespace-pre-wrap">{selectedRequest.message}</p>
+              </div>
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2 text-[#db2b2e]">Notes</label>
+              <p className="text-[#db2b2e] text-xs sm:text-sm mb-2">Notes</p>
               <textarea
+                className="w-full bg-black border border-[#db2b2e]/20 text-white p-3 sm:p-4 rounded focus:border-[#db2b2e] focus:outline-none transition-colors resize-none text-sm"
+                rows="4"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full bg-black border border-[#db2b2e] p-3 focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none resize-none"
-                rows="4"
-                placeholder="Add notes about how this case was handled..."
-              ></textarea>
+                placeholder="Add notes about this request..."
+              />
             </div>
 
-            <div className="mb-4">
-              <label className="block mb-2 text-[#db2b2e]">Update Status</label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {['new', 'in-progress', 'resolved', 'closed'].map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => handleStatusChange(selectedRequest._id, status)}
-                    className={`p-2 border ${
-                      selectedRequest.status === status
-                        ? 'border-[#db2b2e] bg-[#db2b2e] text-white'
-                        : 'border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white'
-                    }`}
-                  >
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-wrap justify-end gap-2">
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => handleDelete(selectedRequest._id)}
-              >
-                Delete Request
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end pt-4 border-t border-[#db2b2e]/20">
+              <button
                 onClick={() => {
                   setShowDetailsModal(false);
+                  setSelectedRequest(null);
                   setNotes('');
                 }}
+                className="px-3 sm:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white transition-colors rounded text-xs sm:text-sm"
               >
                 Close
-              </Button>
+              </button>
+              <button
+                onClick={() => handleStatusChange(selectedRequest._id, 'resolved')}
+                className="px-3 sm:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
+              >
+                Mark Resolved
+              </button>
+              <button
+                onClick={() => handleDelete(selectedRequest._id)}
+                className="px-3 sm:px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition-colors rounded text-xs sm:text-sm"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

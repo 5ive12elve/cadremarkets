@@ -57,20 +57,20 @@ export default function CadreBackLogin() {
           <img
             src="/mediassets/CadreBigUse2.png"
             alt="Cadre Logo"
-            className="mx-auto h-24 w-auto mb-8"
+            className="mx-auto h-16 sm:h-24 w-auto mb-6 sm:mb-8"
           />
-          <h2 className="text-4xl font-bold text-white mb-2">
+          <h2 className="text-2xl sm:text-4xl font-bold text-white mb-2">
             Back Office
           </h2>
-          <p className="text-white/60 mb-8">
+          <p className="text-white/60 mb-6 sm:mb-8 text-sm sm:text-base">
             Enter your credentials to access the dashboard
           </p>
         </div>
         
-        <div className="bg-black border border-[#db2b2e] p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-black border border-[#db2b2e] p-6 sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             <div>
-              <label htmlFor="username" className="block text-white/60 text-sm font-medium mb-2">
+              <label htmlFor="username" className="block text-white/60 text-xs sm:text-sm font-medium mb-2">
                 Username
               </label>
               <div className="relative">
@@ -80,7 +80,7 @@ export default function CadreBackLogin() {
                   name="username"
                   type="text"
                   required
-                  className="w-full bg-black border border-[#db2b2e]/20 text-white px-10 py-2 focus:border-[#db2b2e] focus:outline-none transition-colors"
+                  className="w-full bg-black border border-[#db2b2e]/20 text-white px-10 py-2 sm:py-3 focus:border-[#db2b2e] focus:outline-none transition-colors text-sm"
                   placeholder="Enter your username"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
@@ -89,7 +89,7 @@ export default function CadreBackLogin() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-white/60 text-sm font-medium mb-2">
+              <label htmlFor="password" className="block text-white/60 text-xs sm:text-sm font-medium mb-2">
                 Password
               </label>
               <div className="relative">
@@ -99,7 +99,7 @@ export default function CadreBackLogin() {
                   name="password"
                   type="password"
                   required
-                  className="w-full bg-black border border-[#db2b2e]/20 text-white px-10 py-2 focus:border-[#db2b2e] focus:outline-none transition-colors"
+                  className="w-full bg-black border border-[#db2b2e]/20 text-white px-10 py-2 sm:py-3 focus:border-[#db2b2e] focus:outline-none transition-colors text-sm"
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -110,13 +110,13 @@ export default function CadreBackLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#db2b2e] text-white py-2 hover:bg-[#c41e21] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 bg-[#db2b2e] text-white py-2 sm:py-3 hover:bg-[#c41e21] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               {loading ? (
-                <div className="w-5 h-5 border-t-2 border-r-2 border-white animate-spin" />
+                <div className="w-4 h-4 sm:w-5 sm:h-5 border-t-2 border-r-2 border-white animate-spin" />
               ) : (
                 <>
-                  <FiLogIn className="w-5 h-5" />
+                  <FiLogIn className="w-4 h-4 sm:w-5 sm:h-5" />
                   Sign In
                 </>
               )}

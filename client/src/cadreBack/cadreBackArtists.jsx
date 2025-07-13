@@ -3,9 +3,7 @@ import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/ca
 import { FiUser, FiImage, FiX, FiSearch } from 'react-icons/fi';
 import PageHeader from '../components/shared/PageHeader';
 import Card from '../components/shared/Card';
-import Button from '../components/shared/Button';
 import Table from '../components/shared/Table';
-import GE02Loader from '../components/GE02Loader';
 import toast from 'react-hot-toast';
 
 const ROLE_TYPES = {
@@ -163,21 +161,21 @@ const CadreBackArtists = () => {
                 description="Manage and monitor artist accounts"
             />
 
-            <Card className="mb-6">
-                <div className="flex gap-4 mb-6">
+            <Card className="mb-4 sm:mb-6">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div className="flex-1 relative">
                         <input
                             type="text"
                             placeholder="Search artists..."
-                            className="w-full bg-black border border-[#db2b2e] px-4 py-2 text-white focus:outline-none"
+                            className="w-full bg-black border border-[#db2b2e] px-4 py-2 text-white focus:outline-none text-sm"
                             value={searchQuery}
                             onChange={(e) => handleSearch(e.target.value)}
                         />
                         <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-[#db2b2e]" />
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         <button
-                            className={`px-4 py-2 ${
+                            className={`px-3 sm:px-4 py-2 text-xs sm:text-sm ${
                                 selectedRole === ''
                                     ? 'bg-[#db2b2e] text-white'
                                     : 'border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white'
@@ -190,7 +188,7 @@ const CadreBackArtists = () => {
                             value !== 'all' && (
                                 <button
                                     key={value}
-                                    className={`px-4 py-2 ${
+                                    className={`px-3 sm:px-4 py-2 text-xs sm:text-sm ${
                                         selectedRole === value
                                             ? 'bg-[#db2b2e] text-white'
                                             : 'border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white'
@@ -213,7 +211,7 @@ const CadreBackArtists = () => {
                     loading={loading}
                 />
                 {error && (
-                    <div className="text-red-500 mt-4 text-center">
+                    <div className="text-red-500 mt-4 text-center text-sm">
                         {error}
                     </div>
                 )}
@@ -221,71 +219,71 @@ const CadreBackArtists = () => {
 
             {/* Artist Details Modal */}
             {selectedArtist && (
-                <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-                    <Card className="w-full max-w-2xl">
-                        <div className="flex justify-between items-start mb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center">
-                                    {selectedArtist.avatar ? (
-                                        <img
-                                            src={selectedArtist.avatar}
-                                            alt={selectedArtist.username}
-                                            className="w-full h-full rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <FiUser className="w-8 h-8 text-gray-400" />
-                                    )}
-                                </div>
-                                <div>
-                                    <h2 className="text-2xl font-bold text-primary">{selectedArtist.username}</h2>
-                                    <p className="text-gray-400">{selectedArtist.email}</p>
-                                </div>
+                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-4">
+                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-2xl p-4 sm:p-6 relative">
+                        <button
+                            onClick={() => setSelectedArtist(null)}
+                            className="absolute top-2 sm:top-4 right-2 sm:right-4 text-gray-400 hover:text-white p-2"
+                        >
+                            <FiX size={20} />
+                        </button>
+
+                        <div className="flex flex-col sm:flex-row sm:items-start gap-4 mb-4 sm:mb-6">
+                            <div className="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
+                                {selectedArtist.avatar ? (
+                                    <img
+                                        src={selectedArtist.avatar}
+                                        alt={selectedArtist.username}
+                                        className="w-full h-full rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <FiUser className="w-8 h-8 text-gray-400" />
+                                )}
                             </div>
-                            <Button
-                                variant="secondary"
-                                icon={FiX}
-                                onClick={() => setSelectedArtist(null)}
-                            />
+                            <div>
+                                <h2 className="text-xl sm:text-2xl font-bold text-[#db2b2e]">{selectedArtist.username}</h2>
+                                <p className="text-gray-400 text-sm sm:text-base">{selectedArtist.email}</p>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-6 mb-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                             <div>
-                                <p className="text-gray-400 mb-1">Role</p>
-                                <p className="font-medium">{selectedArtist.role || 'User'}</p>
+                                <p className="text-gray-400 mb-1 text-xs sm:text-sm">Role</p>
+                                <p className="font-medium text-sm sm:text-base">{selectedArtist.role || 'User'}</p>
                             </div>
                             <div>
-                                <p className="text-gray-400 mb-1">Listings</p>
-                                <p className="font-medium">{selectedArtist.listingCount || 0}</p>
+                                <p className="text-gray-400 mb-1 text-xs sm:text-sm">Listings</p>
+                                <p className="font-medium text-sm sm:text-base">{selectedArtist.listingCount || 0}</p>
                             </div>
                             <div>
-                                <p className="text-gray-400 mb-1">Joined</p>
-                                <p className="font-medium">
+                                <p className="text-gray-400 mb-1 text-xs sm:text-sm">Joined</p>
+                                <p className="font-medium text-sm sm:text-base">
                                     {new Date(selectedArtist.createdAt).toLocaleDateString()}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-gray-400 mb-1">Last Active</p>
-                                <p className="font-medium">
+                                <p className="text-gray-400 mb-1 text-xs sm:text-sm">Last Active</p>
+                                <p className="font-medium text-sm sm:text-base">
                                     {new Date(selectedArtist.updatedAt).toLocaleDateString()}
                                 </p>
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-4">
-                            <Button
-                                variant="danger"
-                                onClick={() => handleDeleteUser(selectedArtist._id)}
-                            >
-                                Delete Artist
-                            </Button>
-                            <Button
-                                variant="secondary"
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-end pt-4 border-t border-[#db2b2e]/20">
+                            <button
                                 onClick={() => setSelectedArtist(null)}
+                                className="px-3 sm:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white transition-colors rounded text-xs sm:text-sm"
                             >
                                 Close
-                            </Button>
+                            </button>
+                            <button
+                                onClick={() => handleDeleteUser(selectedArtist._id)}
+                                className="px-3 sm:px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition-colors rounded text-xs sm:text-sm"
+                            >
+                                Delete Artist
+                            </button>
                         </div>
-                    </Card>
+                    </div>
                 </div>
             )}
         </div>

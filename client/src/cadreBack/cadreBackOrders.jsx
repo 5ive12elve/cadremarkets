@@ -447,7 +447,7 @@ const CadreBackOrders = () => {
         title="Orders"
         description="Manage and track all orders"
         actions={
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <Button
               variant="outline"
               size="sm"
@@ -456,7 +456,7 @@ const CadreBackOrders = () => {
               className="flex items-center gap-2"
             >
                                       {isLoading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
-              Refresh
+              <span className="hidden sm:inline">Refresh</span>
             </Button>
             <Button
               variant="primary"
@@ -465,7 +465,7 @@ const CadreBackOrders = () => {
               className="flex items-center gap-2"
             >
               <FiDownload className="w-4 h-4" />
-              Export PDF
+              <span className="hidden sm:inline">Export PDF</span>
             </Button>
           </div>
         }
@@ -474,14 +474,14 @@ const CadreBackOrders = () => {
       {/* Order Statistics Dashboard */}
       <OrderStatistics refreshTrigger={refreshTrigger} />
 
-      <Card className="mb-6">
+      <Card className="mb-4 sm:mb-6">
         {/* Search and Filter Section */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div className="flex-1 relative">
             <input
               type="text"
               placeholder="Search orders..."
-              className="w-full bg-black border border-[#db2b2e] px-4 py-2 text-white focus:outline-none text-sm sm:text-base"
+              className="w-full bg-black border border-[#db2b2e] px-4 py-2 text-white focus:outline-none text-sm"
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
             />

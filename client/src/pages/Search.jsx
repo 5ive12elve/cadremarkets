@@ -186,16 +186,16 @@ export default function Search() {
             id="searchTerm"
             value={sidebardata.searchTerm}
             onChange={handleChange}
-            placeholder="Search..."
+            placeholder={useTranslation('search', 'searchPlaceholder', currentLang)}
             className="flex-1 w-0 min-w-0 border border-gray-300 px-4 py-2 text-base focus:outline-none focus:border-[#db2b2e] transition-colors duration-200 rounded-none"
             style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           />
           <button
             type="submit"
-            className="bg-[#db2b2e] text-white px-4 py-2 rounded-none hover:bg-[#c02629] transition-colors duration-200 flex-shrink-0 h-full w-28 sm:w-32 md:w-36"
+            className="bg-[#db2b2e] text-white px-4 py-2 rounded-none hover:bg-[#c02629] transition-colors duration-200 flex-shrink-0 w-28 sm:w-32 md:w-36"
             style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           >
-            Search
+            {useTranslation('search', 'search', currentLang)}
           </button>
         </form>
         <div className="max-w-3xl">

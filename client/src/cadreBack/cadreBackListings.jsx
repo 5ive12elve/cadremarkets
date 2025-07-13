@@ -322,7 +322,7 @@ const CadreBackListings = () => {
                 title="Listings Management"
                 description="Manage and monitor all listings"
                 actions={
-                    <div className="flex gap-3">
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                         <Button
                             variant="outline"
                             size="sm"
@@ -331,7 +331,7 @@ const CadreBackListings = () => {
                             className="flex items-center gap-2"
                         >
                             {loading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
-                            Refresh
+                            <span className="hidden sm:inline">Refresh</span>
                         </Button>
                         <Button
                             variant="primary"
@@ -340,7 +340,7 @@ const CadreBackListings = () => {
                             className="flex items-center gap-2"
                         >
                             <FiDownload className="w-4 h-4" />
-                            Export PDF
+                            <span className="hidden sm:inline">Export PDF</span>
                         </Button>
                     </div>
                 }
@@ -349,21 +349,21 @@ const CadreBackListings = () => {
             {/* Statistics Dashboard */}
             <ListingStatistics refreshTrigger={refreshTrigger} />
 
-            <Card className="mb-6">
-                <div className="flex gap-4 mb-6">
+            <Card className="mb-4 sm:mb-6">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div className="flex-1 relative">
                         <input
                             type="text"
                             placeholder="Search listings..."
-                            className="w-full bg-black border border-[#db2b2e] px-4 py-2 text-white focus:outline-none"
+                            className="w-full bg-black border border-[#db2b2e] px-4 py-2 text-white focus:outline-none text-sm"
                             value={searchQuery}
                             onChange={(e) => handleSearch(e.target.value)}
                         />
                         <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-[#db2b2e]" />
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         <button
-                            className={`px-4 py-2 ${
+                            className={`px-3 sm:px-4 py-2 text-xs sm:text-sm ${
                                 selectedStatus === ''
                                     ? 'bg-[#db2b2e] text-white'
                                     : 'border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white'
@@ -375,7 +375,7 @@ const CadreBackListings = () => {
                         {Object.values(LISTING_STATUSES).map(status => (
                             <button
                                 key={status}
-                                className={`px-4 py-2 ${
+                                className={`px-3 sm:px-4 py-2 text-xs sm:text-sm ${
                                     selectedStatus === status
                                         ? 'bg-[#db2b2e] text-white'
                                         : 'border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white'
@@ -386,14 +386,14 @@ const CadreBackListings = () => {
                             </button>
                         ))}
                         <button
-                            className={`px-4 py-2 ${
+                            className={`px-3 sm:px-4 py-2 text-xs sm:text-sm ${
                                 showServiceRequests
                                     ? 'bg-[#db2b2e] text-white'
                                     : 'border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white'
                             } transition-colors`}
                             onClick={() => handleServiceFilter(!showServiceRequests)}
                         >
-                            Service Requests
+                            Service
                         </button>
                     </div>
                 </div>
@@ -416,31 +416,31 @@ const CadreBackListings = () => {
 
             {/* Listing Details Modal */}
             {selectedListing && (
-                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-40">
-                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 relative">
+                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-40 p-4">
+                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-8 relative">
                         <button
                             onClick={() => setSelectedListing(null)}
-                            className="absolute top-4 right-4 text-gray-400 hover:text-white"
+                            className="absolute top-2 sm:top-4 right-2 sm:right-4 text-gray-400 hover:text-white p-2"
                         >
-                            <FiX size={24} />
+                            <FiX size={20} />
                         </button>
 
-                        <h2 className="text-2xl font-bold mb-6 text-[#db2b2e]">Listing Details</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-[#db2b2e]">Listing Details</h2>
                         
                         {/* Basic Information */}
-                        <div className="grid grid-cols-2 gap-6 mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
                             <div>
-                                <p className="text-gray-400">Name</p>
-                                <p className="font-semibold text-white">{selectedListing.name}</p>
+                                <p className="text-gray-400 text-sm">Name</p>
+                                <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.name}</p>
                             </div>
                             <div>
-                                <p className="text-gray-400">Status</p>
-                                <div className="flex items-center gap-3">
+                                <p className="text-gray-400 text-sm">Status</p>
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                                     <select
                                         value={selectedListing.status}
                                         onChange={(e) => handleStatusChange(selectedListing._id, e.target.value)}
                                         disabled={updatingStatus}
-                                        className={`bg-black border border-[#db2b2e] text-white px-3 py-2 focus:outline-none focus:border-[#db2b2e] hover:border-[#db2b2e]/80 ${
+                                        className={`bg-black border border-[#db2b2e] text-white px-3 py-2 focus:outline-none focus:border-[#db2b2e] hover:border-[#db2b2e]/80 text-sm ${
                                             updatingStatus ? 'opacity-50 cursor-not-allowed' : ''
                                         }`}
                                     >
@@ -452,7 +452,7 @@ const CadreBackListings = () => {
                                     {updatingStatus && (
                                         <GE02Loader size="small" />
                                     )}
-                                    <span className={`px-2 py-1 text-sm ${
+                                    <span className={`px-2 py-1 text-xs sm:text-sm ${
                                         selectedListing.status === 'For Sale' 
                                             ? 'bg-green-500/10 text-green-500'
                                             : selectedListing.status === 'Pending'
@@ -468,28 +468,28 @@ const CadreBackListings = () => {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-gray-400">Type</p>
-                                <p className="font-semibold text-white">{selectedListing.type}</p>
+                                <p className="text-gray-400 text-sm">Type</p>
+                                <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.type}</p>
                             </div>
                             <div>
-                                <p className="text-gray-400">Price</p>
-                                <p className="font-semibold text-white">{selectedListing.price?.toLocaleString()} EGP</p>
+                                <p className="text-gray-400 text-sm">Price</p>
+                                <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.price?.toLocaleString()} EGP</p>
                             </div>
                             <div>
-                                <p className="text-gray-400">Created At</p>
-                                <p className="font-semibold text-white">{new Date(selectedListing.createdAt).toLocaleString()}</p>
+                                <p className="text-gray-400 text-sm">Created At</p>
+                                <p className="font-semibold text-white text-sm sm:text-base">{new Date(selectedListing.createdAt).toLocaleString()}</p>
                             </div>
                             <div>
-                                <p className="text-gray-400">Listing Type</p>
-                                <p className="font-semibold text-white">{selectedListing.listingType}</p>
+                                <p className="text-gray-400 text-sm">Listing Type</p>
+                                <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.listingType}</p>
                             </div>
                         </div>
 
                         {/* Image Gallery */}
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold mb-4 text-[#db2b2e]">Images</h3>
+                        <div className="mb-6 sm:mb-8">
+                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Images</h3>
                             {selectedListing.imageUrls && selectedListing.imageUrls.length > 0 ? (
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                                     {processImageUrls(selectedListing.imageUrls).map((imageUrl, index) => (
                                         <div 
                                             key={index} 
@@ -511,129 +511,129 @@ const CadreBackListings = () => {
                                                 />
                                                 <div className="hidden w-full h-full bg-gray-900 border-2 border-dashed border-[#db2b2e]/30 flex items-center justify-center">
                                                     <div className="text-center text-gray-400">
-                                                        <FiImage className="w-8 h-8 mx-auto mb-2 text-[#db2b2e]/50" />
+                                                        <FiImage className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-[#db2b2e]/50" />
                                                         <p className="text-xs">Image not available</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                                                <p className="text-white text-sm font-medium">Click to view full size</p>
+                                                <p className="text-white text-xs sm:text-sm font-medium text-center px-2">Click to view full size</p>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex items-center justify-center h-32 bg-gray-900 border-2 border-dashed border-[#db2b2e]/30">
+                                <div className="flex items-center justify-center h-24 sm:h-32 bg-gray-900 border-2 border-dashed border-[#db2b2e]/30">
                                     <div className="text-center text-gray-400">
-                                        <div className="mb-3">
+                                        <div className="mb-2 sm:mb-3">
                                             <img 
                                                 src="/mediassets/Filter05.png" 
                                                 alt="" 
-                                                className="w-16 h-16 mx-auto opacity-20 mb-2"
+                                                className="w-12 h-12 sm:w-16 sm:h-16 mx-auto opacity-20 mb-2"
                                             />
                                         </div>
-                                        <FiImage className="w-8 h-8 mx-auto mb-2 text-[#db2b2e]/50" />
-                                        <p className="text-sm">No images available for this listing</p>
+                                        <FiImage className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-[#db2b2e]/50" />
+                                        <p className="text-xs sm:text-sm">No images available for this listing</p>
                                     </div>
                                 </div>
                             )}
                         </div>
 
                         {/* Quantity Information */}
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold mb-4 text-[#db2b2e]">Quantity Information</h3>
-                            <div className="grid grid-cols-3 gap-6">
+                        <div className="mb-6 sm:mb-8">
+                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Quantity Information</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                                 <div>
-                                    <p className="text-gray-400">Initial Quantity</p>
-                                    <p className="font-semibold text-white">{selectedListing.initialQuantity}</p>
+                                    <p className="text-gray-400 text-sm">Initial Quantity</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.initialQuantity}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400">Current Quantity</p>
-                                    <p className="font-semibold text-white">{selectedListing.currentQuantity}</p>
+                                    <p className="text-gray-400 text-sm">Current Quantity</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.currentQuantity}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400">Sold Quantity</p>
-                                    <p className="font-semibold text-white">{selectedListing.soldQuantity || 0}</p>
+                                    <p className="text-gray-400 text-sm">Sold Quantity</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.soldQuantity || 0}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Location Information */}
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold mb-4 text-[#db2b2e]">Location Information</h3>
-                            <div className="grid grid-cols-2 gap-6">
+                        <div className="mb-6 sm:mb-8">
+                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Location Information</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                 <div>
-                                    <p className="text-gray-400">City</p>
-                                    <p className="font-semibold text-white">{selectedListing.city}</p>
+                                    <p className="text-gray-400 text-sm">City</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.city}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400">District</p>
-                                    <p className="font-semibold text-white">{selectedListing.district}</p>
+                                    <p className="text-gray-400 text-sm">District</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.district}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400">Address</p>
-                                    <p className="font-semibold text-white">{selectedListing.address}</p>
+                                    <p className="text-gray-400 text-sm">Address</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.address}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400">Contact Preference</p>
-                                    <p className="font-semibold text-white">{selectedListing.contactPreference}</p>
+                                    <p className="text-gray-400 text-sm">Contact Preference</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.contactPreference}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Description */}
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold mb-4 text-[#db2b2e]">Description</h3>
-                            <p className="text-white whitespace-pre-wrap">{selectedListing.description}</p>
+                        <div className="mb-6 sm:mb-8">
+                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Description</h3>
+                            <p className="text-white whitespace-pre-wrap text-sm sm:text-base">{selectedListing.description}</p>
                         </div>
 
                         {/* Dimensions */}
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold mb-4 text-[#db2b2e]">Dimensions</h3>
-                            <div className="grid grid-cols-3 gap-6">
+                        <div className="mb-6 sm:mb-8">
+                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Dimensions</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                                 <div>
-                                    <p className="text-gray-400">Width</p>
-                                    <p className="font-semibold text-white">{selectedListing.width} cm</p>
+                                    <p className="text-gray-400 text-sm">Width</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.width} cm</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400">Height</p>
-                                    <p className="font-semibold text-white">{selectedListing.height} cm</p>
+                                    <p className="text-gray-400 text-sm">Height</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.height} cm</p>
                                 </div>
                                 {selectedListing.depth && (
                                     <div>
-                                        <p className="text-gray-400">Depth</p>
-                                        <p className="font-semibold text-white">{selectedListing.depth} cm</p>
+                                        <p className="text-gray-400 text-sm">Depth</p>
+                                        <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.depth} cm</p>
                                     </div>
                                 )}
                             </div>
                         </div>
 
                         {/* Platform Information */}
-                        <div className="mb-8">
-                            <h3 className="text-xl font-semibold mb-4 text-[#db2b2e]">Platform Information</h3>
-                            <div className="grid grid-cols-2 gap-6">
+                        <div className="mb-6 sm:mb-8">
+                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Platform Information</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                 <div>
-                                    <p className="text-gray-400">Cadre Profit</p>
-                                    <p className="font-semibold text-white">{selectedListing.cadreProfit?.toLocaleString()} EGP</p>
+                                    <p className="text-gray-400 text-sm">Cadre Profit</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.cadreProfit?.toLocaleString()} EGP</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400">Cadremarkets Service</p>
-                                    <p className="font-semibold text-white">{selectedListing.cadremarketsService ? 'Yes' : 'No'}</p>
+                                    <p className="text-gray-400 text-sm">Cadremarkets Service</p>
+                                    <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.cadremarketsService ? 'Yes' : 'No'}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Actions */}
-                        <div className="flex justify-end gap-4">
+                        <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
                                 <button
                                 onClick={() => setSelectedListing(null)}
-                                className="px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white transition"
+                                className="px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white transition text-sm"
                                 >
                                 Close
                                 </button>
                             <button
                                 onClick={() => handleDeleteListing(selectedListing._id)}
-                                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition"
+                                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition text-sm"
                             >
                                 Delete Listing
                             </button>

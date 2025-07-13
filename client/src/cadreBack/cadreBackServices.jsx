@@ -155,7 +155,7 @@ const CadreBackServices = () => {
         title="Services"
         description="Manage and monitor all services"
         actions={
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <Button
               variant="outline"
               size="sm"
@@ -164,7 +164,7 @@ const CadreBackServices = () => {
               className="flex items-center gap-2"
             >
               {loading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
-              Refresh
+              <span className="hidden sm:inline">Refresh</span>
             </Button>
             <Button
               variant="primary"
@@ -173,7 +173,7 @@ const CadreBackServices = () => {
               className="flex items-center gap-2"
             >
               <FiDownload className="w-4 h-4" />
-              Export PDF
+              <span className="hidden sm:inline">Export PDF</span>
             </Button>
           </div>
         }
@@ -181,16 +181,16 @@ const CadreBackServices = () => {
 
       <ServiceStatistics refreshTrigger={refreshTrigger} />
 
-      <Card className="mb-6">
+      <Card className="mb-4 sm:mb-6">
         {/* Filters */}
-        <div className="bg-black border border-[#db2b2e] p-6 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="bg-black border border-[#db2b2e] p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="flex flex-col gap-4">
             <div className="relative">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60" />
               <input
                 type="text"
                 placeholder="Search services..."
-                className="w-full md:w-96 bg-black border border-[#db2b2e]/20 text-white pl-10 pr-4 py-2 focus:border-[#db2b2e] focus:outline-none transition-colors"
+                className="w-full bg-black border border-[#db2b2e]/20 text-white pl-10 pr-4 py-2 focus:border-[#db2b2e] focus:outline-none transition-colors text-sm"
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
               />
@@ -203,14 +203,14 @@ const CadreBackServices = () => {
                 </button>
               )}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <FiFilter className="text-white/60" />
               <div className="flex flex-wrap gap-2">
                 {statusFilters.map(filter => (
                   <button
                     key={filter.value}
                     onClick={() => handleStatusFilter(filter.value)}
-                    className={`px-4 py-2 text-sm transition-colors ${
+                    className={`px-3 sm:px-4 py-2 text-xs sm:text-sm transition-colors ${
                       selectedStatus === filter.value
                         ? 'bg-[#db2b2e] text-white'
                         : 'border border-[#db2b2e]/20 text-white/60 hover:border-[#db2b2e] hover:text-white'
@@ -231,68 +231,109 @@ const CadreBackServices = () => {
           </div>
         ) : (
           <div className="bg-black border border-[#db2b2e] overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-[#db2b2e]">
-                  <th className="text-left p-4 text-white/60 font-medium">Request ID</th>
-                  <th className="text-left p-4 text-white/60 font-medium">Requester</th>
-                  <th className="text-left p-4 text-white/60 font-medium">Service Type</th>
-                  <th className="text-left p-4 text-white/60 font-medium">Status</th>
-                  <th className="text-left p-4 text-white/60 font-medium">Created</th>
-                  <th className="text-right p-4 text-white/60 font-medium">Budget</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredServices.map((service) => (
-                  <tr
-                    key={service._id}
-                    className="border-b border-[#db2b2e]/20 hover:bg-[#db2b2e]/5 cursor-pointer"
-                    onClick={() => {
-                      setSelectedService(service);
-                      setShowDetailsModal(true);
-                    }}
-                  >
-                    <td className="p-4">
-                      <p className="text-white font-medium">{service.requestId}</p>
-                    </td>
-                    <td className="p-4">
-                      <div>
-                        <p className="text-white">{service.requesterName}</p>
-                        <p className="text-white/60 text-sm">{service.email}</p>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <div>
-                        <p className="text-white">{service.serviceType}</p>
-                        <p className="text-white/60 text-sm">{service.subType}</p>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className={`px-3 py-1 text-sm ${getStatusColor(service.status)}`}>
-                        {service.status.charAt(0).toUpperCase() + service.status.slice(1)}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span className="text-white/60">
+            {/* Desktop Table */}
+            <div className="hidden md:block">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-[#db2b2e]">
+                    <th className="text-left p-4 text-white/60 font-medium">Request ID</th>
+                    <th className="text-left p-4 text-white/60 font-medium">Requester</th>
+                    <th className="text-left p-4 text-white/60 font-medium">Service Type</th>
+                    <th className="text-left p-4 text-white/60 font-medium">Status</th>
+                    <th className="text-left p-4 text-white/60 font-medium">Created</th>
+                    <th className="text-right p-4 text-white/60 font-medium">Budget</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredServices.map((service) => (
+                    <tr
+                      key={service._id}
+                      className="border-b border-[#db2b2e]/20 hover:bg-[#db2b2e]/5 cursor-pointer"
+                      onClick={() => {
+                        setSelectedService(service);
+                        setShowDetailsModal(true);
+                      }}
+                    >
+                      <td className="p-4">
+                        <p className="text-white font-medium">{service.requestId}</p>
+                      </td>
+                      <td className="p-4">
+                        <div>
+                          <p className="text-white">{service.requesterName}</p>
+                          <p className="text-white/60 text-sm">{service.email}</p>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <div>
+                          <p className="text-white">{service.serviceType}</p>
+                          <p className="text-white/60 text-sm">{service.subType}</p>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className={`px-3 py-1 text-sm ${getStatusColor(service.status)}`}>
+                          {service.status.charAt(0).toUpperCase() + service.status.slice(1)}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span className="text-white/60">
+                          {new Date(service.createdAt).toLocaleDateString()}
+                        </span>
+                      </td>
+                      <td className="p-4 text-right">
+                        <span className="text-white font-medium">
+                          {service.budget}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden space-y-3 p-4">
+              {filteredServices.map((service) => (
+                <div
+                  key={service._id}
+                  className="border border-[#db2b2e]/20 p-4 rounded cursor-pointer hover:bg-[#db2b2e]/5 transition-colors"
+                  onClick={() => {
+                    setSelectedService(service);
+                    setShowDetailsModal(true);
+                  }}
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <p className="text-white font-medium text-sm">#{service.requestId}</p>
+                      <p className="text-white/60 text-xs">{service.requesterName}</p>
+                    </div>
+                    <span className={`px-2 py-1 text-xs ${getStatusColor(service.status)}`}>
+                      {service.status.charAt(0).toUpperCase() + service.status.slice(1)}
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    <div>
+                      <p className="text-white text-sm">{service.serviceType}</p>
+                      <p className="text-white/60 text-xs">{service.subType}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-white/60 text-xs">
                         {new Date(service.createdAt).toLocaleDateString()}
                       </span>
-                    </td>
-                    <td className="p-4 text-right">
-                      <span className="text-white font-medium">
+                      <span className="text-white font-medium text-sm">
                         {service.budget}
                       </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </Card>
 
       {/* Details Modal */}
       {showDetailsModal && selectedService && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-4 overflow-y-auto">
           <div className="bg-black border border-[#db2b2e] w-full max-w-2xl my-8 relative">
             <button
               onClick={() => {
@@ -300,70 +341,70 @@ const CadreBackServices = () => {
                 setSelectedService(null);
                 setNotes('');
               }}
-              className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+              className="absolute top-2 sm:top-4 right-2 sm:right-4 text-white/60 hover:text-white transition-colors p-2"
             >
               <FiX className="w-5 h-5" />
             </button>
 
-            <div className="p-6">
-              <h3 className="text-xl sm:text-2xl font-bold text-[#db2b2e] mb-6">Service Request Details</h3>
+            <div className="p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#db2b2e] mb-4 sm:mb-6">Service Request Details</h3>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Basic Information */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
-                    <p className="text-white/60 text-sm mb-1">Request ID</p>
-                    <p className="text-white font-medium">{selectedService.requestId}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mb-1">Request ID</p>
+                    <p className="text-white font-medium text-sm sm:text-base">{selectedService.requestId}</p>
                   </div>
                   <div>
-                    <p className="text-white/60 text-sm mb-1">Status</p>
-                    <span className={`px-3 py-1 text-sm inline-block ${getStatusColor(selectedService.status)}`}>
+                    <p className="text-white/60 text-xs sm:text-sm mb-1">Status</p>
+                    <span className={`px-2 sm:px-3 py-1 text-xs sm:text-sm inline-block ${getStatusColor(selectedService.status)}`}>
                       {selectedService.status.charAt(0).toUpperCase() + selectedService.status.slice(1)}
                     </span>
                   </div>
                   <div>
-                    <p className="text-white/60 text-sm mb-1">Requester Name</p>
-                    <p className="text-white font-medium">{selectedService.requesterName}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mb-1">Requester Name</p>
+                    <p className="text-white font-medium text-sm sm:text-base">{selectedService.requesterName}</p>
                   </div>
                   <div>
-                    <p className="text-white/60 text-sm mb-1">Contact</p>
-                    <p className="text-white font-medium break-words">{selectedService.email}</p>
-                    <p className="text-white/60 text-sm mt-1">{selectedService.phoneNumber}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mb-1">Contact</p>
+                    <p className="text-white font-medium break-words text-sm sm:text-base">{selectedService.email}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mt-1">{selectedService.phoneNumber}</p>
                   </div>
                   <div>
-                    <p className="text-white/60 text-sm mb-1">Service Type</p>
-                    <p className="text-white font-medium">{selectedService.serviceType}</p>
-                    <p className="text-white/60 text-sm mt-1">{selectedService.subType}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mb-1">Service Type</p>
+                    <p className="text-white font-medium text-sm sm:text-base">{selectedService.serviceType}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mt-1">{selectedService.subType}</p>
                   </div>
                   <div>
-                    <p className="text-white/60 text-sm mb-1">Budget</p>
-                    <p className="text-white font-medium">{selectedService.budget}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mb-1">Budget</p>
+                    <p className="text-white font-medium text-sm sm:text-base">{selectedService.budget}</p>
                   </div>
                   <div>
-                    <p className="text-white/60 text-sm mb-1">Design Stage</p>
-                    <p className="text-white font-medium">{selectedService.designStage}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mb-1">Design Stage</p>
+                    <p className="text-white font-medium text-sm sm:text-base">{selectedService.designStage}</p>
                   </div>
                   <div>
-                    <p className="text-white/60 text-sm mb-1">Project Scope</p>
-                    <p className="text-white font-medium">{selectedService.projectScope}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mb-1">Project Scope</p>
+                    <p className="text-white font-medium text-sm sm:text-base">{selectedService.projectScope}</p>
                   </div>
                 </div>
 
                 {/* Additional Details */}
                 {selectedService.details && (
                   <div>
-                    <p className="text-white/60 text-sm mb-2">Additional Details</p>
-                    <div className="bg-black/20 p-4 rounded">
-                      <p className="text-white whitespace-pre-wrap">{selectedService.details}</p>
+                    <p className="text-white/60 text-xs sm:text-sm mb-2">Additional Details</p>
+                    <div className="bg-black/20 p-3 sm:p-4 rounded">
+                      <p className="text-white whitespace-pre-wrap text-sm sm:text-base">{selectedService.details}</p>
                     </div>
                   </div>
                 )}
 
                 {/* Notes Section */}
                 <div>
-                  <p className="text-white/60 text-sm mb-2">Notes</p>
+                  <p className="text-white/60 text-xs sm:text-sm mb-2">Notes</p>
                   <textarea
-                    className="w-full bg-black border border-[#db2b2e]/20 text-white p-4 rounded focus:border-[#db2b2e] focus:outline-none transition-colors resize-none"
+                    className="w-full bg-black border border-[#db2b2e]/20 text-white p-3 sm:p-4 rounded focus:border-[#db2b2e] focus:outline-none transition-colors resize-none text-sm"
                     rows="4"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
@@ -372,18 +413,18 @@ const CadreBackServices = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3 justify-end pt-4 border-t border-[#db2b2e]/20">
+                <div className="flex flex-wrap gap-2 sm:gap-3 justify-end pt-4 border-t border-[#db2b2e]/20">
                   {selectedService.status === 'pending' && (
                     <>
                       <button
                         onClick={() => handleStatusChange(selectedService._id, 'rejected')}
-                        className="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded"
+                        className="px-3 sm:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
                       >
                         Reject
                       </button>
                       <button
                         onClick={() => handleStatusChange(selectedService._id, 'approved')}
-                        className="px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded"
+                        className="px-3 sm:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
                       >
                         Approve
                       </button>
@@ -393,13 +434,13 @@ const CadreBackServices = () => {
                     <>
                       <button
                         onClick={() => handleStatusChange(selectedService._id, 'rejected')}
-                        className="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded"
+                        className="px-3 sm:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
                       >
                         Reject
                       </button>
                       <button
                         onClick={() => handleStatusChange(selectedService._id, 'completed')}
-                        className="px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded"
+                        className="px-3 sm:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
                       >
                         Complete
                       </button>
@@ -408,7 +449,7 @@ const CadreBackServices = () => {
                   {(selectedService.status === 'rejected' || selectedService.status === 'completed') && (
                     <button
                       onClick={() => handleStatusChange(selectedService._id, 'pending')}
-                      className="px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e]/10 transition-colors rounded"
+                      className="px-3 sm:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e]/10 transition-colors rounded text-xs sm:text-sm"
                     >
                       Reopen
                     </button>

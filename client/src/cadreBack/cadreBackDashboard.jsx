@@ -226,52 +226,52 @@ const CadreBackDashboard = () => {
                 }
             />
 
-            <div className="p-4 lg:p-6">
+            <div className="p-2 sm:p-4 lg:p-6">
                 {loading ? (
                     <div className="flex justify-center items-center h-[calc(100vh-200px)]">
                         <GE02Loader size="xlarge" message="Loading dashboard data..." />
                     </div>
                 ) : error ? (
-                    <div className="text-center text-[#db2b2e] text-lg border border-[#db2b2e] p-6 bg-red-50 dark:bg-red-900/20">
+                    <div className="text-center text-[#db2b2e] text-lg border border-[#db2b2e] p-4 sm:p-6 bg-red-50 dark:bg-red-900/20">
                         Failed to load dashboard data. Please try again.
                     </div>
                 ) : (
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6">
                         {/* Primary Metrics */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Total Orders</h3>
-                                    <FiShoppingBag className="text-[#db2b2e] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Total Orders</h3>
+                                    <FiShoppingBag className="text-[#db2b2e] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
-                                <p className="text-2xl font-bold text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">
+                                <p className="text-xl sm:text-2xl font-bold text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">
                                     {stats?.totalOrders || 0}
                                 </p>
                             </div>
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Total Revenue</h3>
-                                    <FiDollarSign className="text-[#f3eb4b] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Total Revenue</h3>
+                                    <FiDollarSign className="text-[#f3eb4b] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
-                                <p className="text-2xl font-bold text-black dark:text-white group-hover:text-[#f3eb4b] transition-colors duration-300">
+                                <p className="text-xl sm:text-2xl font-bold text-black dark:text-white group-hover:text-[#f3eb4b] transition-colors duration-300">
                                     {((stats?.totalRevenue?.total || 0) / 1).toLocaleString()} EGP
                                 </p>
                             </div>
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Cadre Profit</h3>
-                                    <FiTrendingUp className="text-[#db2b2e] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Cadre Profit</h3>
+                                    <FiTrendingUp className="text-[#db2b2e] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
-                                <p className="text-2xl font-bold text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">
+                                <p className="text-xl sm:text-2xl font-bold text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">
                                     {((stats?.totalCadreProfit?.total || 0) / 1).toLocaleString()} EGP
                                 </p>
                             </div>
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Active Listings</h3>
-                                    <FiPackage className="text-[#f3eb4b] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Active Listings</h3>
+                                    <FiPackage className="text-[#f3eb4b] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
-                                <p className="text-2xl font-bold text-black dark:text-white group-hover:text-[#f3eb4b] transition-colors duration-300">
+                                <p className="text-xl sm:text-2xl font-bold text-black dark:text-white group-hover:text-[#f3eb4b] transition-colors duration-300">
                                     {dashboardData.activeListings}
                                 </p>
                             </div>
@@ -279,21 +279,21 @@ const CadreBackDashboard = () => {
 
                         {/* Business Metrics */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Total Users</h3>
-                                    <FiUsers className="text-[#db2b2e] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Total Users</h3>
+                                    <FiUsers className="text-[#db2b2e] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
-                                <p className="text-2xl font-bold text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">
+                                <p className="text-xl sm:text-2xl font-bold text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">
                                     {dashboardData.totalUsers}
                                 </p>
                             </div>
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Support Requests</h3>
-                                    <FiHeadphones className="text-[#f3eb4b] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Support Requests</h3>
+                                    <FiHeadphones className="text-[#f3eb4b] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
-                                <p className="text-2xl font-bold text-black dark:text-white group-hover:text-[#f3eb4b] transition-colors duration-300">
+                                <p className="text-xl sm:text-2xl font-bold text-black dark:text-white group-hover:text-[#f3eb4b] transition-colors duration-300">
                                     {dashboardData.supportRequests}
                                 </p>
                             </div>
@@ -301,46 +301,46 @@ const CadreBackDashboard = () => {
 
                         {/* Order Status Overview */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Placed Orders</h3>
-                                    <FiShoppingBag className="text-[#db2b2e] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Placed Orders</h3>
+                                    <FiShoppingBag className="text-[#db2b2e] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
                                 <div className="text-black dark:text-white">
-                                    <p className="text-xl font-bold group-hover:text-[#db2b2e] transition-colors duration-300">{stats?.placedOrders || 0}</p>
+                                    <p className="text-lg sm:text-xl font-bold group-hover:text-[#db2b2e] transition-colors duration-300">{stats?.placedOrders || 0}</p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 group-hover:text-[#db2b2e]/80 transition-colors duration-300">
                                         <FiStar className="inline w-3 h-3 mr-1" />
                                         Awaiting Processing
                                     </p>
                                 </div>
                             </div>
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Out for Delivery</h3>
-                                    <FiTruck className="text-[#f3eb4b] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Out for Delivery</h3>
+                                    <FiTruck className="text-[#f3eb4b] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
                                 <div className="text-black dark:text-white">
-                                    <p className="text-xl font-bold group-hover:text-[#f3eb4b] transition-colors duration-300">{stats?.outForDeliveryOrders || 0}</p>
+                                    <p className="text-lg sm:text-xl font-bold group-hover:text-[#f3eb4b] transition-colors duration-300">{stats?.outForDeliveryOrders || 0}</p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 group-hover:text-[#f3eb4b]/80 transition-colors duration-300">In Transit</p>
                                 </div>
                             </div>
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Delivered</h3>
-                                    <FiCheck className="text-[#db2b2e] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Delivered</h3>
+                                    <FiCheck className="text-[#db2b2e] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
                                 <div className="text-black dark:text-white">
-                                    <p className="text-xl font-bold group-hover:text-[#db2b2e] transition-colors duration-300">{stats?.deliveredOrders || 0}</p>
+                                    <p className="text-lg sm:text-xl font-bold group-hover:text-[#db2b2e] transition-colors duration-300">{stats?.deliveredOrders || 0}</p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 group-hover:text-[#db2b2e]/80 transition-colors duration-300">Successfully Completed</p>
                                 </div>
                             </div>
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Cancelled</h3>
-                                    <FiX className="text-[#db2b2e] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Cancelled</h3>
+                                    <FiX className="text-[#db2b2e] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
                                 <div className="text-black dark:text-white">
-                                    <p className="text-xl font-bold group-hover:text-[#db2b2e] transition-colors duration-300">{stats?.cancelledOrders || 0}</p>
+                                    <p className="text-lg sm:text-xl font-bold group-hover:text-[#db2b2e] transition-colors duration-300">{stats?.cancelledOrders || 0}</p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 group-hover:text-[#db2b2e]/80 transition-colors duration-300">Order Cancelled</p>
                                 </div>
                             </div>
@@ -348,30 +348,30 @@ const CadreBackDashboard = () => {
 
                         {/* Payment Methods */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Cash Orders</h3>
-                                    <FiDollarSign className="text-[#db2b2e] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#db2b2e] transition-colors duration-300">Cash Orders</h3>
+                                    <FiDollarSign className="text-[#db2b2e] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
                                 <div className="space-y-2">
-                                    <p className="text-xl font-bold text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">
+                                    <p className="text-lg sm:text-xl font-bold text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">
                                         Count: {stats?.cashOrders?.count || 0}
                                     </p>
-                                    <p className="text-sm text-gray-700 dark:text-white/80 group-hover:text-[#db2b2e]/80 transition-colors duration-300">
+                                    <p className="text-xs sm:text-sm text-gray-700 dark:text-white/80 group-hover:text-[#db2b2e]/80 transition-colors duration-300">
                                         Total: {((stats?.cashOrders?.total || 0) / 1).toLocaleString()} EGP
                                     </p>
                                 </div>
                             </div>
-                            <div className="bg-white dark:bg-black p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Instapay Orders</h3>
-                                    <FiCreditCard className="text-[#f3eb4b] text-lg group-hover:scale-125 transition-transform duration-300" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border-l-4 border-[#f3eb4b] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#f3eb4b]/20 hover:-translate-y-1 hover:border-l-8 cursor-pointer group">
+                                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                                    <h3 className="text-gray-600 dark:text-white/60 font-medium text-xs sm:text-sm group-hover:text-[#f3eb4b] transition-colors duration-300">Instapay Orders</h3>
+                                    <FiCreditCard className="text-[#f3eb4b] text-base sm:text-lg group-hover:scale-125 transition-transform duration-300" />
                                 </div>
                                 <div className="space-y-2">
-                                    <p className="text-xl font-bold text-black dark:text-white group-hover:text-[#f3eb4b] transition-colors duration-300">
+                                    <p className="text-lg sm:text-xl font-bold text-black dark:text-white group-hover:text-[#f3eb4b] transition-colors duration-300">
                                         Count: {stats?.visaOrders?.count || 0}
                                     </p>
-                                    <p className="text-sm text-gray-700 dark:text-white/80 group-hover:text-[#f3eb4b]/80 transition-colors duration-300">
+                                    <p className="text-xs sm:text-sm text-gray-700 dark:text-white/80 group-hover:text-[#f3eb4b]/80 transition-colors duration-300">
                                         Total: {((stats?.visaOrders?.total || 0) / 1).toLocaleString()} EGP
                                     </p>
                                 </div>
@@ -381,9 +381,9 @@ const CadreBackDashboard = () => {
                         {/* Charts */}
                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
                             {/* Revenue Chart */}
-                            <div className="bg-white dark:bg-black p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/10 hover:-translate-y-1 cursor-pointer group">
-                                <h3 className="text-lg font-bold mb-4 text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">Revenue Trend</h3>
-                                <ResponsiveContainer width="100%" height={250}>
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/10 hover:-translate-y-1 cursor-pointer group">
+                                <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">Revenue Trend</h3>
+                                <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={revenueData}>
                                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(219, 43, 46, 0.1)" />
                                         <XAxis dataKey="date" stroke="currentColor" className="text-black dark:text-white text-xs" />
@@ -411,9 +411,9 @@ const CadreBackDashboard = () => {
                             </div>
 
                             {/* Order Trends Chart */}
-                            <div className="bg-white dark:bg-black p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/10 hover:-translate-y-1 cursor-pointer group">
-                                <h3 className="text-lg font-bold mb-4 text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">Order Trends</h3>
-                                <ResponsiveContainer width="100%" height={250}>
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-[#db2b2e]/10 hover:-translate-y-1 cursor-pointer group">
+                                <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-black dark:text-white group-hover:text-[#db2b2e] transition-colors duration-300">Order Trends</h3>
+                                <ResponsiveContainer width="100%" height={200}>
                                     <BarChart data={orderTrends}>
                                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(219, 43, 46, 0.1)" />
                                         <XAxis dataKey="date" stroke="currentColor" className="text-black dark:text-white text-xs" />
@@ -437,20 +437,20 @@ const CadreBackDashboard = () => {
                         {/* Districts and Users Statistics */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                             {/* Top Selling Districts */}
-                            <div className="bg-white dark:bg-black p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-colors duration-300">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-black dark:text-white">Top Selling Districts</h3>
-                                    <FiMapPin className="text-[#db2b2e] text-lg" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-colors duration-300">
+                                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                    <h3 className="text-base sm:text-lg font-bold text-black dark:text-white">Top Selling Districts</h3>
+                                    <FiMapPin className="text-[#db2b2e] text-base sm:text-lg" />
                                 </div>
-                                <div className="space-y-3">
+                                <div className="space-y-2 sm:space-y-3">
                                     {(stats?.topSellingDistricts || []).map((district) => (
                                         <div
                                             key={district.label}
                                             className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-[#db2b2e]/20 hover:border-[#db2b2e] transition-colors duration-200"
                                         >
-                                            <span className="text-black dark:text-white text-sm">{district.label}</span>
+                                            <span className="text-black dark:text-white text-xs sm:text-sm">{district.label}</span>
                                             <div className="flex items-center">
-                                                <span className="text-[#db2b2e] font-bold text-sm mr-2">
+                                                <span className="text-[#db2b2e] font-bold text-xs sm:text-sm mr-2">
                                                     {district.value}
                                                 </span>
                                                 <span className="text-xs text-gray-500 dark:text-white/60">listings</span>
@@ -461,20 +461,20 @@ const CadreBackDashboard = () => {
                             </div>
 
                             {/* Top Buying Districts */}
-                            <div className="bg-white dark:bg-black p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-colors duration-300">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-black dark:text-white">Top Buying Districts</h3>
-                                    <FiMapPin className="text-[#db2b2e] text-lg" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-colors duration-300">
+                                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                    <h3 className="text-base sm:text-lg font-bold text-black dark:text-white">Top Buying Districts</h3>
+                                    <FiMapPin className="text-[#db2b2e] text-base sm:text-lg" />
                                 </div>
-                                <div className="space-y-3">
+                                <div className="space-y-2 sm:space-y-3">
                                     {(stats?.topBuyingDistricts || []).map((district) => (
                                         <div
                                             key={district.label}
                                             className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-[#db2b2e]/20 hover:border-[#db2b2e] transition-colors duration-200"
                                         >
-                                            <span className="text-black dark:text-white text-sm">{district.label}</span>
+                                            <span className="text-black dark:text-white text-xs sm:text-sm">{district.label}</span>
                                             <div className="flex items-center">
-                                                <span className="text-[#db2b2e] font-bold text-sm mr-2">
+                                                <span className="text-[#db2b2e] font-bold text-xs sm:text-sm mr-2">
                                                     {district.value}
                                                 </span>
                                                 <span className="text-xs text-gray-500 dark:text-white/60">orders</span>
@@ -485,20 +485,20 @@ const CadreBackDashboard = () => {
                             </div>
 
                             {/* Top Selling Users */}
-                            <div className="bg-white dark:bg-black p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-colors duration-300">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-black dark:text-white">Top Selling Users</h3>
-                                    <FiUser className="text-[#db2b2e] text-lg" />
+                            <div className="bg-white dark:bg-black p-3 sm:p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-colors duration-300">
+                                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                    <h3 className="text-base sm:text-lg font-bold text-black dark:text-white">Top Selling Users</h3>
+                                    <FiUser className="text-[#db2b2e] text-base sm:text-lg" />
                                 </div>
-                                <div className="space-y-3">
+                                <div className="space-y-2 sm:space-y-3">
                                     {(stats?.topSellingUsers || []).map((user) => (
                                         <div
                                             key={user.label}
                                             className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-[#db2b2e]/20 hover:border-[#db2b2e] transition-colors duration-200"
                                         >
-                                            <span className="text-black dark:text-white text-sm">{user.label}</span>
+                                            <span className="text-black dark:text-white text-xs sm:text-sm">{user.label}</span>
                                             <div className="flex items-center">
-                                                <span className="text-[#db2b2e] font-bold text-sm mr-2">
+                                                <span className="text-[#db2b2e] font-bold text-xs sm:text-sm mr-2">
                                                     {user.value.toLocaleString()} EGP
                                                 </span>
                                                 <span className="text-xs text-gray-500 dark:text-white/60">revenue</span>
@@ -510,25 +510,25 @@ const CadreBackDashboard = () => {
                         </div>
 
                         {/* High Value Listings */}
-                        <div className="bg-white dark:bg-black p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-colors duration-300">
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-bold text-black dark:text-white">High Value Listings</h3>
-                                <FiBox className="text-[#db2b2e] text-lg" />
+                        <div className="bg-white dark:bg-black p-3 sm:p-4 border border-gray-200 dark:border-[#db2b2e] shadow-sm transition-colors duration-300">
+                            <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                <h3 className="text-base sm:text-lg font-bold text-black dark:text-white">High Value Listings</h3>
+                                <FiBox className="text-[#db2b2e] text-base sm:text-lg" />
                             </div>
                             
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                                 {/* Unique Listings */}
                                 <div>
-                                    <h4 className="text-md font-semibold text-gray-700 dark:text-white/80 mb-3">Unique Listings</h4>
+                                    <h4 className="text-sm sm:text-md font-semibold text-gray-700 dark:text-white/80 mb-2 sm:mb-3">Unique Listings</h4>
                                     <div className="space-y-2">
                                         {(stats?.uniqueListingsHighPrice || []).map((listing) => (
                                             <div
                                                 key={listing.id}
                                                 className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-[#db2b2e]/20 hover:border-[#db2b2e] transition-colors duration-200"
                                             >
-                                                <span className="text-black dark:text-white text-sm">{listing.name}</span>
+                                                <span className="text-black dark:text-white text-xs sm:text-sm">{listing.name}</span>
                                                 <div className="flex items-center">
-                                                    <span className="text-[#db2b2e] font-bold text-sm">
+                                                    <span className="text-[#db2b2e] font-bold text-xs sm:text-sm">
                                                         {listing.price.toLocaleString()} EGP
                                                     </span>
                                                 </div>
@@ -539,16 +539,16 @@ const CadreBackDashboard = () => {
 
                                 {/* Stock Listings */}
                                 <div>
-                                    <h4 className="text-md font-semibold text-gray-700 dark:text-white/80 mb-3">Stock Listings</h4>
+                                    <h4 className="text-sm sm:text-md font-semibold text-gray-700 dark:text-white/80 mb-2 sm:mb-3">Stock Listings</h4>
                                     <div className="space-y-2">
                                         {(stats?.stockListingsHighPrice || []).map((listing) => (
                                             <div
                                                 key={listing.id}
                                                 className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-[#db2b2e]/20 hover:border-[#db2b2e] transition-colors duration-200"
                                             >
-                                                <span className="text-black dark:text-white text-sm">{listing.name}</span>
+                                                <span className="text-black dark:text-white text-xs sm:text-sm">{listing.name}</span>
                                                 <div className="flex items-center">
-                                                    <span className="text-[#db2b2e] font-bold text-sm">
+                                                    <span className="text-[#db2b2e] font-bold text-xs sm:text-sm">
                                                         {listing.price.toLocaleString()} EGP
                                                     </span>
                                                 </div>
