@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react';
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
-import { app } from '../firebase';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { uploadToCloudinary } from '../utils/cloudinaryUpload';
+import { authenticatedFetch, isAuthenticated } from '../utils/apiUtils';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { getAuth } from 'firebase/auth';
+import toast from 'react-hot-toast';
+import { FiCheck, FiArrowLeft, FiUpload, FiX, FiImage, FiTrash2 } from 'react-icons/fi';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useTranslation } from '../locales/translations';
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -33,6 +31,100 @@ export default function UpdateListing() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const params = useParams();
+  const { isArabic, currentLang } = useLanguage();
+
+  // Check if user is authenticated
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate('/signin', { state: { from: '/update-listing' } });
+    }
+  }, [navigate]);
+  
+  // Helper text translations
+  const helperText = {
+    images: useTranslation('createListingHelpers', 'images', currentLang),
+    name: useTranslation('createListingHelpers', 'name', currentLang),
+    description: useTranslation('createListingHelpers', 'description', currentLang),
+    type: useTranslation('createListingHelpers', 'type', currentLang),
+    sizes: useTranslation('createListingHelpers', 'sizes', currentLang),
+    dimensions: useTranslation('createListingHelpers', 'dimensions', currentLang),
+    width: useTranslation('createListingHelpers', 'width', currentLang),
+    height: useTranslation('createListingHelpers', 'height', currentLang),
+    depth: useTranslation('createListingHelpers', 'depth', currentLang),
+    address: useTranslation('createListingHelpers', 'address', currentLang),
+    city: useTranslation('createListingHelpers', 'city', currentLang),
+    district: useTranslation('createListingHelpers', 'district', currentLang),
+    price: useTranslation('createListingHelpers', 'price', currentLang),
+    service: useTranslation('createListingHelpers', 'service', currentLang),
+    contact: useTranslation('createListingHelpers', 'contact', currentLang),
+    phone: useTranslation('createListingHelpers', 'phone', currentLang),
+    quantity: useTranslation('createListingHelpers', 'quantity', currentLang),
+  };
+
+  // Success toast translations
+  const successToastTexts = {
+    listingUpdated: useTranslation('updateListing', 'title', currentLang) + '!',
+    pendingApproval: isArabic ? 'إعلانك الآن قيد المراجعة' : 'Your listing is now pending approval',
+  };
+
+  // Additional translation variables
+  const dropImagesHereText = useTranslation('createListing', 'dropImagesHere', currentLang);
+  const dragDropText = useTranslation('createListing', 'dragDrop', currentLang);
+  const browseText = useTranslation('createListing', 'browse', currentLang);
+  const fileTypesText = useTranslation('createListing', 'fileTypes', currentLang);
+  const maxImagesText = useTranslation('createListing', 'maxImages', currentLang);
+  const selectedFilesText = useTranslation('createListing', 'selectedFiles', currentLang);
+  const uploadText = useTranslation('createListing', 'upload', currentLang);
+  const uploadingText = useTranslation('createListing', 'uploading', currentLang);
+  const uploadedImagesText = useTranslation('createListing', 'uploadedImages', currentLang);
+  const mainImageText = useTranslation('createListing', 'mainImage', currentLang);
+  const firstImageMainText = useTranslation('createListing', 'firstImageMain', currentLang);
+  const basicInfoText = useTranslation('createListing', 'basicInfo', currentLang);
+  const listingNameText = useTranslation('createListing', 'listingName', currentLang);
+  const descriptionText = useTranslation('createListing', 'description', currentLang);
+  const updatingText = useTranslation('updateListing', 'updating', currentLang);
+  const submitText = useTranslation('updateListing', 'submit', currentLang);
+  const availableSizesText = useTranslation('createListing', 'sizes', currentLang);
+  const selectSizesText = useTranslation('createListing', 'selectSizes', currentLang);
+  const selectedSizesText = useTranslation('createListing', 'selectedSizes', currentLang);
+  const dimensionsText = useTranslation('createListing', 'dimensions', currentLang);
+  const widthText = useTranslation('createListing', 'width', currentLang);
+  const heightText = useTranslation('createListing', 'height', currentLang);
+  const depthText = useTranslation('createListing', 'depth', currentLang);
+  const locationText = useTranslation('createListing', 'location', currentLang);
+  const addressText = useTranslation('createListing', 'address', currentLang);
+  const selectCityText = useTranslation('createListing', 'selectCity', currentLang);
+  const selectDistrictText = useTranslation('createListing', 'selectDistrict', currentLang);
+  const enterDistrictText = useTranslation('createListing', 'enterDistrict', currentLang);
+  const pricingText = useTranslation('createListing', 'pricing', currentLang);
+  const priceText = useTranslation('createListing', 'price', currentLang);
+  const platformFeeText = useTranslation('createListing', 'platformFee', currentLang);
+  const serviceFeeText = useTranslation('createListing', 'serviceFee', currentLang);
+  const yourProfitText = useTranslation('createListing', 'yourProfit', currentLang);
+  const cadremarketsServiceText = useTranslation('createListing', 'cadremarketsService', currentLang);
+  const enableServiceText = useTranslation('createListing', 'enableService', currentLang);
+  const featuredPlacementText = useTranslation('createListing', 'featuredPlacement', currentLang);
+  const priorityPositioningText = useTranslation('createListing', 'priorityPositioning', currentLang);
+  const professionalPhotoshootText = useTranslation('createListing', 'professionalPhotoshoot', currentLang);
+  const contactText = useTranslation('createListing', 'contact', currentLang);
+  const contactPreferenceText = useTranslation('createListing', 'contactPreference', currentLang);
+  const phoneNumberText = useTranslation('createListing', 'phoneNumber', currentLang);
+  const quantityText = useTranslation('createListing', 'quantity', currentLang);
+  const initialQuantityText = useTranslation('createListing', 'initialQuantity', currentLang);
+  const listingTypeText = useTranslation('createListing', 'listingType', currentLang);
+  const uniqueText = useTranslation('createListing', 'unique', currentLang);
+  const stockText = useTranslation('createListing', 'stock', currentLang);
+  const stockInfoText = useTranslation('createListing', 'stockInfo', currentLang);
+  const currentQuantityText = useTranslation('createListing', 'currentQuantity', currentLang);
+  const soldQuantityText = useTranslation('createListing', 'soldQuantity', currentLang);
+  const cairoText = useTranslation('createListing', 'cairo', currentLang);
+  const otherText = useTranslation('createListing', 'other', currentLang);
+  const servicePaymentMethodText = useTranslation('createListing', 'servicePaymentMethod', currentLang);
+  const deductFromProfitText = useTranslation('createListing', 'deductFromProfit', currentLang);
+  const paySeparatelyText = useTranslation('createListing', 'paySeparately', currentLang);
+  const deductFromProfitDescText = useTranslation('createListing', 'deductFromProfitDesc', currentLang);
+  const paySeparatelyDescText = useTranslation('createListing', 'paySeparatelyDesc', currentLang);
+  
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -47,7 +139,7 @@ export default function UpdateListing() {
     width: '',
     height: '',
     depth: '',
-    price: 1000,
+    price: 100,
     contactPreference: 'Phone Number',
     initialQuantity: 1,
     currentQuantity: 1,
@@ -61,41 +153,43 @@ export default function UpdateListing() {
 
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [clothingSizes, setClothingSizes] = useState([]);
 
   const artTypes = [
-    'Paintings & Drawings',
-    'Sculptures & 3D Art',
-    'Antiques & Collectibles',
-    'Clothing & Wearables',
-    'Home Décor',
-    'Accessories',
-    'Prints & Posters',
+    useTranslation('createListing', 'paintingsDrawings', currentLang),
+    useTranslation('createListing', 'sculptures3DArt', currentLang),
+    useTranslation('createListing', 'antiquesCollectibles', currentLang),
+    useTranslation('createListing', 'clothingWearables', currentLang),
+    useTranslation('createListing', 'homeDecor', currentLang),
+    useTranslation('createListing', 'accessories', currentLang),
+    useTranslation('createListing', 'printsPoster', currentLang),
   ];
 
   const cairoDistricts = [
-    'Maadi',
-    'Heliopolis',
-    'Nasr City',
-    'New Cairo',
-    'Zamalek',
-    'Garden City',
-    'Downtown Cairo',
-    'Dokki',
-    'Mohandessin',
-    '6th of October',
-    'Sheikh Zayed',
-    'Giza',
-    'Haram',
-    'Shoubra',
-    'Ain Shams',
-    'El Matareya',
-    'Madinaty',
-    'El Rehab',
-    'El Tagamoa El Khames',
-    'Other'
+    useTranslation('createListing', 'maadi', currentLang),
+    useTranslation('createListing', 'heliopolis', currentLang),
+    useTranslation('createListing', 'nasrCity', currentLang),
+    useTranslation('createListing', 'newCairo', currentLang),
+    useTranslation('createListing', 'zamalek', currentLang),
+    useTranslation('createListing', 'gardenCity', currentLang),
+    useTranslation('createListing', 'downtownCairo', currentLang),
+    useTranslation('createListing', 'dokki', currentLang),
+    useTranslation('createListing', 'mohandessin', currentLang),
+    useTranslation('createListing', 'sixthOfOctober', currentLang),
+    useTranslation('createListing', 'sheikhZayed', currentLang),
+    useTranslation('createListing', 'giza', currentLang),
+    useTranslation('createListing', 'haram', currentLang),
+    useTranslation('createListing', 'shoubra', currentLang),
+    useTranslation('createListing', 'ainShams', currentLang),
+    useTranslation('createListing', 'elMatareya', currentLang),
+    useTranslation('createListing', 'madinaty', currentLang),
+    useTranslation('createListing', 'elRehab', currentLang),
+    useTranslation('createListing', 'elTagamoaElKhames', currentLang),
+    useTranslation('createListing', 'other', currentLang)
   ];
 
   // Fetch available clothing sizes on component mount
@@ -147,10 +241,10 @@ export default function UpdateListing() {
     fetchListing();
   }, [params.id]);
 
-  const handleImageSubmit = () => {
-    if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
+  const handleImageSubmit = (selectedFiles = files) => {
+    if (selectedFiles.length > 0 && selectedFiles.length + formData.imageUrls.length < 7) {
       // Validate file sizes before upload
-      const filesArray = Array.from(files);
+      const filesArray = Array.from(selectedFiles);
       const oversizedFiles = filesArray.filter(file => file.size > 2 * 1024 * 1024); // 2MB
       if (oversizedFiles.length > 0) {
         setImageUploadError(`The following files are too large (max 2MB): ${oversizedFiles.map(f => f.name).join(', ')}`);
@@ -166,10 +260,11 @@ export default function UpdateListing() {
 
       setUploading(true);
       setImageUploadError(false);
+      setUploadProgress(0);
       const promises = [];
 
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeImage(files[i]));
+      for (let i = 0; i < selectedFiles.length; i++) {
+        promises.push(storeImage(selectedFiles[i]));
       }
       Promise.all(promises)
         .then((urls) => {
@@ -179,43 +274,20 @@ export default function UpdateListing() {
           });
           setImageUploadError(false);
           setUploading(false);
+          setUploadProgress(100);
+          setFiles([]); // Clear selected files after successful upload
         })
         .catch((error) => {
           console.error('Upload error:', error);
           let errorMessage = 'Image upload failed.';
           
-          if (error.code) {
-            switch (error.code) {
-              case 'storage/unauthorized':
-                errorMessage = 'Upload failed: You are not authorized to upload images.';
-                break;
-              case 'storage/canceled':
-                errorMessage = 'Upload was canceled.';
-                break;
-              case 'storage/unknown':
-                errorMessage = 'Upload failed: An unknown error occurred.';
-                break;
-              case 'storage/object-not-found':
-                errorMessage = 'Upload failed: Storage location not found.';
-                break;
-              case 'storage/quota-exceeded':
-                errorMessage = 'Upload failed: Storage quota exceeded.';
-                break;
-              case 'storage/unauthenticated':
-                errorMessage = 'Upload failed: Please sign in to upload images.';
-                break;
-              case 'storage/retry-limit-exceeded':
-                errorMessage = 'Upload failed: Too many attempts. Please try again later.';
-                break;
-              default:
-                errorMessage = `Upload failed: ${error.message || 'Unknown error'}`;
-            }
-          } else if (error.message) {
+          if (error.message) {
             errorMessage = `Upload failed: ${error.message}`;
           }
           
           setImageUploadError(errorMessage);
           setUploading(false);
+          setUploadProgress(0);
         });
     } else {
       setImageUploadError('You can only upload up to 6 images.');
@@ -223,85 +295,54 @@ export default function UpdateListing() {
     }
   };
 
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const droppedFiles = Array.from(e.dataTransfer.files);
+      const validFiles = droppedFiles.filter(file => 
+        file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024
+      );
+      
+      if (validFiles.length !== droppedFiles.length) {
+        setImageUploadError('Some files were invalid. Only image files under 2MB are allowed.');
+      }
+      
+      if (validFiles.length > 0) {
+        setFiles(validFiles);
+      }
+    }
+  };
+
   const storeImage = (file) => {
     return new Promise((resolve, reject) => {
-      // Double-check file size before Firebase upload
+      // Double-check file size before upload
       if (file.size > 2 * 1024 * 1024) {
         reject(new Error(`File "${file.name}" is ${(file.size / (1024 * 1024)).toFixed(2)}MB, which exceeds the 2MB limit.`));
         return;
       }
 
-      // Check if user is authenticated
-      const storage = getStorage(app);
-      const auth = getAuth(app);
-      const currentUser = auth.currentUser;
-      
-      if (!currentUser) {
-        // User not authenticated - require authentication for uploads
-        reject(new Error('Please sign in to upload images.'));
-        return;
-      }
-
-      // Use a more specific path structure for better organization
-      const fileName = `listings/${currentUser.uid}/${new Date().getTime()}-${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      
-      uploadTask.on(
-        'state_changed',
-        () => {
-          // Optional: You can add progress tracking here if needed
-        },
-        (error) => {
-          console.error('Firebase Storage Error Details:', {
-            code: error.code,
-            message: error.message,
-            serverResponse: error.serverResponse,
-            customMetadata: error.customMetadata
-          });
-          
-          // Enhanced error handling with better error messages
-          let errorMessage = 'Upload failed';
-          
-          switch (error.code) {
-            case 'storage/unauthorized':
-              errorMessage = 'Upload failed: You are not authorized to upload images.';
-              break;
-            case 'storage/canceled':
-              errorMessage = 'Upload was canceled.';
-              break;
-            case 'storage/unknown':
-              errorMessage = 'Upload failed: An unknown error occurred. Please try again.';
-              break;
-            case 'storage/object-not-found':
-              errorMessage = 'Upload failed: Storage location not found.';
-              break;
-            case 'storage/quota-exceeded':
-              errorMessage = 'Upload failed: Storage quota exceeded.';
-              break;
-            case 'storage/unauthenticated':
-              errorMessage = 'Upload failed: Please sign in to upload images.';
-              break;
-            case 'storage/retry-limit-exceeded':
-              errorMessage = 'Upload failed: Too many attempts. Please try again later.';
-              break;
-            default:
-              errorMessage = `Upload failed: ${error.message || 'Unknown error'}`;
-          }
-          
-          reject(new Error(errorMessage));
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref)
-            .then((downloadURL) => {
-              resolve(downloadURL);
-            })
-            .catch((error) => {
-              console.error('Error getting download URL:', error);
-              reject(new Error('Upload completed but failed to get download URL. Please try again.'));
-            });
-        }
-      );
+      // Use Cloudinary upload
+      uploadToCloudinary(file)
+        .then((url) => {
+          resolve(url);
+        })
+        .catch((error) => {
+          console.error('Cloudinary upload error:', error);
+          reject(error);
+        });
     });
   };
 
@@ -406,21 +447,44 @@ export default function UpdateListing() {
         delete submitData.availableSizes;
       }
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/update/${params.id}`, {
+      const res = await authenticatedFetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/update/${params.id}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(submitData),
       });
   
       const data = await res.json();
       setLoading(false);
     
-      if (!data.success === false) {
-        setError(data.message || 'Failed to update the listing.');
-        return;
+      if (!data.success) {
+        return setError(data.message || 'Failed to update the listing.');
       }
+
+      // Custom success toast
+      toast.custom((toastData) => (
+        <div
+          className={`${
+            toastData.visible ? 'animate-enter' : 'animate-leave'
+          } max-w-md w-full bg-[#f3eb4b] shadow-lg rounded-none pointer-events-auto flex items-center justify-between`}
+          dir={isArabic ? 'rtl' : 'ltr'}
+        >
+          <div className="flex items-center gap-2 p-4">
+            <div className="bg-[#db2b2e] p-2">
+              <FiCheck className="text-white text-xl" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <h3 className={`text-[#db2b2e] font-bold ${isArabic ? 'font-noto' : 'font-primary'}`}>
+                {successToastTexts.listingUpdated || 'Listing updated!'}
+              </h3>
+              <p className={`text-[#db2b2e] text-sm ${isArabic ? 'font-noto' : 'font-secondary'}`}>
+                {successToastTexts.pendingApproval || 'Your listing is now pending approval'}
+              </p>
+            </div>
+          </div>
+        </div>
+      ), {
+        duration: 3000,
+        position: 'top-center',
+      });
     
       navigate(`/listing/${params.id}`);
     } catch (err) {
