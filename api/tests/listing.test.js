@@ -101,7 +101,7 @@ describe('Listing Endpoints', () => {
     test('should return error for price below minimum', async () => {
       const listingData = {
         ...global.testUtils.createTestListing(),
-        price: 500 // Below minimum of 1000
+        price: 50 // Below minimum of 100
       };
 
       const response = await request(app)
@@ -534,6 +534,21 @@ describe('Listing Endpoints', () => {
         .expect(404);
 
       expect(response.body.success).toBe(false);
+    });
+
+    test('should return error for price below minimum when updating', async () => {
+      const updateData = {
+        price: 50 // Below minimum of 100
+      };
+
+      const response = await request(app)
+        .post(`/api/listing/update/${testListing._id}`)
+        .set('Cookie', [`access_token=${testUserToken}`])
+        .send(updateData)
+        .expect(400);
+
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toContain('Price must be at least 100 EGP');
     });
   });
 

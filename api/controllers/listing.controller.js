@@ -70,6 +70,11 @@ export const updateListing = async (req, res, next) => {
     return next(errorHandler(401, 'You can only update your own listings!'));
   }
 
+  // Validate price if it's being updated
+  if (req.body.price !== undefined && req.body.price < 100) {
+    return next(errorHandler(400, 'Price must be at least 100 EGP'));
+  }
+
   try {
     // Validate clothing sizes if type is being updated to Clothing & Wearables
     const typeToUpdate = req.body.type || listing.type;
