@@ -396,6 +396,11 @@ export default function CreateListing() {
         ...formData,
         [id]: checked,
       });
+    } else if (type === 'radio') {
+      setFormData({
+        ...formData,
+        [id]: value,
+      });
     } else if (id === 'price') {
       const price = parseFloat(value) || 0;
       setFormData({
@@ -1165,6 +1170,7 @@ export default function CreateListing() {
                       }`}>
                         <input
                           type="radio"
+                          id="servicePaymentMethod"
                           name="servicePaymentMethod"
                           value="deductFromProfit"
                           checked={formData.servicePaymentMethod === 'deductFromProfit'}
@@ -1181,6 +1187,7 @@ export default function CreateListing() {
                       }`}>
                         <input
                           type="radio"
+                          id="servicePaymentMethod"
                           name="servicePaymentMethod"
                           value="paySeparately"
                           checked={formData.servicePaymentMethod === 'paySeparately'}
