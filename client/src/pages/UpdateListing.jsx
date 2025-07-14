@@ -118,7 +118,19 @@ export default function UpdateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get/${params.listingId}`);
+        console.log('🔍 UpdateListing: params =', params);
+        console.log('🔍 UpdateListing: params.id =', params.id);
+        
+        if (!params.id) {
+          console.error('🔍 UpdateListing: No listing ID found in params');
+          setError('No listing ID provided');
+          return;
+        }
+        
+        const listingId = params.id;
+        console.log('🔍 UpdateListing: Using listing ID =', listingId);
+        
+        const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/get/${listingId}`);
         const data = await res.json();
         if (data.success === false) {
           console.error(data.message);
@@ -133,7 +145,7 @@ export default function UpdateListing() {
     };
 
     fetchListing();
-  }, [params.listingId]);
+  }, [params.id]);
 
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -394,7 +406,7 @@ export default function UpdateListing() {
         delete submitData.availableSizes;
       }
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/update/${params.listingId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/update/${params.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -410,7 +422,7 @@ export default function UpdateListing() {
         return;
       }
     
-      navigate(`/listing/${params.listingId}`);
+      navigate(`/listing/${params.id}`);
     } catch (err) {
       setLoading(false);
       setError('An unexpected error occurred. Please try again.');

@@ -118,6 +118,8 @@ export default function UserListings({ userId }) {
             
             // Ensure data is an array
             if (Array.isArray(data)) {
+                console.log('🔍 UserListings: Setting listings with', data.length, 'items');
+                console.log('🔍 UserListings: First listing sample:', data[0]);
                 setListings(data);
             } else {
                 console.error('Expected array but received:', typeof data, data);
@@ -489,6 +491,11 @@ export default function UserListings({ userId }) {
                                             <Link
                                                 to={`/update-listing/${listing._id}`}
                                                 className="flex-1 bg-[#db2b2e] text-white py-1.5 sm:py-2 px-2 sm:px-3 hover:bg-[#db2b2e]/90 transition-colors flex items-center justify-center gap-1 text-[10px] sm:text-xs font-medium"
+                                                onClick={() => {
+                                                    console.log('🔍 UserListings: Edit button clicked for listing:', listing);
+                                                    console.log('🔍 UserListings: listing._id =', listing._id);
+                                                    console.log('🔍 UserListings: listing object =', listing);
+                                                }}
                                             >
                                                 <FiEdit2 className="text-xs" />
                                                 <span>Edit</span>

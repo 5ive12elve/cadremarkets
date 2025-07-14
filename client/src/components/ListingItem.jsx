@@ -25,9 +25,9 @@ export default function ListingItem({ listing }) {
           />
         </div>
         <div className="p-3 sm:p-4 w-full overflow-hidden">
-          <p className="text-sm sm:text-[17px] font-bold mb-1 sm:mb-[2px] truncate group-hover:!text-white transition-colors duration-300">{listing.name || 'No Name'}</p>
-          <p className="text-xs sm:text-[12px] font-medium mb-2 sm:mb-[6px] truncate group-hover:!text-white transition-colors duration-300">{listing.type || 'Uncategorized'}</p>
-          <p className="text-sm sm:text-[17px] font-normal group-hover:!text-white transition-colors duration-300">E£{listing.price ? listing.price.toLocaleString('en-GB') : 'N/A'}</p>
+          <p className="text-sm sm:text-[17px] font-bold mb-1 sm:mb-[2px] truncate group-hover:!text-white transition-colors duration-300 font-nt">{listing.name || 'No Name'}</p>
+          <p className="text-xs sm:text-[12px] font-medium mb-2 sm:mb-[6px] truncate group-hover:!text-white transition-colors duration-300 font-nt">{listing.type || 'Uncategorized'}</p>
+          <p className="text-sm sm:text-[17px] font-normal group-hover:!text-white transition-colors duration-300 font-nt">E£{listing.price ? listing.price.toLocaleString('en-GB') : 'N/A'}</p>
         </div>
       </Link>
     </div>
