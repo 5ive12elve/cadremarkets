@@ -153,7 +153,7 @@ export default function Listing() {
   }
 
   return (
-    <main className={`bg-white dark:bg-black text-black dark:text-white min-h-screen transition-colors duration-300 ${isArabic ? 'font-amiri' : 'font-nt'}`} dir={isArabic ? 'rtl' : 'ltr'}>
+    <main className={`bg-white dark:bg-black text-black dark:text-white min-h-screen transition-colors duration-300 ${isArabic ? 'font-noto' : 'font-nt'}`} dir={isArabic ? 'rtl' : 'ltr'}>
       {/* Custom Swiper Navigation Styles */}
       <style>{`
         .swiper-button-next,
@@ -172,7 +172,7 @@ export default function Listing() {
           transition={{ duration: 0.5 }}
         >
           {/* Main Content */}
-          <div className="max-w-6xl mx-auto p-3 sm:p-4 pt-12 sm:pt-16">
+          <div className="max-w-6xl mx-auto p-3 sm:p-4 pt-12 sm:pt-16 pb-4">
             {/* Navigation Buttons */}
             <div className={`flex justify-between items-center mb-3 sm:mb-4 ${isArabic ? 'flex-row-reverse' : ''}`}>
               <button
@@ -229,7 +229,7 @@ export default function Listing() {
                               <svg className="w-16 h-16 mx-auto mb-4 text-[#db2b2e]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
-                              <p className={`text-sm ${isArabic ? 'font-amiri' : 'font-nt'}`}>{imageNotAvailableText}</p>
+                              <p className={`text-sm ${isArabic ? 'font-noto' : 'font-nt'}`}>{imageNotAvailableText}</p>
                             </div>
                           </div>
                         </div>
@@ -265,8 +265,8 @@ export default function Listing() {
                       <svg className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto mb-2 sm:mb-4 text-[#db2b2e]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <p className="text-sm sm:text-base md:text-lg font-medium font-nt">No Images Available</p>
-                      <p className="text-xs sm:text-sm font-nt">This listing doesn&apos;t have any images yet</p>
+                      <p className={`text-sm sm:text-base md:text-lg font-medium ${isArabic ? 'font-noto' : 'font-nt'}`}>No Images Available</p>
+                      <p className={`text-xs sm:text-sm ${isArabic ? 'font-noto' : 'font-nt'}`}>This listing doesn&apos;t have any images yet</p>
                     </div>
                   </div>
                 )}
@@ -275,34 +275,34 @@ export default function Listing() {
               {/* Right: Details */}
               <div className="w-full flex flex-col gap-3 md:gap-4">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">
+                  <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold text-black dark:text-white mb-2 ${isArabic ? 'font-amiri' : 'font-nt'}`}>
                     {listing.name}
                   </h1>
-                  <p className="text-[#db2b2e] text-base sm:text-lg">{listing.type}</p>
+                  <p className={`text-[#db2b2e] text-base sm:text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>{listing.type}</p>
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm border-y border-[#db2b2e]/20 py-2 sm:py-3">
                   <div className="flex items-center gap-2">
                     <FaBox className="text-[#db2b2e]" />
-                    <span className="font-nt">{listing.listingType === 'unique' ? 'Unique Item' : 'Stock Item'}</span>
+                    <span className={`${isArabic ? 'font-noto' : 'font-nt'}`}>{listing.listingType === 'unique' ? 'Unique Item' : 'Stock Item'}</span>
                   </div>
                   {listing.listingType === 'stock' && (
                                       <div className="flex items-center gap-2">
                     <FaRegClock className="text-[#db2b2e]" />
-                    <span className={isArabic ? 'font-amiri' : 'font-nt'}>{listing.currentQuantity} {availableText}</span>
+                    <span className={`${isArabic ? 'font-noto' : 'font-nt'}`}>{listing.currentQuantity} {availableText}</span>
                   </div>
                   )}
                   {listing.cadremarketsService && (
                     <div className="flex items-center gap-2">
                       <FaShippingFast className="text-[#db2b2e]" />
-                      <span className="font-nt">Shipping Available</span>
+                      <span className={`${isArabic ? 'font-noto' : 'font-nt'}`}>Shipping Available</span>
                     </div>
                   )}
                 </div>
 
                 <div className="space-y-2 sm:space-y-3">
                   <div className="flex flex-col">
-                    <span className={`text-xs sm:text-sm text-gray-400 ${isArabic ? 'font-amiri' : 'font-nt'}`}>{priceText}</span>
+                    <span className={`text-xs sm:text-sm text-gray-400 ${isArabic ? 'font-noto' : 'font-nt'}`}>{priceText}</span>
                     <span className={`text-2xl sm:text-3xl font-bold ${isArabic ? 'font-amiri' : 'font-nt'}`}>
                       {listing.price?.toLocaleString()} EGP
                     </span>
@@ -310,7 +310,7 @@ export default function Listing() {
 
                   {listing.type === 'Clothing & Wearables' ? (
                     <div className="flex flex-col gap-2">
-                      <span className="text-xs sm:text-sm text-gray-400 font-nt">Available Sizes</span>
+                      <span className={`text-xs sm:text-sm text-gray-400 ${isArabic ? 'font-noto' : 'font-nt'}`}>Available Sizes</span>
                       {listing.availableSizes && listing.availableSizes.length > 0 ? (
                         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                           {listing.availableSizes.map((size) => (
@@ -328,20 +328,20 @@ export default function Listing() {
                           ))}
                         </div>
                       ) : (
-                        <p className="text-xs sm:text-sm text-gray-400 font-nt">No sizes available</p>
+                        <p className={`text-xs sm:text-sm text-gray-400 ${isArabic ? 'font-noto' : 'font-nt'}`}>No sizes available</p>
                       )}
                       {selectedSize && (
-                        <p className="text-xs sm:text-sm text-[#db2b2e] font-nt">Selected size: {selectedSize}</p>
+                        <p className={`text-xs sm:text-sm text-[#db2b2e] ${isArabic ? 'font-noto' : 'font-nt'}`}>Selected size: {selectedSize}</p>
                       )}
                     </div>
                   ) : (
                   <div className="flex flex-col gap-2">
-                    <span className="text-xs sm:text-sm text-gray-400 font-nt">Dimensions</span>
+                    <span className={`text-xs sm:text-sm text-gray-400 ${isArabic ? 'font-noto' : 'font-nt'}`}>Dimensions</span>
                     <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm">
-                      <span className="font-nt">Width: {listing.width}cm</span>
-                      <span className="font-nt">Height: {listing.height}cm</span>
+                      <span className={`${isArabic ? 'font-noto' : 'font-nt'}`}>Width: {listing.width}cm</span>
+                      <span className={`${isArabic ? 'font-noto' : 'font-nt'}`}>Height: {listing.height}cm</span>
                       {listing.dimensions === '3D' && (
-                        <span className="font-nt">Depth: {listing.depth}cm</span>
+                        <span className={`${isArabic ? 'font-noto' : 'font-nt'}`}>Depth: {listing.depth}cm</span>
                       )}
                     </div>
                   </div>
@@ -349,8 +349,8 @@ export default function Listing() {
                 </div>
 
                 <div className="border-t border-[#db2b2e]/20 pt-2 sm:pt-3">
-                  <h2 className={`text-xs sm:text-sm text-gray-400 mb-2 ${isArabic ? 'font-amiri' : 'font-nt'}`}>{descriptionText}</h2>
-                  <p className={`text-sm sm:text-base text-black dark:text-white leading-relaxed ${isArabic ? 'font-amiri' : 'font-nt'}`}>{listing.description}</p>
+                  <h2 className={`text-xs sm:text-sm text-gray-400 mb-2 ${isArabic ? 'font-noto' : 'font-nt'}`}>{descriptionText}</h2>
+                  <p className={`text-sm sm:text-base text-black dark:text-white leading-relaxed ${isArabic ? 'font-noto' : 'font-nt'}`}>{listing.description}</p>
                 </div>
 
                 <div className="flex flex-col gap-2 sm:gap-3">
@@ -394,7 +394,7 @@ export default function Listing() {
 
                   <button
                     onClick={() => navigate('/#contact')}
-                    className={`border border-[#db2b2e] text-[#db2b2e] px-4 py-3 sm:px-6 sm:py-2 hover:bg-[#db2b2e] hover:text-white transition-colors text-sm sm:text-base font-medium ${isArabic ? 'font-amiri' : 'font-nt'}`}
+                    className={`border border-[#db2b2e] text-[#db2b2e] px-4 py-3 sm:px-6 sm:py-2 hover:bg-[#db2b2e] hover:text-white transition-colors text-sm sm:text-base font-medium ${isArabic ? 'font-noto' : 'font-nt'}`}
                   >
                     {contactSellerText}
                   </button>
