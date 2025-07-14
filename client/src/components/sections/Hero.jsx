@@ -66,7 +66,7 @@ export default function Hero() {
           {/* Image Block */}
           <motion.div 
             variants={itemVariants}
-            className={`text-left md:text-left text-black dark:text-white mt-4 md:mt-0 w-full md:w-auto transition-colors duration-300 ${isArabic ? 'order-1' : 'order-1'}`}
+            className={`text-left md:text-left text-black dark:text-white flex items-center justify-center md:justify-start w-full md:w-auto transition-colors duration-300 ${isArabic ? 'order-1' : 'order-1'}`}
           >
             <motion.img
               initial={{ opacity: 0, x: -30 }}
