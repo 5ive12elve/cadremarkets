@@ -16,7 +16,7 @@ export default function ListingItem({ listing }) {
   return (
     <div className="border border-primary bg-white dark:bg-black hover:!bg-[#db2b2e] transition-all duration-300 text-black dark:text-white hover:!text-white w-full max-w-[265px] sm:max-w-none mx-auto group relative z-10">
       <Link to={`/listing/${listing._id}`} className="block w-full h-full">
-        <div className="aspect-[4/3] w-full">
+        <div className="aspect-square w-full">
           <img
             src={mainImageUrl}
             alt="listing cover"
