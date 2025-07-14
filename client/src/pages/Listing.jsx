@@ -172,9 +172,9 @@ export default function Listing() {
           transition={{ duration: 0.5 }}
         >
           {/* Main Content */}
-          <div className="max-w-6xl mx-auto p-3 sm:p-6 pt-16 sm:pt-24">
+          <div className="max-w-6xl mx-auto p-3 sm:p-4 pt-12 sm:pt-16">
             {/* Navigation Buttons */}
-            <div className={`flex justify-between items-center mb-4 sm:mb-8 ${isArabic ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex justify-between items-center mb-3 sm:mb-4 ${isArabic ? 'flex-row-reverse' : ''}`}>
               <button
                 onClick={() => navigate(-1)}
                 className={`flex items-center gap-1 sm:gap-2 text-sm sm:text-base text-black dark:text-white hover:text-[#db2b2e] transition-colors ${isArabic ? 'font-amiri flex-row-reverse' : 'font-nt'}`}
@@ -196,7 +196,7 @@ export default function Listing() {
             </div>
 
             {/* Listing Content Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
               {/* Left: Images */}
               <div className="w-full">
 {listing.imageUrls && listing.imageUrls.length > 0 ? (
@@ -210,7 +210,7 @@ export default function Listing() {
                   >
                     {listing.imageUrls.map((url, index) => (
                     <SwiperSlide key={index}>
-                        <div className="h-[300px] sm:h-[400px] md:h-[500px] flex items-center justify-center bg-black">
+                        <div className="h-[250px] sm:h-[350px] md:h-[400px] flex items-center justify-center bg-black">
                           <img
                             src={url}
                             alt={`${listing.name} - Image ${index + 1}`}
@@ -260,7 +260,7 @@ export default function Listing() {
                     )}
                 </Swiper>
                 ) : (
-                  <div className="h-[300px] sm:h-[400px] md:h-[500px] bg-black border border-[#db2b2e]/20 flex items-center justify-center">
+                  <div className="h-[250px] sm:h-[350px] md:h-[400px] bg-black border border-[#db2b2e]/20 flex items-center justify-center">
                     <div className="text-center text-gray-400 p-4">
                       <svg className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto mb-2 sm:mb-4 text-[#db2b2e]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -273,7 +273,7 @@ export default function Listing() {
               </div>
 
               {/* Right: Details */}
-              <div className="w-full flex flex-col gap-4 md:gap-6">
+              <div className="w-full flex flex-col gap-3 md:gap-4">
                 <div>
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black dark:text-white mb-2">
                     {listing.name}
@@ -281,7 +281,7 @@ export default function Listing() {
                   <p className="text-[#db2b2e] text-base sm:text-lg">{listing.type}</p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm border-y border-[#db2b2e]/20 py-3 sm:py-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm border-y border-[#db2b2e]/20 py-2 sm:py-3">
                   <div className="flex items-center gap-2">
                     <FaBox className="text-[#db2b2e]" />
                     <span className="font-nt">{listing.listingType === 'unique' ? 'Unique Item' : 'Stock Item'}</span>
@@ -300,7 +300,7 @@ export default function Listing() {
                   )}
                 </div>
 
-                <div className="space-y-3 sm:space-y-4">
+                <div className="space-y-2 sm:space-y-3">
                   <div className="flex flex-col">
                     <span className={`text-xs sm:text-sm text-gray-400 ${isArabic ? 'font-amiri' : 'font-nt'}`}>{priceText}</span>
                     <span className={`text-2xl sm:text-3xl font-bold ${isArabic ? 'font-amiri' : 'font-nt'}`}>
@@ -348,14 +348,14 @@ export default function Listing() {
                   )}
                 </div>
 
-                <div className="border-t border-[#db2b2e]/20 pt-3 sm:pt-4">
+                <div className="border-t border-[#db2b2e]/20 pt-2 sm:pt-3">
                   <h2 className={`text-xs sm:text-sm text-gray-400 mb-2 ${isArabic ? 'font-amiri' : 'font-nt'}`}>{descriptionText}</h2>
                   <p className={`text-sm sm:text-base text-black dark:text-white leading-relaxed ${isArabic ? 'font-amiri' : 'font-nt'}`}>{listing.description}</p>
                 </div>
 
-                <div className="flex flex-col gap-3 sm:gap-4">
+                <div className="flex flex-col gap-2 sm:gap-3">
                   {listing.listingType === 'stock' ? (
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                       <div className="flex items-center border border-[#db2b2e] w-full sm:w-auto">
                         <button
                           className="px-3 py-2 sm:px-4 sm:py-2 text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white transition-colors flex-1 sm:flex-none"

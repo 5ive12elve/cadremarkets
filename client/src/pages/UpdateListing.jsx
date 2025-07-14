@@ -23,9 +23,9 @@ const containerVariants = {
   },
 };
 
-const calculateSellerProfit = (price, usesCadreService) => {
-  const serviceFee = usesCadreService ? 400 : 0;
+const calculateSellerProfit = (price, usesCadreService, servicePaymentMethod) => {
   const platformFee = price * 0.10; // 10% platform fee
+  const serviceFee = usesCadreService && servicePaymentMethod === 'deductFromProfit' ? 400 : 0;
   return price - serviceFee - platformFee;
 };
 
@@ -55,6 +55,7 @@ export default function UpdateListing() {
     listingType: 'unique',
     status: 'Pending',
     cadremarketsService: false,
+    servicePaymentMethod: 'deductFromProfit', // 'deductFromProfit' or 'paySeparately'
     availableSizes: [],
   });
 
@@ -675,7 +676,7 @@ export default function UpdateListing() {
                   )}
                   <div className="text-gray-400 pt-2 border-t border-gray-700">Your Profit: 
                     <span className="text-white ml-2">
-                      {calculateSellerProfit(formData.price, formData.cadremarketsService).toLocaleString()} EGP
+                      {calculateSellerProfit(formData.price, formData.cadremarketsService, formData.servicePaymentMethod).toLocaleString()} EGP
                     </span>
                   </div>
                 </div>

@@ -22,9 +22,9 @@ const containerVariants = {
   },
 };
 
-const calculateSellerProfit = (price, usesCadreService) => {
-  const serviceFee = usesCadreService ? 400 : 0;
+const calculateSellerProfit = (price, usesCadreService, servicePaymentMethod) => {
   const platformFee = price * 0.10; // 10% platform fee
+  const serviceFee = usesCadreService && servicePaymentMethod === 'deductFromProfit' ? 400 : 0;
   return price - serviceFee - platformFee;
 };
 
@@ -103,14 +103,12 @@ export default function CreateListing() {
   const yourProfitText = useTranslation('createListing', 'yourProfit', currentLang);
   const cadremarketsServiceText = useTranslation('createListing', 'cadremarketsService', currentLang);
   const enableServiceText = useTranslation('createListing', 'enableService', currentLang);
-  const minimumPriceText = useTranslation('createListing', 'minimumPrice', currentLang);
   const featuredPlacementText = useTranslation('createListing', 'featuredPlacement', currentLang);
   const priorityPositioningText = useTranslation('createListing', 'priorityPositioning', currentLang);
   const professionalPhotoshootText = useTranslation('createListing', 'professionalPhotoshoot', currentLang);
   const contactText = useTranslation('createListing', 'contact', currentLang);
   const contactPreferenceText = useTranslation('createListing', 'contactPreference', currentLang);
   const phoneNumberText = useTranslation('createListing', 'phoneNumber', currentLang);
-  const emailText = useTranslation('createListing', 'email', currentLang);
   const quantityText = useTranslation('createListing', 'quantity', currentLang);
   const initialQuantityText = useTranslation('createListing', 'initialQuantity', currentLang);
   const listingTypeText = useTranslation('createListing', 'listingType', currentLang);
@@ -121,6 +119,11 @@ export default function CreateListing() {
   const soldQuantityText = useTranslation('createListing', 'soldQuantity', currentLang);
   const cairoText = useTranslation('createListing', 'cairo', currentLang);
   const otherText = useTranslation('createListing', 'other', currentLang);
+  const servicePaymentMethodText = useTranslation('createListing', 'servicePaymentMethod', currentLang);
+  const deductFromProfitText = useTranslation('createListing', 'deductFromProfit', currentLang);
+  const paySeparatelyText = useTranslation('createListing', 'paySeparately', currentLang);
+  const deductFromProfitDescText = useTranslation('createListing', 'deductFromProfitDesc', currentLang);
+  const paySeparatelyDescText = useTranslation('createListing', 'paySeparatelyDesc', currentLang);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -143,6 +146,7 @@ export default function CreateListing() {
     listingType: 'unique',
     status: 'Pending',
     cadremarketsService: false,
+    servicePaymentMethod: 'deductFromProfit', // 'deductFromProfit' or 'paySeparately'
     availableSizes: [],
   });
 
@@ -486,6 +490,7 @@ export default function CreateListing() {
         currentQuantity: formData.initialQuantity,
         soldQuantity: 0,
         cadreProfit: formData.price * 0.10, // 10% platform fee
+        servicePaymentMethod: formData.servicePaymentMethod, // Include payment method
       };
 
       // Remove dimensions/sizes fields based on type
@@ -1094,11 +1099,16 @@ export default function CreateListing() {
                   </div>
                   {formData.cadremarketsService && (
                     <div className="text-gray-600 dark:text-gray-400">
-                      {serviceFeeText}: <span className="text-black dark:text-white">400 EGP</span>
+                      {serviceFeeText}: <span className="text-black dark:text-white">
+                        {formData.servicePaymentMethod === 'deductFromProfit' ? '400 EGP' : '0 EGP'}
+                      </span>
+                      {formData.servicePaymentMethod === 'paySeparately' && (
+                        <span className="text-sm text-gray-500 ml-2">(paid separately)</span>
+                      )}
                     </div>
                   )}
                   <div className="text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-300 dark:border-gray-700">
-                    {yourProfitText}: <span className="text-black dark:text-white">{calculateSellerProfit(formData.price, formData.cadremarketsService).toLocaleString()} EGP</span>
+                    {yourProfitText}: <span className="text-black dark:text-white">{calculateSellerProfit(formData.price, formData.cadremarketsService, formData.servicePaymentMethod).toLocaleString()} EGP</span>
                   </div>
                 </div>
               </div>
@@ -1112,14 +1122,13 @@ export default function CreateListing() {
                     {cadremarketsServiceText}
                   </label>
                 <div className="relative">
-                  <label className={`flex items-center ${formData.price < 400 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+                  <label className="flex items-center cursor-pointer">
                     <div className="relative">
                       <input
                         type="checkbox"
                         id="cadremarketsService"
                         checked={formData.cadremarketsService}
                         onChange={handleChange}
-                        disabled={formData.price < 400}
                         className="sr-only"
                       />
                       <div className="w-14 h-7 bg-gray-300 dark:bg-gray-700 border border-[#db2b2e] dark:border-primary">
@@ -1142,12 +1151,54 @@ export default function CreateListing() {
                   </div>
                 </div>
                 
+                {/* Service Payment Method Selector */}
+                {formData.cadremarketsService && (
+                  <div className="flex flex-col gap-2 mt-4">
+                    <label className={`text-sm text-gray-600 dark:text-gray-300 ${
+                      isArabic ? 'font-noto' : 'font-nt'
+                    }`}>
+                      {servicePaymentMethodText}
+                    </label>
+                    <div className="space-y-2">
+                      <label className={`flex items-start cursor-pointer ${
+                        isArabic ? 'font-noto' : 'font-nt'
+                      }`}>
+                        <input
+                          type="radio"
+                          name="servicePaymentMethod"
+                          value="deductFromProfit"
+                          checked={formData.servicePaymentMethod === 'deductFromProfit'}
+                          onChange={handleChange}
+                          className="mr-2 mt-1"
+                        />
+                        <div className="flex flex-col">
+                          <span className="font-medium">{deductFromProfitText}</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">{deductFromProfitDescText}</span>
+                        </div>
+                      </label>
+                      <label className={`flex items-start cursor-pointer ${
+                        isArabic ? 'font-noto' : 'font-nt'
+                      }`}>
+                        <input
+                          type="radio"
+                          name="servicePaymentMethod"
+                          value="paySeparately"
+                          checked={formData.servicePaymentMethod === 'paySeparately'}
+                          onChange={handleChange}
+                          className="mr-2 mt-1"
+                        />
+                        <div className="flex flex-col">
+                          <span className="font-medium">{paySeparatelyText}</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">{paySeparatelyDescText}</span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                )}
+                
                 <div className={`text-sm text-gray-600 dark:text-gray-300 space-y-1 ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
-                  {formData.price < 400 && (
-                    <p className="text-red-500 font-medium">• {minimumPriceText}</p>
-                  )}
                   <p>• {featuredPlacementText}</p>
                   <p>• {priorityPositioningText}</p>
                   <p>• {professionalPhotoshootText}</p>

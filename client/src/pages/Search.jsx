@@ -29,6 +29,9 @@ export default function Search() {
   const noResults = useTranslation('search', 'noResults', currentLang);
   const noResultsSubtitle = useTranslation('search', 'noResultsSubtitle', currentLang);
   const loadMore = useTranslation('search', 'loadMore', currentLang);
+  const sortByPrice = useTranslation('search', 'sortByPrice', currentLang);
+  const lowestPriceToHighest = useTranslation('search', 'lowestPriceToHighest', currentLang);
+  const highestPriceToLowest = useTranslation('search', 'highestPriceToLowest', currentLang);
 
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
@@ -187,7 +190,7 @@ export default function Search() {
             value={sidebardata.searchTerm}
             onChange={handleChange}
             placeholder={useTranslation('search', 'searchPlaceholder', currentLang)}
-            className="flex-1 w-0 min-w-0 border border-gray-300 px-4 py-2 text-base focus:outline-none focus:border-[#db2b2e] transition-colors duration-200 rounded-none"
+            className="flex-1 w-0 min-w-0 border border-gray-300 dark:border-gray-600 px-4 py-2 text-base text-black dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:border-[#db2b2e] transition-colors duration-200 rounded-none"
             style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
           />
           <button
@@ -288,7 +291,7 @@ export default function Search() {
                 <h3 className={`text-sm md:text-sm font-semibold mb-3 ${
                   isArabic ? 'font-noto' : 'font-nt'
                 }`}>
-                  Sort by Price
+                  {sortByPrice}
                 </h3>
                 <div className="flex flex-col gap-2">
                   <button
@@ -299,7 +302,7 @@ export default function Search() {
                         : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
                     }`}
                   >
-                    Lowest Price to Highest
+                    {lowestPriceToHighest}
                   </button>
                   <button
                     onClick={() => handleChange({ id: 'sort', value: 'price', order: 'desc' })}
@@ -309,7 +312,7 @@ export default function Search() {
                         : 'border-gray-300 dark:border-white/20 hover:border-[#db2b2e]/50'
                     }`}
                   >
-                    Highest Price to Lowest
+                    {highestPriceToLowest}
                   </button>
                 </div>
 
