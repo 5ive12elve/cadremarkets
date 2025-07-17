@@ -35,7 +35,7 @@ export const errorHandler = (err, req, res, next) => {
   const errorResponse = {
     success: false,
     message: process.env.NODE_ENV === 'production' 
-      ? getGenericErrorMessage(statusCode)
+      ? (statusCode === 400 ? message : getGenericErrorMessage(statusCode)) // Show actual message for 400 errors
       : message,
     requestId: req.id,
     timestamp: new Date().toISOString()

@@ -447,24 +447,23 @@ export default function UpdateListing() {
         delete submitData.availableSizes;
       }
 
-      console.log('🔍 UpdateListing: Sending data:', submitData);
+      console.log('🔍 UpdateListing: Sending data:', JSON.stringify(submitData, null, 2));
       
       const res = await authenticatedFetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/update/${params.id}`, {
         method: 'POST',
         body: JSON.stringify(submitData),
       });
   
-      console.log('🔍 UpdateListing: Response status:', res.status);
+      console.log('🔍 UpdateListing: Response received:', res);
       
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.error('🔍 UpdateListing: Error response:', errorData);
+      // authenticatedFetch already returns the parsed JSON response
+      if (res.success === false) {
+        console.error('🔍 UpdateListing: Error response:', res);
         setLoading(false);
-        return setError(errorData.message || `HTTP ${res.status}: Failed to update the listing.`);
+        return setError(res.message || 'Failed to update the listing.');
       }
       
-      const data = await res.json();
-      console.log('🔍 UpdateListing: Success response:', data);
+      console.log('🔍 UpdateListing: Success response:', res);
       setLoading(false);
 
       // Custom success toast
