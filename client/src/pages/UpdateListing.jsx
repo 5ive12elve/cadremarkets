@@ -447,17 +447,25 @@ export default function UpdateListing() {
         delete submitData.availableSizes;
       }
 
+      console.log('🔍 UpdateListing: Sending data:', submitData);
+      
       const res = await authenticatedFetch(`${import.meta.env.VITE_API_URL || ''}/api/listing/update/${params.id}`, {
         method: 'POST',
         body: JSON.stringify(submitData),
       });
   
-      const data = await res.json();
-      setLoading(false);
-    
-      if (!data.success) {
-        return setError(data.message || 'Failed to update the listing.');
+      console.log('🔍 UpdateListing: Response status:', res.status);
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error('🔍 UpdateListing: Error response:', errorData);
+        setLoading(false);
+        return setError(errorData.message || `HTTP ${res.status}: Failed to update the listing.`);
       }
+      
+      const data = await res.json();
+      console.log('🔍 UpdateListing: Success response:', data);
+      setLoading(false);
 
       // Custom success toast
       toast.custom((toastData) => (

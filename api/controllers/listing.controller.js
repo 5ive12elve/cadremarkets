@@ -62,27 +62,43 @@ export const deleteListing = async (req, res, next) => {
 };
 
 export const updateListing = async (req, res, next) => {
+  console.log('🔍 Backend updateListing: Request body:', req.body);
+  console.log('🔍 Backend updateListing: Listing ID:', req.params.id);
+  
   const listing = await Listing.findById(req.params.id);
   if (!listing) {
+    console.log('🔍 Backend updateListing: Listing not found');
     return next(errorHandler(404, 'Listing not found!'));
   }
+  
+  console.log('🔍 Backend updateListing: Found listing:', listing._id);
+  console.log('🔍 Backend updateListing: User ID:', req.user.id);
+  console.log('🔍 Backend updateListing: Listing userRef:', listing.userRef.toString());
+  
   if (req.user.id !== listing.userRef.toString()) {
+    console.log('🔍 Backend updateListing: Unauthorized - user mismatch');
     return next(errorHandler(401, 'You can only update your own listings!'));
   }
 
   // Validate price if it's being updated
   if (req.body.price !== undefined && req.body.price < 100) {
+    console.log('🔍 Backend updateListing: Price validation failed - price:', req.body.price);
     return next(errorHandler(400, 'Price must be at least 100 EGP'));
   }
 
   try {
+    console.log('🔍 Backend updateListing: Starting validation');
+    
     // Validate clothing sizes if type is being updated to Clothing & Wearables
     const typeToUpdate = req.body.type || listing.type;
+    console.log('🔍 Backend updateListing: Type to update:', typeToUpdate);
     
     if (typeToUpdate === 'Clothing & Wearables') {
       const sizesToUpdate = req.body.availableSizes || listing.availableSizes;
+      console.log('🔍 Backend updateListing: Sizes to update:', sizesToUpdate);
       
       if (!sizesToUpdate || !Array.isArray(sizesToUpdate) || sizesToUpdate.length === 0) {
+        console.log('🔍 Backend updateListing: Clothing sizes validation failed');
         return next(errorHandler(400, 'Available sizes are required for clothing items'));
       }
       
@@ -114,11 +130,15 @@ export const updateListing = async (req, res, next) => {
       }
     }
 
+    console.log('🔍 Backend updateListing: About to update listing with data:', req.body);
+    
     const updatedListing = await Listing.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true, runValidators: true }
     );
+    
+    console.log('🔍 Backend updateListing: Successfully updated listing:', updatedListing._id);
     res.status(200).json(updatedListing);
   } catch (error) {
     next(error);
