@@ -440,6 +440,10 @@ export default function UpdateListing() {
       delete submitData._id;
       delete submitData.createdAt;
       delete submitData.__v;
+      delete submitData.initialQuantity;
+      delete submitData.currentQuantity;
+      delete submitData.soldQuantity;
+      delete submitData.listingType;
 
       if (formData.type === 'Clothing & Wearables') {
         // Remove dimension fields for clothing
