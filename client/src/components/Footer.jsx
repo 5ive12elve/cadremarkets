@@ -14,7 +14,7 @@ export default function Footer() {
           <span className="text-black dark:text-white">|</span>
           <Link to="/return-policy" className="hover:text-primary">Return Policy</Link>
           <span className="text-black dark:text-white">|</span>
-          <a href="#" className="hover:text-primary">Cookie Policy</a>
+          <Link to="/support" className="hover:text-primary">Support</Link>
         </div>
       </div>
     </footer>

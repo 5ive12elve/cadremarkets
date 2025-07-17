@@ -733,7 +733,7 @@ export default function UpdateListing() {
                     placeholder="Price (EGP)"
                     id="price"
                     required
-                    min="1000"
+                    min="100"
                     value={formData.price}
                     onChange={handleChange}
                     className="border border-[#db2b2e] bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e]/80"
