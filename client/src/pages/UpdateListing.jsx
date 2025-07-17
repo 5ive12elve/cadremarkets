@@ -436,6 +436,11 @@ export default function UpdateListing() {
         cadreProfit: formData.price * 0.10, // 10% platform fee
       };
 
+      // Remove fields that shouldn't be updated
+      delete submitData._id;
+      delete submitData.createdAt;
+      delete submitData.__v;
+
       if (formData.type === 'Clothing & Wearables') {
         // Remove dimension fields for clothing
         delete submitData.dimensions;
