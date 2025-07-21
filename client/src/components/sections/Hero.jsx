@@ -53,7 +53,7 @@ export default function Hero() {
       animate="visible"
       variants={containerVariants}
     >
-      <section className="relative flex justify-center items-start h-[50vh] min-h-[300px] md:h-[calc(100vh-300px)] md:min-h-[380px] bg-white dark:bg-black transition-colors duration-300 mt-3">
+      <section className="relative flex justify-center items-start h-[50vh] min-h-[300px] md:h-[calc(100vh-400px)] md:min-h-[320px] bg-white dark:bg-black transition-colors duration-300 mt-3">
         <motion.img
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: isMobile ? 0.6 : 1, scale: 1 }}
@@ -62,7 +62,7 @@ export default function Hero() {
           alt="Hero"
           className="w-[280px] md:w-[360px] h-[278px] md:h-[358px] object-contain absolute top-[70px] z-0"
         />
-        <div className={`relative z-10 w-full max-w-7xl mx-auto flex flex-col ${isArabic ? 'md:flex-row-reverse' : 'md:flex-row'} justify-between items-center md:items-start px-3 gap-[30px] md:gap-[60px]`} dir={isArabic ? 'rtl' : 'ltr'}>
+        <div className={`relative z-10 w-full max-w-7xl mx-auto flex flex-col ${isArabic ? 'md:flex-row-reverse' : 'md:flex-row'} justify-between items-center md:items-center px-3 gap-[30px] md:gap-[30px]`} dir={isArabic ? 'rtl' : 'ltr'}>
           {/* Image Block */}
           <motion.div 
             variants={itemVariants}
@@ -89,7 +89,7 @@ export default function Hero() {
           {/* Text Block */}
           <motion.div 
             variants={itemVariants}
-            className={`text-black dark:text-white ${isArabic ? 'font-noto' : 'font-nt'} text-[18px] md:text-[20px] font-light max-w-[360px] ${isArabic ? 'text-right md:text-right order-2' : 'text-left md:text-left order-2'} leading-relaxed mt-4 md:mt-20 px-4 md:px-0 transition-colors duration-300`}
+            className={`text-black dark:text-white ${isArabic ? 'font-noto' : 'font-nt'} text-[18px] md:text-[20px] font-light max-w-[360px] ${isArabic ? 'text-right md:text-right order-2' : 'text-left md:text-left order-2'} leading-relaxed mt-4 md:mt-8 px-4 md:px-0 transition-colors duration-300`}
           >
             <motion.p
               variants={itemVariants}
@@ -112,7 +112,7 @@ export default function Hero() {
       </section>
       <motion.section 
         variants={itemVariants}
-        className="w-full max-w-7xl mx-auto px-3 flex justify-between items-start mt-8 md:mt-12"
+        className="w-full max-w-7xl mx-auto px-3 flex justify-between items-start mt-4 md:mt-6"
       >
         <motion.img
           whileHover={{ rotate: 180 }}
