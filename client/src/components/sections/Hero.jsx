@@ -53,7 +53,7 @@ export default function Hero() {
       animate="visible"
       variants={containerVariants}
     >
-      <section className="relative flex justify-center items-start h-[50vh] min-h-[300px] md:h-[calc(100vh-300px)] md:min-h-[380px] bg-white dark:bg-black transition-colors duration-300">
+      <section className="relative flex justify-center items-start h-[50vh] min-h-[300px] md:h-[calc(100vh-300px)] md:min-h-[380px] bg-white dark:bg-black transition-colors duration-300 mt-3">
         <motion.img
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: isMobile ? 0.6 : 1, scale: 1 }}
