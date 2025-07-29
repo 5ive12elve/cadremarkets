@@ -67,6 +67,7 @@ export default function Checkout() {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
   
   // Alert dialog states
   const [alertDialog, setAlertDialog] = useState({
@@ -114,6 +115,11 @@ export default function Checkout() {
       ...prev,
       [name]: value
     }));
+    
+    // Clear validation error for this field when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors(prev => ({ ...prev, [name]: null }));
+    }
   };
 
   const validateStep = (step) => {
@@ -131,6 +137,39 @@ export default function Checkout() {
       default:
         return true;
     }
+  };
+
+  const handleNextStep = (nextStep) => {
+    const errors = {};
+    
+    if (currentStep === 1) {
+      if (!orderDetails.phoneNumber.trim()) errors.phoneNumber = "Phone number is required";
+      if (!orderDetails.email.trim()) errors.email = "Email is required";
+      if (orderDetails.email && !/\S+@\S+\.\S+/.test(orderDetails.email)) {
+        errors.email = "Please enter a valid email address";
+      }
+    }
+    
+    if (currentStep === 2) {
+      if (!orderDetails.firstName.trim()) errors.firstName = "First name is required";
+      if (!orderDetails.lastName.trim()) errors.lastName = "Last name is required";
+      if (!orderDetails.address.trim()) errors.address = "Address is required";
+      if (!orderDetails.city.trim()) errors.city = "City is required";
+      if (!orderDetails.district.trim()) errors.district = "District is required";
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      const stepMessages = {
+        1: "Please fill in all contact information fields (phone number and email).",
+        2: "Please fill in all shipping address fields (first name, last name, address, city, and district)."
+      };
+      showAlert("Required Fields Missing", stepMessages[currentStep], "warning");
+      return;
+    }
+    
+    setValidationErrors({});
+    setCurrentStep(nextStep);
   };
 
   const getItemImage = (item) => {
@@ -278,13 +317,16 @@ export default function Checkout() {
                       type="tel"
                       id="phoneNumber"
                       name="phoneNumber"
-                      className={`w-full p-3 bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 rounded-sm focus:border-[#db2b2e] transition-colors outline-none text-black dark:text-white font-secondary ${isArabic ? 'text-right' : 'text-left'}`}
+                      className={`w-full p-3 bg-white dark:bg-black border ${validationErrors.phoneNumber ? 'border-red-500' : 'border-gray-300 dark:border-[#db2b2e]/20'} rounded-sm focus:border-[#db2b2e] transition-colors outline-none text-black dark:text-white font-secondary ${isArabic ? 'text-right' : 'text-left'}`}
                       value={orderDetails.phoneNumber}
                       onChange={handleChange}
                       required
                       placeholder={enterPhoneNumberText}
                       dir={isArabic ? 'rtl' : 'ltr'}
                     />
+                    {validationErrors.phoneNumber && (
+                      <p className="text-red-500 text-xs mt-1">{validationErrors.phoneNumber}</p>
+                    )}
                   </div>
                   <div className="mb-4">
                     <label htmlFor="email" className={`block text-sm text-gray-400 mb-1 font-secondary ${isArabic ? 'text-right' : 'text-left'}`}>
@@ -294,13 +336,16 @@ export default function Checkout() {
                       type="email"
                       id="email"
                       name="email"
-                      className={`w-full p-3 bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 rounded-sm focus:border-[#db2b2e] transition-colors outline-none text-black dark:text-white font-secondary ${isArabic ? 'text-right' : 'text-left'}`}
+                      className={`w-full p-3 bg-white dark:bg-black border ${validationErrors.email ? 'border-red-500' : 'border-gray-300 dark:border-[#db2b2e]/20'} rounded-sm focus:border-[#db2b2e] transition-colors outline-none text-black dark:text-white font-secondary ${isArabic ? 'text-right' : 'text-left'}`}
                       value={orderDetails.email}
                       onChange={handleChange}
                       required
                       placeholder={enterEmailText}
                       dir={isArabic ? 'rtl' : 'ltr'}
                     />
+                    {validationErrors.email && (
+                      <p className="text-red-500 text-xs mt-1">{validationErrors.email}</p>
+                    )}
                   </div>
                   <div className={`flex ${isArabic ? 'flex-row-reverse' : ''} justify-between`}>
                     <button
@@ -310,7 +355,7 @@ export default function Checkout() {
                       {useTranslation('checkout', 'backToCart', currentLang)}
                     </button>
                     <button
-                      onClick={() => setCurrentStep(2)}
+                      onClick={() => handleNextStep(2)}
                       className={`bg-[#db2b2e] text-white px-6 py-3 rounded-sm hover:bg-[#db2b2e]/90 transition-colors font-primary`}
                     >
                       {useTranslation('checkout', 'continueToShipping', currentLang)}
@@ -440,7 +485,7 @@ export default function Checkout() {
                       {backToContactText}
                     </button>
                     <button
-                      onClick={() => setCurrentStep(3)}
+                      onClick={() => handleNextStep(3)}
                       className={`bg-[#db2b2e] text-white px-6 py-3 rounded-sm hover:bg-[#db2b2e]/90 transition-colors font-primary`}
                     >
                       {continueToPaymentText}
