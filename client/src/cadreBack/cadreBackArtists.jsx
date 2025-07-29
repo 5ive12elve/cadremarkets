@@ -154,8 +154,8 @@ const CadreBackArtists = () => {
         }
     ];
 
-    return (
-        <div className="w-full">
+      return (
+    <div className="w-full md:pt-0 pt-16">
             <PageHeader
                 title="Artists Management"
                 description="Manage and monitor artist accounts"

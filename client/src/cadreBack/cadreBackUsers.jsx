@@ -119,8 +119,8 @@ const CadreBackUsers = () => {
         }
     };
 
-    return (
-        <div className="w-full">
+      return (
+    <div className="w-full md:pt-0 pt-16">
             <PageHeader
                 title="Users"
                 description="Manage back office user accounts"
@@ -130,7 +130,7 @@ const CadreBackUsers = () => {
                         className="flex items-center gap-2 bg-[#db2b2e] text-white px-3 sm:px-4 lg:px-6 py-2 hover:bg-[#c41e21] transition-colors duration-200 text-xs sm:text-sm"
                     >
                         <FiPlus className="w-4 h-4" /> 
-                        <span className="hidden sm:inline">Add User</span>
+                                                    <span>Add User</span>
                         <span className="sm:hidden">Add</span>
                     </Button>
                 }

@@ -316,8 +316,8 @@ const CadreBackListings = () => {
         }
     ];
 
-    return (
-        <div className="w-full">
+      return (
+    <div className="w-full md:pt-0 pt-16">
             <PageHeader
                 title="Listings Management"
                 description="Manage and monitor all listings"
@@ -331,7 +331,7 @@ const CadreBackListings = () => {
                             className="flex items-center gap-2"
                         >
                             {loading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
-                            <span className="hidden sm:inline">Refresh</span>
+                            <span>Refresh</span>
                         </Button>
                         <Button
                             variant="primary"
@@ -340,7 +340,7 @@ const CadreBackListings = () => {
                             className="flex items-center gap-2"
                         >
                             <FiDownload className="w-4 h-4" />
-                            <span className="hidden sm:inline">Export PDF</span>
+                            <span>Export PDF</span>
                         </Button>
                     </div>
                 }

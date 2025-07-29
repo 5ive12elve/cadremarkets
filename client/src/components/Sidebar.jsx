@@ -1,10 +1,11 @@
-import { FiHome, FiUsers, FiLogOut, FiBox, FiSettings, FiShoppingBag, FiHeadphones, FiUser, FiMenu, FiX } from 'react-icons/fi';
+import { FiHome, FiUsers, FiLogOut, FiBox, FiSettings, FiShoppingBag, FiHeadphones, FiUser } from 'react-icons/fi';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { signOutUserStart, signOutUserSuccess, signOutUserFailure } from '../redux/user/userSlice';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { useState } from 'react';
+import CadreBackHeader from './CadreBackHeader';
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -37,13 +38,8 @@ const Sidebar = () => {
 
     return (
         <>
-            {/* Mobile Menu Button */}
-            <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden fixed top-4 left-4 z-50 p-3 bg-black border border-[#db2b2e] text-white hover:bg-[#db2b2e] transition-colors"
-            >
-                {isMobileMenuOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
-            </button>
+            {/* CadreBack Header - Mobile Only */}
+            <CadreBackHeader onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
 
             {/* Mobile Overlay */}
             {isMobileMenuOpen && (
@@ -98,7 +94,7 @@ const Sidebar = () => {
                 isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}>
                 <div className="p-4">
-                    <div className="flex justify-center mb-8 mt-16">
+                    <div className="flex justify-center mb-8 mt-20">
                         <NavLink to="/" className="block" onClick={closeMobileMenu}>
                             <img src="/mediassets/CadreBigUse2.png" alt="Logo" className="w-40" />
                         </NavLink>

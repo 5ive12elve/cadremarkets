@@ -203,30 +203,30 @@ const CadreBackDashboard = () => {
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                         <Button
                             onClick={fetchStats}
-                            className="flex items-center justify-center gap-2 text-white/60 hover:text-white text-sm px-3 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#db2b2e]/20"
+                            className="flex items-center justify-center gap-2 text-white/60 hover:text-white text-xs sm:text-sm px-3 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#db2b2e]/20"
                         >
                             <FiRefreshCw className={loading ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-300'} />
-                            <span className="hidden sm:inline">Refresh</span>
+                            <span>Refresh</span>
                         </Button>
                         <Button
                             onClick={handleExportData}
-                            className="flex items-center justify-center gap-2 text-white/60 hover:text-white text-sm px-3 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#f3eb4b]/20 group"
+                            className="flex items-center justify-center gap-2 text-white/60 hover:text-white text-xs sm:text-sm px-3 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#f3eb4b]/20 group"
                         >
                             <FiDownload className="group-hover:-translate-y-1 transition-transform duration-300" />
-                            <span className="hidden sm:inline">Export CSV</span>
+                            <span>Export CSV</span>
                         </Button>
                         <Button
                             onClick={handleExportPDF}
-                            className="flex items-center justify-center gap-2 text-white/60 hover:text-white text-sm px-3 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#db2b2e]/20 group"
+                            className="flex items-center justify-center gap-2 text-white/60 hover:text-white text-xs sm:text-sm px-3 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#db2b2e]/20 group"
                         >
                             <FiDownload className="group-hover:-translate-y-1 transition-transform duration-300" />
-                            <span className="hidden sm:inline">Export PDF</span>
+                            <span>Export PDF</span>
                         </Button>
                     </div>
                 }
             />
 
-            <div className="p-2 sm:p-4 lg:p-6">
+            <div className="p-2 sm:p-4 lg:p-6 md:pt-6 pt-16">
                 {loading ? (
                     <div className="flex justify-center items-center h-[calc(100vh-200px)]">
                         <GE02Loader size="xlarge" message="Loading dashboard data..." />

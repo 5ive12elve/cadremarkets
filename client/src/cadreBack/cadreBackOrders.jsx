@@ -442,7 +442,7 @@ const CadreBackOrders = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full md:pt-0 pt-16">
       <PageHeader
         title="Orders"
         description="Manage and track all orders"
@@ -453,19 +453,19 @@ const CadreBackOrders = () => {
               size="sm"
               onClick={handleRefresh}
               disabled={isLoading}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 text-xs sm:text-sm"
             >
-                                      {isLoading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
-              <span className="hidden sm:inline">Refresh</span>
+              {isLoading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
+              <span>Refresh</span>
             </Button>
             <Button
               variant="primary"
               size="sm"
               onClick={handleExportPDF}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 text-xs sm:text-sm"
             >
               <FiDownload className="w-4 h-4" />
-              <span className="hidden sm:inline">Export PDF</span>
+              <span>Export PDF</span>
             </Button>
           </div>
         }
@@ -602,8 +602,8 @@ const CadreBackOrders = () => {
 
         {/* Order Details Modal */}
         {selectedOrder && (
-          <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
-            <div className="bg-black border border-[#db2b2e] p-4 sm:p-6 lg:p-8 w-full max-w-5xl relative overflow-y-auto max-h-[90vh]">
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-2 sm:p-4 z-50">
+            <div className="bg-black border border-[#db2b2e] p-3 sm:p-6 lg:p-8 w-full max-w-5xl relative overflow-y-auto max-h-[95vh]">
               <button
                 className="absolute top-4 right-4 text-[#db2b2e] hover:text-white transition-colors"
                 onClick={() => setSelectedOrder(null)}
@@ -612,17 +612,17 @@ const CadreBackOrders = () => {
               </button>
 
               {/* Order Header */}
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 sm:mb-8">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 sm:mb-8">
                 <div className="mb-4 sm:mb-0">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-2 pr-8">
                     Order #{selectedOrder._id}
                   </h2>
-                  <p className="text-[#ffffff]/60 text-sm sm:text-base">
+                  <p className="text-[#ffffff]/60 text-xs sm:text-sm lg:text-base">
                     Placed on {new Date(selectedOrder.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 <div className="sm:text-right">
-                <p className="text-white font-bold text-xl sm:text-2xl mb-4">
+                <p className="text-white font-bold text-lg sm:text-xl lg:text-2xl mb-4">
                     ${selectedOrder.totalPrice.toFixed(2)}
                   </p>
                 <div className="flex flex-col gap-2">
@@ -644,7 +644,7 @@ const CadreBackOrders = () => {
                         handleStatusChangeWithConfirm(selectedOrder._id, 'placed', 'Are you sure you want to mark this order as Placed?', 'Mark as Placed');
                       }}
                       disabled={isLoading}
-                      className={`px-3 sm:px-4 py-2 border transition-colors text-sm sm:text-base ${
+                      className={`px-2 sm:px-3 lg:px-4 py-2 border transition-colors text-xs sm:text-sm lg:text-base ${
                         selectedOrder.status === 'placed'
                           ? 'bg-[#db2b2e] border-[#db2b2e] text-white'
                           : 'border-[#db2b2e]/20 text-[#ffffff]/60 hover:border-[#db2b2e] hover:text-white'
@@ -669,7 +669,7 @@ const CadreBackOrders = () => {
                         handleStatusChangeWithConfirm(selectedOrder._id, 'out for delivery', 'Are you sure you want to mark this order as Out for Delivery?', 'Mark as Out for Delivery');
                       }}
                       disabled={isLoading || selectedOrder.status === 'delivered' || selectedOrder.status === 'cancelled'}
-                      className={`px-3 sm:px-4 py-2 border transition-colors text-sm sm:text-base ${
+                      className={`px-2 sm:px-3 lg:px-4 py-2 border transition-colors text-xs sm:text-sm lg:text-base ${
                         selectedOrder.status === 'out for delivery'
                           ? 'bg-[#db2b2e] border-[#db2b2e] text-white'
                           : 'border-[#db2b2e]/20 text-[#ffffff]/60 hover:border-[#db2b2e] hover:text-white'
@@ -694,7 +694,7 @@ const CadreBackOrders = () => {
                         handleStatusChangeWithConfirm(selectedOrder._id, 'delivered', 'Are you sure you want to mark this order as Delivered?', 'Mark as Delivered');
                       }}
                       disabled={isLoading || selectedOrder.status === 'cancelled'}
-                      className={`px-4 py-2 border transition-colors ${
+                      className={`px-2 sm:px-3 lg:px-4 py-2 border transition-colors text-xs sm:text-sm lg:text-base ${
                         selectedOrder.status === 'delivered'
                           ? 'bg-[#db2b2e] border-[#db2b2e] text-white'
                           : 'border-[#db2b2e]/20 text-[#ffffff]/60 hover:border-[#db2b2e] hover:text-white'
@@ -712,7 +712,7 @@ const CadreBackOrders = () => {
                         handleStatusChangeWithConfirm(selectedOrder._id, 'cancelled', 'Are you sure you want to cancel this order? This will restore all items to their original state.', 'Cancel Order');
                       }}
                       disabled={isLoading || selectedOrder.status === 'cancelled'}
-                      className={`px-4 py-2 border transition-colors ${
+                      className={`px-2 sm:px-3 lg:px-4 py-2 border transition-colors text-xs sm:text-sm lg:text-base ${
                         selectedOrder.status === 'cancelled'
                           ? 'bg-red-500 border-red-500 text-white'
                           : 'border-red-500/20 text-red-500/60 hover:border-red-500 hover:text-red-500'
@@ -723,7 +723,7 @@ const CadreBackOrders = () => {
                   </div>
                   <button
                     onClick={() => handleDeleteOrderWithConfirm(selectedOrder._id)}
-                    className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition-colors self-end"
+                    className="px-2 sm:px-3 lg:px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition-colors self-end text-xs sm:text-sm lg:text-base"
                   >
                     Delete Order
                   </button>
@@ -732,61 +732,61 @@ const CadreBackOrders = () => {
               </div>
 
               {/* Customer Information */}
-              <div className="mb-8 border border-[#db2b2e] p-4">
-                <h3 className="text-lg font-semibold text-white mb-4">Customer Information</h3>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="mb-6 sm:mb-8 border border-[#db2b2e] p-3 sm:p-4">
+                <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Customer Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <p className="text-[#ffffff]/60 mb-1">Name</p>
-                    <p className="text-white">{selectedOrder.customerInfo.name}</p>
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">Name</p>
+                    <p className="text-white text-xs sm:text-sm lg:text-base">{selectedOrder.customerInfo.name}</p>
                   </div>
                   <div>
-                    <p className="text-[#ffffff]/60 mb-1">Phone Number</p>
-                    <p className="text-white">{selectedOrder.customerInfo.phoneNumber}</p>
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">Phone Number</p>
+                    <p className="text-white text-xs sm:text-sm lg:text-base">{selectedOrder.customerInfo.phoneNumber}</p>
                   </div>
                   <div>
-                    <p className="text-[#ffffff]/60 mb-1">City</p>
-                    <p className="text-white">{selectedOrder.customerInfo.city}</p>
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">City</p>
+                    <p className="text-white text-xs sm:text-sm lg:text-base">{selectedOrder.customerInfo.city}</p>
                   </div>
                   <div>
-                    <p className="text-[#ffffff]/60 mb-1">District</p>
-                    <p className="text-white">{selectedOrder.customerInfo.district}</p>
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">District</p>
+                    <p className="text-white text-xs sm:text-sm lg:text-base">{selectedOrder.customerInfo.district}</p>
                   </div>
-                  <div className="col-span-2">
-                    <p className="text-[#ffffff]/60 mb-1">Address</p>
-                    <p className="text-white">{selectedOrder.customerInfo.address}</p>
+                  <div className="col-span-1 sm:col-span-2">
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">Address</p>
+                    <p className="text-white text-xs sm:text-sm lg:text-base">{selectedOrder.customerInfo.address}</p>
                   </div>
                   <div>
-                    <p className="text-[#ffffff]/60 mb-1">Payment Method</p>
-                    <p className="text-white capitalize">{selectedOrder.customerInfo.paymentMethod}</p>
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">Payment Method</p>
+                    <p className="text-white capitalize text-xs sm:text-sm lg:text-base">{selectedOrder.customerInfo.paymentMethod}</p>
                   </div>
                 </div>
               </div>
 
               {/* Financial Information */}
-              <div className="mb-8 border border-[#db2b2e] p-4">
-                <h3 className="text-lg font-semibold text-white mb-4">Financial Details</h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="mb-6 sm:mb-8 border border-[#db2b2e] p-3 sm:p-4">
+                <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Financial Details</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                   <div>
-                    <p className="text-[#ffffff]/60 mb-1">Items Total</p>
-                    <p className="text-white text-lg font-medium">
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">Items Total</p>
+                    <p className="text-white text-sm sm:text-lg font-medium">
                       ${selectedOrder.orderItems.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[#ffffff]/60 mb-1">Shipment Fees</p>
-                    <p className="text-white text-lg font-medium">
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">Shipment Fees</p>
+                    <p className="text-white text-sm sm:text-lg font-medium">
                       ${selectedOrder.shipmentFees.toFixed(2)}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[#ffffff]/60 mb-1">Cadre Profit</p>
-                    <p className="text-white text-lg font-medium">
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">Cadre Profit</p>
+                    <p className="text-white text-sm sm:text-lg font-medium">
                       ${selectedOrder.cadreProfit.toFixed(2)}
                     </p>
                   </div>
-                <div className="col-span-3 border-t border-[#db2b2e]/20 pt-4 mt-2">
-                    <p className="text-[#ffffff]/60 mb-1">Total Amount</p>
-                    <p className="text-white text-2xl font-bold">
+                <div className="col-span-1 sm:col-span-3 border-t border-[#db2b2e]/20 pt-3 sm:pt-4 mt-2">
+                    <p className="text-[#ffffff]/60 mb-1 text-xs sm:text-sm">Total Amount</p>
+                    <p className="text-white text-lg sm:text-xl lg:text-2xl font-bold">
                       ${selectedOrder.totalPrice.toFixed(2)}
                     </p>
                   </div>
@@ -794,26 +794,26 @@ const CadreBackOrders = () => {
               </div>
 
               {/* Order Items */}
-            <div className="mb-8">
-                <h4 className="text-lg font-semibold text-white mb-4">Order Items</h4>
-                <div className="space-y-4">
+            <div className="mb-6 sm:mb-8">
+                <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Order Items</h4>
+                <div className="space-y-3 sm:space-y-4">
                   {selectedOrder.orderItems?.map((item) => (
                     <div
                       key={item._id}
-                      className="border border-[#db2b2e] p-4"
+                      className="border border-[#db2b2e] p-3 sm:p-4"
                     >
                       {/* Item Basic Info */}
-                      <div className="flex justify-between items-start mb-4">
+                      <div className="flex justify-between items-start mb-3 sm:mb-4">
                         <div className="flex-1">
-                          <p className="text-white font-medium text-lg mb-2">{item.name}</p>
-                          <p className="text-[#ffffff]/60 text-sm">{item.description}</p>
+                          <p className="text-white font-medium text-sm sm:text-lg mb-2">{item.name}</p>
+                          <p className="text-[#ffffff]/60 text-xs sm:text-sm">{item.description}</p>
                           {item.type === 'Clothing & Wearables' && item.selectedSize && (
-                            <p className="text-[#db2b2e] text-sm font-medium mt-1">
+                            <p className="text-[#db2b2e] text-xs sm:text-sm font-medium mt-1">
                               Size: {item.selectedSize}
                             </p>
                           )}
                           <div className="flex items-center gap-2 mt-1">
-                            <span className="text-[#ffffff]/60 text-sm">Quantity:</span>
+                            <span className="text-[#ffffff]/60 text-xs sm:text-sm">Quantity:</span>
                             {editingQuantity[`${selectedOrder._id}-${item._id}`] ? (
                               <div className="flex items-center gap-2">
                                 <input
@@ -824,7 +824,7 @@ const CadreBackOrders = () => {
                                     ...prev,
                                     [`${selectedOrder._id}-${item._id}`]: e.target.value
                                   }))}
-                                  className="w-16 px-2 py-1 bg-black border border-[#db2b2e] text-white text-sm focus:outline-none"
+                                  className="w-14 sm:w-16 px-2 py-1 bg-black border border-[#db2b2e] text-white text-xs sm:text-sm focus:outline-none"
                                 />
                                 <button
                                   onClick={() => handleUpdateQuantity(
@@ -845,7 +845,7 @@ const CadreBackOrders = () => {
                               </div>
                             ) : (
                               <div className="flex items-center gap-2">
-                                <span className="text-white text-sm">{item.quantity}</span>
+                                <span className="text-white text-xs sm:text-sm">{item.quantity}</span>
                                 <button
                                   onClick={() => startEditingQuantity(selectedOrder._id, item._id, item.quantity)}
                                   className="px-2 py-1 bg-[#db2b2e]/20 text-[#db2b2e] text-xs hover:bg-[#db2b2e] hover:text-white transition-colors"

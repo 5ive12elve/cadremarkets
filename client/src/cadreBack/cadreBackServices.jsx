@@ -150,7 +150,7 @@ const CadreBackServices = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full md:pt-0 pt-16">
       <PageHeader
         title="Services"
         description="Manage and monitor all services"
@@ -164,7 +164,7 @@ const CadreBackServices = () => {
               className="flex items-center gap-2"
             >
               {loading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
-              <span className="hidden sm:inline">Refresh</span>
+                                          <span>Refresh</span>
             </Button>
             <Button
               variant="primary"
@@ -173,7 +173,7 @@ const CadreBackServices = () => {
               className="flex items-center gap-2"
             >
               <FiDownload className="w-4 h-4" />
-              <span className="hidden sm:inline">Export PDF</span>
+                                          <span>Export PDF</span>
             </Button>
           </div>
         }

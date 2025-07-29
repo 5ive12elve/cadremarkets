@@ -272,7 +272,7 @@ export default function CadreBackCustomerService() {
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full md:pt-0 pt-16">
       <PageHeader
         title="Customer Service"
         description="Manage support requests and contact form submissions"
@@ -286,7 +286,7 @@ export default function CadreBackCustomerService() {
               className="flex items-center gap-2"
             >
               {loading ? <GE02Loader size="small" /> : <FiRefreshCw className="w-4 h-4" />}
-              <span className="hidden sm:inline">Refresh</span>
+                                          <span>Refresh</span>
             </Button>
             <Button
               variant="primary"
@@ -295,18 +295,18 @@ export default function CadreBackCustomerService() {
               className="flex items-center gap-2"
             >
               <FiDownload className="w-4 h-4" />
-              <span className="hidden sm:inline">Export PDF</span>
+                                          <span>Export PDF</span>
             </Button>
             {stats && (
               <div className="flex flex-wrap gap-2">
                 <Button variant="secondary" icon={FiMessageSquare} size="sm" className="text-xs">
-                  <span className="hidden sm:inline">New: </span>{stats.overview.newRequests}
+                                              <span>New: </span>{stats.overview.newRequests}
                 </Button>
                 <Button variant="secondary" icon={FiClock} size="sm" className="text-xs">
-                  <span className="hidden sm:inline">In Progress: </span>{stats.overview.inProgress}
+                                              <span>In Progress: </span>{stats.overview.inProgress}
                 </Button>
                 <Button variant="secondary" icon={FiStar} size="sm" className="text-xs">
-                  <span className="hidden sm:inline">Resolved: </span>{stats.overview.resolved}
+                                              <span>Resolved: </span>{stats.overview.resolved}
                 </Button>
               </div>
             )}
