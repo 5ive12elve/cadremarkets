@@ -1,5 +1,6 @@
 import Service from '../models/service.model.js';
 import { errorHandler } from '../utils/error.js';
+import { sendServiceRequestEmail } from '../utils/emailService.js';
 
 // Get all services with optional filters
 export const getServices = async (req, res, next) => {
@@ -28,6 +29,19 @@ export const createService = async (req, res, next) => {
       ...req.body,
       requestId
     });
+
+    // Send email notification for new service request
+    try {
+      const emailResult = await sendServiceRequestEmail(service);
+      if (emailResult.success) {
+        console.log('Service request notification email sent successfully');
+      } else {
+        console.error('Failed to send service request notification email:', emailResult.error);
+      }
+    } catch (emailError) {
+      console.error('Error sending service request notification email:', emailError);
+      // Don't fail the service creation if email fails
+    }
 
     res.status(201).json(service);
   } catch (error) {

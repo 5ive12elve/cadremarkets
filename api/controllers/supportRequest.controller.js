@@ -1,10 +1,25 @@
 import SupportRequest from '../models/supportRequest.model.js';
+import { sendContactMessageEmail } from '../utils/emailService.js';
 
 // Create a new support request
 export const createSupportRequest = async (req, res) => {
   try {
     const newRequest = new SupportRequest(req.body);
     await newRequest.save();
+
+    // Send email notification for new contact message
+    try {
+      const emailResult = await sendContactMessageEmail(newRequest);
+      if (emailResult.success) {
+        console.log('Contact message notification email sent successfully');
+      } else {
+        console.error('Failed to send contact message notification email:', emailResult.error);
+      }
+    } catch (emailError) {
+      console.error('Error sending contact message notification email:', emailError);
+      // Don't fail the contact creation if email fails
+    }
+
     res.status(201).json(newRequest);
   } catch (error) {
     res.status(500).json({ message: error.message });
