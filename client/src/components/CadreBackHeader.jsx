@@ -13,7 +13,10 @@ const CadreBackHeader = ({ onMenuClick }) => {
           <FiMenu className="w-6 h-6" />
         </button>
 
-        {/* CADT04.png Logo */}
+        {/* Spacer to push logo to the right */}
+        <div className="flex-1"></div>
+
+        {/* CADT04.png Logo - Aligned to the right */}
         <div className="flex items-center">
           <img 
             src="/mediassets/CADT04.png" 
@@ -21,9 +24,6 @@ const CadreBackHeader = ({ onMenuClick }) => {
             className="h-8 w-auto"
           />
         </div>
-
-        {/* Spacer to balance the layout */}
-        <div className="w-10"></div>
       </div>
     </div>
   );

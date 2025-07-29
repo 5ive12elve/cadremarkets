@@ -334,7 +334,7 @@ const CadreBackServices = () => {
       {/* Details Modal */}
       {showDetailsModal && selectedService && (
                         <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-30 p-1 sm:p-4 overflow-y-auto">
-          <div className="bg-black border border-[#db2b2e] w-full max-w-2xl my-2 sm:my-8 relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-black border border-[#db2b2e] w-full max-w-2xl my-2 sm:my-8 relative max-h-[85vh] overflow-y-auto">
             <button
               onClick={() => {
                 setShowDetailsModal(false);

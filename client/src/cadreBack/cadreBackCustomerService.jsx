@@ -437,7 +437,7 @@ export default function CadreBackCustomerService() {
       {/* Details Modal */}
       {showDetailsModal && selectedRequest && (
                         <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-30 p-1 sm:p-4">
-          <div className="bg-black p-2 sm:p-6 border border-[#db2b2e] w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-black p-2 sm:p-6 border border-[#db2b2e] w-full max-w-2xl max-h-[85vh] overflow-y-auto">
             <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-3 sm:mb-4 text-[#db2b2e]">
               {selectedRequest.type === 'support' ? 'Support Request' : 'Contact Form'} Details
             </h3>

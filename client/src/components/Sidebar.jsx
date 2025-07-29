@@ -44,7 +44,7 @@ const Sidebar = () => {
             {/* Mobile Overlay */}
             {isMobileMenuOpen && (
                 <div 
-                    className="md:hidden fixed inset-0 bg-black/50 z-40"
+                    className="md:hidden fixed inset-0 bg-black/50 z-30"
                     onClick={closeMobileMenu}
                 />
             )}
@@ -90,7 +90,7 @@ const Sidebar = () => {
             </div>
 
             {/* Mobile Sidebar */}
-            <div className={`md:hidden fixed left-0 top-0 h-full w-56 bg-black border-r border-[#db2b2e]/20 transform transition-transform duration-300 z-50 ${
+            <div className={`md:hidden fixed left-0 top-0 h-full w-56 bg-black border-r border-[#db2b2e]/20 transform transition-transform duration-300 z-40 ${
                 isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}>
                 <div className="p-3">
