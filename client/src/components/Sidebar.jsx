@@ -90,20 +90,18 @@ const Sidebar = () => {
             </div>
 
             {/* Mobile Sidebar */}
-            <div className={`md:hidden fixed left-0 top-0 h-full w-64 bg-black border-r border-[#db2b2e]/20 transform transition-transform duration-300 z-50 ${
+            <div className={`md:hidden fixed left-0 top-0 h-full w-56 bg-black border-r border-[#db2b2e]/20 transform transition-transform duration-300 z-50 ${
                 isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}>
-                <div className="p-4">
-                    <div className="flex justify-center mb-8 mt-20">
-                        <NavLink to="/" className="block" onClick={closeMobileMenu}>
-                            <img src="/mediassets/CadreBigUse2.png" alt="Logo" className="w-40" />
-                        </NavLink>
+                <div className="p-3">
+                    <div className="flex justify-center mb-4 mt-16">
+                        {/* Logo removed from mobile sidebar as requested */}
                     </div>
 
-                    <nav className="p-4">
+                    <nav className="p-2">
                         <ul>
                             {menuItems.map(({ to, icon: Icon, label }) => (
-                                <li key={to} className="mb-4">
+                                <li key={to} className="mb-2">
                                     <NavLink
                                         to={to}
                                         onClick={closeMobileMenu}

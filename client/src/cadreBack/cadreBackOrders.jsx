@@ -447,7 +447,7 @@ const CadreBackOrders = () => {
         title="Orders"
         description="Manage and track all orders"
         actions={
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <div className="flex flex-row gap-2 sm:gap-3">
             <Button
               variant="outline"
               size="sm"
@@ -604,8 +604,8 @@ const CadreBackOrders = () => {
 
         {/* Order Details Modal */}
         {selectedOrder && (
-                          <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-2 sm:p-4 z-30">
-            <div className="bg-black border border-[#db2b2e] p-3 sm:p-6 lg:p-8 w-full max-w-5xl relative overflow-y-auto max-h-[95vh]">
+                          <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-1 sm:p-4 z-30">
+            <div className="bg-black border border-[#db2b2e] p-2 sm:p-6 lg:p-8 w-full max-w-5xl relative overflow-y-auto max-h-[90vh]">
               <button
                 className="absolute top-4 right-4 text-[#db2b2e] hover:text-white transition-colors"
                 onClick={() => setSelectedOrder(null)}

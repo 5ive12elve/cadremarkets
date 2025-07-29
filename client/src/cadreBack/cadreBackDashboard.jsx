@@ -200,7 +200,7 @@ const CadreBackDashboard = () => {
                 title="Dashboard"
                 description="Overview of your business metrics and performance"
                 actions={
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+                    <div className="flex flex-row items-center gap-2 sm:gap-3">
                         <Button
                             onClick={fetchStats}
                             className="flex items-center justify-center gap-2 text-white/60 hover:text-white text-xs sm:text-sm px-3 py-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#db2b2e]/20"

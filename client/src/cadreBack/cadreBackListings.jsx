@@ -322,7 +322,7 @@ const CadreBackListings = () => {
                 title="Listings Management"
                 description="Manage and monitor all listings"
                 actions={
-                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <div className="flex flex-row gap-2 sm:gap-3">
                         <Button
                             variant="outline"
                             size="sm"
@@ -499,8 +499,8 @@ const CadreBackListings = () => {
 
             {/* Listing Details Modal */}
             {selectedListing && (
-                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-30 p-2 sm:p-4">
-                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6 relative">
+                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-30 p-1 sm:p-4">
+                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-4xl max-h-[90vh] overflow-y-auto p-2 sm:p-6 relative">
                         <button
                             onClick={() => setSelectedListing(null)}
                             className="absolute top-2 sm:top-4 right-2 sm:right-4 text-gray-400 hover:text-white p-2 z-10"
