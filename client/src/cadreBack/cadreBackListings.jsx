@@ -350,7 +350,7 @@ const CadreBackListings = () => {
             <ListingStatistics refreshTrigger={refreshTrigger} />
 
             <Card className="mb-4 sm:mb-6">
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
+                <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div className="flex-1 relative">
                         <input
                             type="text"
@@ -405,42 +405,123 @@ const CadreBackListings = () => {
                 </div>
             ) : (
                 <Card className="border border-[#db2b2e]/20 bg-black">
-                    <Table
-                        columns={columns}
-                        data={filteredListings}
-                        onRowClick={(row) => setSelectedListing(row)}
-                        loading={loading}
-                    />
+                    {/* Desktop Table */}
+                    <div className="hidden md:block">
+                        <Table
+                            columns={columns}
+                            data={filteredListings}
+                            onRowClick={(row) => setSelectedListing(row)}
+                            loading={loading}
+                        />
+                    </div>
+
+                    {/* Mobile Cards */}
+                    <div className="md:hidden space-y-3 p-4">
+                        {filteredListings.map((listing) => (
+                            <div
+                                key={listing._id}
+                                className="border border-[#db2b2e]/20 p-4 rounded cursor-pointer hover:bg-[#db2b2e]/5 transition-colors"
+                                onClick={() => setSelectedListing(listing)}
+                            >
+                                <div className="flex items-start gap-3 mb-3">
+                                    <div className="w-16 h-16 bg-black border border-[#db2b2e]/20 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                        {listing.imageUrls?.[0] ? (
+                                            <img 
+                                                src={getMainImageUrl(listing.imageUrls)} 
+                                                alt={listing.name} 
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => {
+                                                    e.target.style.display = 'none';
+                                                    e.target.nextSibling.style.display = 'flex';
+                                                }}
+                                            />
+                                        ) : (
+                                            <FiImage className="w-6 h-6 text-gray-400" />
+                                        )}
+                                        <FiImage className="w-6 h-6 text-gray-400 hidden" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="font-medium text-white text-sm mb-1 truncate">{listing.name}</h3>
+                                        <p className="text-gray-400 text-xs mb-2">{listing.type}</p>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <FiMapPin className="text-[#db2b2e] w-3 h-3" />
+                                            <span className="text-white text-xs">{listing.city}{listing.district ? `, ${listing.district}` : ''}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-2">
+                                        <FiDollarSign className="text-[#db2b2e] w-3 h-3" />
+                                        <span className="font-medium text-white text-sm">
+                                            {listing.price?.toLocaleString()} EGP
+                                        </span>
+                                    </div>
+                                    <div className={`text-xs px-2 py-1 inline-flex items-center gap-1 ${
+                                        listing.status === 'For Sale' 
+                                            ? 'bg-[#db2b2e]/10 text-[#db2b2e]'
+                                            : listing.status === 'Pending'
+                                            ? 'bg-[#db2b2e]/10 text-[#db2b2e]'
+                                            : listing.status === 'Sold'
+                                            ? 'bg-[#db2b2e]/10 text-[#db2b2e]'
+                                            : 'bg-black text-gray-400'
+                                    }`}>
+                                        <FiTag className="w-2 h-2" />
+                                        {listing.status}
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <FiBox className="text-[#db2b2e] w-3 h-3" />
+                                        <span className={`text-xs px-2 py-0.5 ${
+                                            listing.listingType === 'unique' 
+                                                ? 'bg-[#db2b2e]/10 text-[#db2b2e]' 
+                                                : 'bg-black text-gray-400'
+                                        }`}>
+                                            {listing.listingType === 'unique' ? 'Unique' : 'Stock'}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <FiClock className="text-[#db2b2e] w-3 h-3" />
+                                        <span className="text-gray-400 text-xs">
+                                            {new Date(listing.createdAt).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </Card>
             )}
 
             {/* Listing Details Modal */}
             {selectedListing && (
-                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-40 p-4">
-                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-4xl max-h-[90vh] overflow-y-auto p-4 sm:p-8 relative">
+                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-40 p-2 sm:p-4">
+                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6 relative">
                         <button
                             onClick={() => setSelectedListing(null)}
-                            className="absolute top-2 sm:top-4 right-2 sm:right-4 text-gray-400 hover:text-white p-2"
+                            className="absolute top-2 sm:top-4 right-2 sm:right-4 text-gray-400 hover:text-white p-2 z-10"
                         >
                             <FiX size={20} />
                         </button>
 
-                        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-[#db2b2e]">Listing Details</h2>
+                        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 text-[#db2b2e] pr-8">Listing Details</h2>
                         
                         {/* Basic Information */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-4 sm:mb-6">
                             <div>
-                                <p className="text-gray-400 text-sm">Name</p>
+                                <p className="text-gray-400 text-xs sm:text-sm">Name</p>
                                 <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.name}</p>
                             </div>
                             <div>
-                                <p className="text-gray-400 text-sm">Status</p>
+                                <p className="text-gray-400 text-xs sm:text-sm">Status</p>
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                                     <select
                                         value={selectedListing.status}
                                         onChange={(e) => handleStatusChange(selectedListing._id, e.target.value)}
                                         disabled={updatingStatus}
-                                        className={`bg-black border border-[#db2b2e] text-white px-3 py-2 focus:outline-none focus:border-[#db2b2e] hover:border-[#db2b2e]/80 text-sm ${
+                                        className={`bg-black border border-[#db2b2e] text-white px-3 py-2 focus:outline-none focus:border-[#db2b2e] hover:border-[#db2b2e]/80 text-xs sm:text-sm ${
                                             updatingStatus ? 'opacity-50 cursor-not-allowed' : ''
                                         }`}
                                     >
@@ -468,28 +549,28 @@ const CadreBackListings = () => {
                                 </div>
                             </div>
                             <div>
-                                <p className="text-gray-400 text-sm">Type</p>
+                                <p className="text-gray-400 text-xs sm:text-sm">Type</p>
                                 <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.type}</p>
                             </div>
                             <div>
-                                <p className="text-gray-400 text-sm">Price</p>
+                                <p className="text-gray-400 text-xs sm:text-sm">Price</p>
                                 <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.price?.toLocaleString()} EGP</p>
                             </div>
                             <div>
-                                <p className="text-gray-400 text-sm">Created At</p>
+                                <p className="text-gray-400 text-xs sm:text-sm">Created At</p>
                                 <p className="font-semibold text-white text-sm sm:text-base">{new Date(selectedListing.createdAt).toLocaleString()}</p>
                             </div>
                             <div>
-                                <p className="text-gray-400 text-sm">Listing Type</p>
+                                <p className="text-gray-400 text-xs sm:text-sm">Listing Type</p>
                                 <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.listingType}</p>
                             </div>
                         </div>
 
                         {/* Image Gallery */}
-                        <div className="mb-6 sm:mb-8">
-                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Images</h3>
+                        <div className="mb-4 sm:mb-6">
+                            <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Images</h3>
                             {selectedListing.imageUrls && selectedListing.imageUrls.length > 0 ? (
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
                                     {processImageUrls(selectedListing.imageUrls).map((imageUrl, index) => (
                                         <div 
                                             key={index} 
@@ -511,28 +592,28 @@ const CadreBackListings = () => {
                                                 />
                                                 <div className="hidden w-full h-full bg-gray-900 border-2 border-dashed border-[#db2b2e]/30 flex items-center justify-center">
                                                     <div className="text-center text-gray-400">
-                                                        <FiImage className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-[#db2b2e]/50" />
+                                                        <FiImage className="w-4 h-4 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-[#db2b2e]/50" />
                                                         <p className="text-xs">Image not available</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                                                <p className="text-white text-xs sm:text-sm font-medium text-center px-2">Click to view full size</p>
+                                                <p className="text-white text-xs font-medium text-center px-1 sm:px-2">Click to view full size</p>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex items-center justify-center h-24 sm:h-32 bg-gray-900 border-2 border-dashed border-[#db2b2e]/30">
+                                <div className="flex items-center justify-center h-20 sm:h-24 lg:h-32 bg-gray-900 border-2 border-dashed border-[#db2b2e]/30">
                                     <div className="text-center text-gray-400">
-                                        <div className="mb-2 sm:mb-3">
+                                        <div className="mb-1 sm:mb-2">
                                             <img 
                                                 src="/mediassets/Filter05.png" 
                                                 alt="" 
-                                                className="w-12 h-12 sm:w-16 sm:h-16 mx-auto opacity-20 mb-2"
+                                                className="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 mx-auto opacity-20 mb-1 sm:mb-2"
                                             />
                                         </div>
-                                        <FiImage className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 text-[#db2b2e]/50" />
+                                        <FiImage className="w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8 mx-auto mb-1 sm:mb-2 text-[#db2b2e]/50" />
                                         <p className="text-xs sm:text-sm">No images available for this listing</p>
                                     </div>
                                 </div>
@@ -540,68 +621,68 @@ const CadreBackListings = () => {
                         </div>
 
                         {/* Quantity Information */}
-                        <div className="mb-6 sm:mb-8">
-                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Quantity Information</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                        <div className="mb-4 sm:mb-6">
+                            <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Quantity Information</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
                                 <div>
-                                    <p className="text-gray-400 text-sm">Initial Quantity</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Initial Quantity</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.initialQuantity}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400 text-sm">Current Quantity</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Current Quantity</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.currentQuantity}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400 text-sm">Sold Quantity</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Sold Quantity</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.soldQuantity || 0}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Location Information */}
-                        <div className="mb-6 sm:mb-8">
-                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Location Information</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <div className="mb-4 sm:mb-6">
+                            <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Location Information</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
                                 <div>
-                                    <p className="text-gray-400 text-sm">City</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">City</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.city}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400 text-sm">District</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">District</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.district}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400 text-sm">Address</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Address</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.address}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400 text-sm">Contact Preference</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Contact Preference</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.contactPreference}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Description */}
-                        <div className="mb-6 sm:mb-8">
-                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Description</h3>
+                        <div className="mb-4 sm:mb-6">
+                            <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Description</h3>
                             <p className="text-white whitespace-pre-wrap text-sm sm:text-base">{selectedListing.description}</p>
                         </div>
 
                         {/* Dimensions */}
-                        <div className="mb-6 sm:mb-8">
-                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Dimensions</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                        <div className="mb-4 sm:mb-6">
+                            <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Dimensions</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
                                 <div>
-                                    <p className="text-gray-400 text-sm">Width</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Width</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.width} cm</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400 text-sm">Height</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Height</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.height} cm</p>
                                 </div>
                                 {selectedListing.depth && (
                                     <div>
-                                        <p className="text-gray-400 text-sm">Depth</p>
+                                        <p className="text-gray-400 text-xs sm:text-sm">Depth</p>
                                         <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.depth} cm</p>
                                     </div>
                                 )}
@@ -609,31 +690,31 @@ const CadreBackListings = () => {
                         </div>
 
                         {/* Platform Information */}
-                        <div className="mb-6 sm:mb-8">
-                            <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Platform Information</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <div className="mb-4 sm:mb-6">
+                            <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 text-[#db2b2e]">Platform Information</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
                                 <div>
-                                    <p className="text-gray-400 text-sm">Cadre Profit</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Cadre Profit</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.cadreProfit?.toLocaleString()} EGP</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-400 text-sm">Cadremarkets Service</p>
+                                    <p className="text-gray-400 text-xs sm:text-sm">Cadremarkets Service</p>
                                     <p className="font-semibold text-white text-sm sm:text-base">{selectedListing.cadremarketsService ? 'Yes' : 'No'}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Actions */}
-                        <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
+                        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
                                 <button
                                 onClick={() => setSelectedListing(null)}
-                                className="px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white transition text-sm"
+                                className="px-3 sm:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white transition text-xs sm:text-sm"
                                 >
                                 Close
                                 </button>
                             <button
                                 onClick={() => handleDeleteListing(selectedListing._id)}
-                                className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition text-sm"
+                                className="px-3 sm:px-4 py-2 bg-red-600 text-white hover:bg-red-700 transition text-xs sm:text-sm"
                             >
                                 Delete Listing
                             </button>

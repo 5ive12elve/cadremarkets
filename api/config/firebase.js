@@ -9,6 +9,18 @@ const initializeFirebaseAdmin = () => {
       return admin.apps[0];
     }
 
+    // Check if we have the required Firebase credentials
+    const hasFirebaseCredentials = process.env.FIREBASE_PRIVATE_KEY && 
+                                 process.env.FIREBASE_CLIENT_EMAIL && 
+                                 process.env.FIREBASE_PROJECT_ID;
+
+    if (!hasFirebaseCredentials) {
+      console.log('⚠️  Firebase credentials not found. Firebase Admin SDK will not be initialized.');
+      console.log('   This is normal for local development without Firebase setup.');
+      console.log('   For production, ensure FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL, and FIREBASE_PROJECT_ID are set.');
+      return null;
+    }
+
     // For development, you can use a service account key file
     // For production, use environment variables or service account key
     const serviceAccount = {
@@ -32,17 +44,27 @@ const initializeFirebaseAdmin = () => {
       projectId: process.env.FIREBASE_PROJECT_ID || "cadremarkets-fce26"
     });
 
-    console.log('Firebase Admin SDK initialized successfully');
+    console.log('✅ Firebase Admin SDK initialized successfully');
     return app;
   } catch (error) {
-    console.error('Error initializing Firebase Admin SDK:', error);
-    throw error;
+    console.error('❌ Error initializing Firebase Admin SDK:', error);
+    console.log('⚠️  Continuing without Firebase Admin SDK...');
+    return null;
   }
 };
 
 // Verify Firebase ID token
 export const verifyFirebaseToken = async (idToken) => {
   try {
+    // Check if Firebase Admin is available
+    if (!admin.apps.length) {
+      console.log('⚠️  Firebase Admin SDK not initialized. Skipping token verification.');
+      return {
+        success: false,
+        error: 'Firebase Admin SDK not available'
+      };
+    }
+
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     return {
       success: true,

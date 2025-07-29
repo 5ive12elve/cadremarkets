@@ -1,5 +1,5 @@
 import express from 'express';
-import { createOrder, getOrders, updateOrderStatus, deleteOrder, updateItemStatusChecks, deleteOrderItem, updateOrderItemQuantity, getOrderStatistics } from '../controllers/order.controller.js';
+import { createOrder, getOrders, updateOrderStatus, deleteOrder, updateItemStatusChecks, deleteOrderItem, updateOrderItemQuantity, getOrderStatistics, testEmailConfig } from '../controllers/order.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 import { verifyBackOfficeToken } from '../utils/verifyBackOfficeUser.js';
 import { errorHandler } from '../utils/error.js';
@@ -510,5 +510,20 @@ router.put('/:orderId/items/:itemId/quantity', (req, res, next) => {
  *         description: Unauthorized
  */
 router.get('/backoffice/statistics', verifyBackOfficeToken, getOrderStatistics);
+
+/**
+ * @swagger
+ * /api/orders/test-email:
+ *   get:
+ *     tags: [Orders]
+ *     summary: Test email configuration
+ *     description: Test if the email service is properly configured
+ *     responses:
+ *       200:
+ *         description: Email configuration is valid
+ *       500:
+ *         description: Email configuration is invalid
+ */
+router.get('/test-email', testEmailConfig);
 
 export default router; // Use ES Module export

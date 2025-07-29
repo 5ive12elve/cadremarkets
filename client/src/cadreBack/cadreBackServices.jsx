@@ -183,14 +183,14 @@ const CadreBackServices = () => {
 
       <Card className="mb-4 sm:mb-6">
         {/* Filters */}
-        <div className="bg-black border border-[#db2b2e] p-4 sm:p-6 mb-6 sm:mb-8">
-          <div className="flex flex-col gap-4">
+        <div className="bg-black border border-[#db2b2e] p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 lg:mb-8">
+          <div className="flex flex-col gap-3 sm:gap-4">
             <div className="relative">
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60" />
               <input
                 type="text"
                 placeholder="Search services..."
-                className="w-full bg-black border border-[#db2b2e]/20 text-white pl-10 pr-4 py-2 focus:border-[#db2b2e] focus:outline-none transition-colors text-sm"
+                className="w-full bg-black border border-[#db2b2e]/20 text-white pl-10 pr-4 py-2 focus:border-[#db2b2e] focus:outline-none transition-colors text-xs sm:text-sm"
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
               />
@@ -203,14 +203,14 @@ const CadreBackServices = () => {
                 </button>
               )}
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 lg:gap-4">
               <FiFilter className="text-white/60" />
               <div className="flex flex-wrap gap-2">
                 {statusFilters.map(filter => (
                   <button
                     key={filter.value}
                     onClick={() => handleStatusFilter(filter.value)}
-                    className={`px-3 sm:px-4 py-2 text-xs sm:text-sm transition-colors ${
+                    className={`px-2 sm:px-3 lg:px-4 py-2 text-xs sm:text-sm transition-colors ${
                       selectedStatus === filter.value
                         ? 'bg-[#db2b2e] text-white'
                         : 'border border-[#db2b2e]/20 text-white/60 hover:border-[#db2b2e] hover:text-white'
@@ -302,8 +302,8 @@ const CadreBackServices = () => {
                   }}
                 >
                   <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <p className="text-white font-medium text-sm">#{service.requestId}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-white text-sm mb-1">#{service.requestId}</h3>
                       <p className="text-white/60 text-xs">{service.requesterName}</p>
                     </div>
                     <span className={`px-2 py-1 text-xs ${getStatusColor(service.status)}`}>
@@ -333,25 +333,25 @@ const CadreBackServices = () => {
 
       {/* Details Modal */}
       {showDetailsModal && selectedService && (
-        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-4 overflow-y-auto">
-          <div className="bg-black border border-[#db2b2e] w-full max-w-2xl my-8 relative">
+        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-2 sm:p-4 overflow-y-auto">
+          <div className="bg-black border border-[#db2b2e] w-full max-w-2xl my-4 sm:my-8 relative">
             <button
               onClick={() => {
                 setShowDetailsModal(false);
                 setSelectedService(null);
                 setNotes('');
               }}
-              className="absolute top-2 sm:top-4 right-2 sm:right-4 text-white/60 hover:text-white transition-colors p-2"
+              className="absolute top-2 sm:top-4 right-2 sm:right-4 text-white/60 hover:text-white transition-colors p-2 z-10"
             >
               <FiX className="w-5 h-5" />
             </button>
 
-            <div className="p-4 sm:p-6">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#db2b2e] mb-4 sm:mb-6">Service Request Details</h3>
+            <div className="p-3 sm:p-4 lg:p-6">
+              <h3 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-[#db2b2e] mb-3 sm:mb-4 lg:mb-6 pr-8">Service Request Details</h3>
 
-              <div className="space-y-4 sm:space-y-6">
+              <div className="space-y-3 sm:space-y-4 lg:space-y-6">
                 {/* Basic Information */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 lg:gap-6">
                   <div>
                     <p className="text-white/60 text-xs sm:text-sm mb-1">Request ID</p>
                     <p className="text-white font-medium text-sm sm:text-base">{selectedService.requestId}</p>
@@ -418,13 +418,13 @@ const CadreBackServices = () => {
                     <>
                       <button
                         onClick={() => handleStatusChange(selectedService._id, 'rejected')}
-                        className="px-3 sm:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
+                        className="px-2 sm:px-3 lg:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
                       >
                         Reject
                       </button>
                       <button
                         onClick={() => handleStatusChange(selectedService._id, 'approved')}
-                        className="px-3 sm:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
+                        className="px-2 sm:px-3 lg:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
                       >
                         Approve
                       </button>
@@ -434,13 +434,13 @@ const CadreBackServices = () => {
                     <>
                       <button
                         onClick={() => handleStatusChange(selectedService._id, 'rejected')}
-                        className="px-3 sm:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
+                        className="px-2 sm:px-3 lg:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
                       >
                         Reject
                       </button>
                       <button
                         onClick={() => handleStatusChange(selectedService._id, 'completed')}
-                        className="px-3 sm:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
+                        className="px-2 sm:px-3 lg:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
                       >
                         Complete
                       </button>
@@ -449,7 +449,7 @@ const CadreBackServices = () => {
                   {(selectedService.status === 'rejected' || selectedService.status === 'completed') && (
                     <button
                       onClick={() => handleStatusChange(selectedService._id, 'pending')}
-                      className="px-3 sm:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e]/10 transition-colors rounded text-xs sm:text-sm"
+                      className="px-2 sm:px-3 lg:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e]/10 transition-colors rounded text-xs sm:text-sm"
                     >
                       Reopen
                     </button>

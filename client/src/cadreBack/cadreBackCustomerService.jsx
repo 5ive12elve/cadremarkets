@@ -362,27 +362,87 @@ export default function CadreBackCustomerService() {
       </Card>
 
       <Card>
-        <Table
-          columns={columns}
-          data={requests}
-          loading={loading}
-          pagination={{
-            currentPage,
-            totalPages,
-            onPageChange: setCurrentPage
-          }}
-        />
+        {/* Desktop Table */}
+        <div className="hidden md:block">
+          <Table
+            columns={columns}
+            data={requests}
+            loading={loading}
+            pagination={{
+              currentPage,
+              totalPages,
+              onPageChange: setCurrentPage
+            }}
+          />
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden space-y-3 p-4">
+          {requests.map((request) => (
+            <div
+              key={request._id}
+              className="border border-[#db2b2e]/20 p-4 rounded cursor-pointer hover:bg-[#db2b2e]/5 transition-colors"
+              onClick={() => {
+                setSelectedRequest(request);
+                setNotes(request.notes || '');
+                setShowDetailsModal(true);
+              }}
+            >
+              <div className="flex justify-between items-start mb-3">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-white text-sm mb-1 truncate">{request.name}</h3>
+                  <p className="text-gray-400 text-xs mb-2">{request.email}</p>
+                </div>
+                <div className="flex flex-col items-end gap-1">
+                  <span className={`px-2 py-1 text-xs font-medium ${
+                    request.type === 'support' ? 'text-[#db2b2e]' : 'text-[#db2b2e]'
+                  }`}>
+                    {request.type.charAt(0).toUpperCase() + request.type.slice(1)}
+                  </span>
+                  <span className={`px-2 py-1 text-xs font-medium ${
+                    request.status === 'new' ? 'text-[#db2b2e]' :
+                    request.status === 'in-progress' ? 'text-[#db2b2e]/70' :
+                    request.status === 'resolved' ? 'text-[#db2b2e]/50' :
+                    'text-[#db2b2e]/30'
+                  }`}>
+                    {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <div>
+                  <p className="text-white text-sm">
+                    {request.type === 'contact' ? request.reason : request.category || 'N/A'}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className={`px-2 py-1 text-xs font-medium ${
+                    request.priority === 'high' ? 'text-[#db2b2e]' :
+                    request.priority === 'normal' ? 'text-[#db2b2e]/70' :
+                    'text-[#db2b2e]/50'
+                  }`}>
+                    {request.priority ? request.priority.charAt(0).toUpperCase() + request.priority.slice(1) : 'N/A'}
+                  </span>
+                  <span className="text-white/60 text-xs">
+                    {new Date(request.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </Card>
 
       {/* Details Modal */}
       {showDetailsModal && selectedRequest && (
-        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-4">
-          <div className="bg-black p-4 sm:p-6 border border-[#db2b2e] w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg sm:text-xl font-bold mb-4 text-[#db2b2e]">
+        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-2 sm:p-4">
+          <div className="bg-black p-3 sm:p-6 border border-[#db2b2e] w-full max-w-2xl max-h-[95vh] overflow-y-auto">
+            <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-3 sm:mb-4 text-[#db2b2e]">
               {selectedRequest.type === 'support' ? 'Support Request' : 'Contact Form'} Details
             </h3>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
               <div>
                 <p className="text-[#db2b2e] text-xs sm:text-sm">Name</p>
                 <p className="text-sm sm:text-base">{selectedRequest.name}</p>
@@ -419,14 +479,14 @@ export default function CadreBackCustomerService() {
               </div>
             </div>
 
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <p className="text-[#db2b2e] text-xs sm:text-sm mb-2">Message</p>
               <div className="bg-black/20 p-3 sm:p-4 rounded">
                 <p className="text-sm sm:text-base whitespace-pre-wrap">{selectedRequest.message}</p>
               </div>
             </div>
 
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <p className="text-[#db2b2e] text-xs sm:text-sm mb-2">Notes</p>
               <textarea
                 className="w-full bg-black border border-[#db2b2e]/20 text-white p-3 sm:p-4 rounded focus:border-[#db2b2e] focus:outline-none transition-colors resize-none text-sm"

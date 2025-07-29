@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Order from '../models/order.model.js';
 import Listing from '../models/listing.model.js';
+import { sendOrderNotificationEmail, testEmailConfiguration } from '../utils/emailService.js';
 
 
 // Create a new order
@@ -108,6 +109,19 @@ export const createOrder = async (req, res, next) => {
     });
 
     await newOrder.save();
+
+    // Send email notification to support
+    try {
+      const emailResult = await sendOrderNotificationEmail(newOrder);
+      if (emailResult.success) {
+        console.log('Order notification email sent successfully');
+      } else {
+        console.error('Failed to send order notification email:', emailResult.error);
+      }
+    } catch (emailError) {
+      console.error('Error sending order notification email:', emailError);
+      // Don't fail the order creation if email fails
+    }
 
     res.status(201).json({
       success: true,
@@ -467,6 +481,31 @@ export const updateOrderItemQuantity = async (req, res) => {
 };
 
 // Get order statistics for back office dashboard
+// Test email configuration endpoint
+export const testEmailConfig = async (req, res) => {
+  try {
+    const isValid = await testEmailConfiguration();
+    if (isValid) {
+      res.status(200).json({
+        success: true,
+        message: 'Email configuration is valid'
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Email configuration is invalid'
+      });
+    }
+  } catch (error) {
+    console.error('Error testing email configuration:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error testing email configuration',
+      error: error.message
+    });
+  }
+};
+
 export const getOrderStatistics = async (req, res, next) => {
   try {
     const { timeframe = '30' } = req.query; // Default to last 30 days

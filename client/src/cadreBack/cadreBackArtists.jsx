@@ -162,7 +162,7 @@ const CadreBackArtists = () => {
             />
 
             <Card className="mb-4 sm:mb-6">
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
+                <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div className="flex-1 relative">
                         <input
                             type="text"
@@ -204,12 +204,61 @@ const CadreBackArtists = () => {
             </Card>
 
             <Card>
-                <Table
-                    columns={columns}
-                    data={filteredArtists}
-                    onRowClick={(row) => setSelectedArtist(row)}
-                    loading={loading}
-                />
+                {/* Desktop Table */}
+                <div className="hidden md:block">
+                    <Table
+                        columns={columns}
+                        data={filteredArtists}
+                        onRowClick={(row) => setSelectedArtist(row)}
+                        loading={loading}
+                    />
+                </div>
+
+                {/* Mobile Cards */}
+                <div className="md:hidden space-y-3 p-4">
+                    {filteredArtists.map((artist) => (
+                        <div
+                            key={artist._id}
+                            className="border border-[#db2b2e]/20 p-4 rounded cursor-pointer hover:bg-[#db2b2e]/5 transition-colors"
+                            onClick={() => setSelectedArtist(artist)}
+                        >
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
+                                    {artist.avatar ? (
+                                        <img src={artist.avatar} alt={artist.username} className="w-full h-full rounded-full object-cover" />
+                                    ) : (
+                                        <FiUser className="w-6 h-6 text-gray-400" />
+                                    )}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="font-medium text-white text-sm mb-1 truncate">{artist.username || 'N/A'}</h3>
+                                    <p className="text-gray-400 text-xs truncate">{artist.email}</p>
+                                </div>
+                            </div>
+                            
+                            <div className="flex items-center justify-between">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    artist.role === 'admin' ? 'bg-purple-500/20 text-purple-400' :
+                                    artist.role === 'artist' ? 'bg-blue-500/20 text-blue-400' :
+                                    'bg-gray-500/20 text-gray-400'
+                                }`}>
+                                    {artist.role?.charAt(0).toUpperCase() + artist.role?.slice(1) || 'User'}
+                                </span>
+                                <div className="flex items-center gap-2">
+                                    <FiImage className="text-gray-400 w-3 h-3" />
+                                    <span className="text-white text-xs">{artist.listingCount || 0}</span>
+                                </div>
+                            </div>
+                            
+                            <div className="mt-2">
+                                <span className="text-gray-400 text-xs">
+                                    Joined: {new Date(artist.createdAt).toLocaleDateString()}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                
                 {error && (
                     <div className="text-red-500 mt-4 text-center text-sm">
                         {error}
@@ -219,16 +268,16 @@ const CadreBackArtists = () => {
 
             {/* Artist Details Modal */}
             {selectedArtist && (
-                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-4">
-                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-2xl p-4 sm:p-6 relative">
+                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-2 sm:p-4">
+                    <div className="bg-black border border-[#db2b2e]/20 w-full max-w-2xl max-h-[95vh] overflow-y-auto p-3 sm:p-6 relative">
                         <button
                             onClick={() => setSelectedArtist(null)}
-                            className="absolute top-2 sm:top-4 right-2 sm:right-4 text-gray-400 hover:text-white p-2"
+                            className="absolute top-2 sm:top-4 right-2 sm:right-4 text-gray-400 hover:text-white p-2 z-10"
                         >
                             <FiX size={20} />
                         </button>
 
-                        <div className="flex flex-col sm:flex-row sm:items-start gap-4 mb-4 sm:mb-6">
+                        <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                             <div className="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
                                 {selectedArtist.avatar ? (
                                     <img
@@ -240,13 +289,13 @@ const CadreBackArtists = () => {
                                     <FiUser className="w-8 h-8 text-gray-400" />
                                 )}
                             </div>
-                            <div>
-                                <h2 className="text-xl sm:text-2xl font-bold text-[#db2b2e]">{selectedArtist.username}</h2>
-                                <p className="text-gray-400 text-sm sm:text-base">{selectedArtist.email}</p>
+                            <div className="flex-1 min-w-0">
+                                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#db2b2e] pr-8">{selectedArtist.username}</h2>
+                                <p className="text-gray-400 text-sm sm:text-base break-words">{selectedArtist.email}</p>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-4 sm:mb-6">
                             <div>
                                 <p className="text-gray-400 mb-1 text-xs sm:text-sm">Role</p>
                                 <p className="font-medium text-sm sm:text-base">{selectedArtist.role || 'User'}</p>
@@ -269,7 +318,7 @@ const CadreBackArtists = () => {
                             </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-end pt-4 border-t border-[#db2b2e]/20">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end pt-4 border-t border-[#db2b2e]/20">
                             <button
                                 onClick={() => setSelectedArtist(null)}
                                 className="px-3 sm:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e] hover:text-white transition-colors rounded text-xs sm:text-sm"

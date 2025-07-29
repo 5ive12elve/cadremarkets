@@ -11,7 +11,9 @@
     "client:build": "cd client && npm run build",
     "dev:all": "concurrently \"npm run dev\" \"npm run client\"",
     "build": "npm run client:build",
-    "prod": "npm run build && npm run start"
+    "prod": "npm run build && npm run start",
+    "docs": "node generate-api-docs.js",
+    "docs:deploy": "npm run docs && cd api-docs && vercel --prod"
   },
   "keywords": [],
   "author": "",
