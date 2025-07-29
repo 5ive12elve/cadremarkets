@@ -268,7 +268,7 @@ const CadreBackArtists = () => {
 
             {/* Artist Details Modal */}
             {selectedArtist && (
-                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-2 sm:p-4">
+                <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-30 p-2 sm:p-4">
                     <div className="bg-black border border-[#db2b2e]/20 w-full max-w-2xl max-h-[95vh] overflow-y-auto p-3 sm:p-6 relative">
                         <button
                             onClick={() => setSelectedArtist(null)}

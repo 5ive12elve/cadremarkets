@@ -333,7 +333,7 @@ const CadreBackServices = () => {
 
       {/* Details Modal */}
       {showDetailsModal && selectedService && (
-        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-50 p-2 sm:p-4 overflow-y-auto">
+                        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-30 p-2 sm:p-4 overflow-y-auto">
           <div className="bg-black border border-[#db2b2e] w-full max-w-2xl my-4 sm:my-8 relative">
             <button
               onClick={() => {
