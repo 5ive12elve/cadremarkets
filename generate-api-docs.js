@@ -1,21 +1,27 @@
 #!/usr/bin/env node
 
+import swaggerJsdoc from 'swagger-jsdoc';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import { specs } from './api/swagger.js';
+import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Create docs directory if it doesn't exist
-const docsDir = path.join(__dirname, 'api-docs');
+// Import the swagger configuration
+import { specs } from './api/swagger.js';
+
+// Create the documentation directory if it doesn't exist
+const docsDir = join(__dirname, 'api-docs');
 if (!fs.existsSync(docsDir)) {
   fs.mkdirSync(docsDir, { recursive: true });
 }
 
-// Create the main HTML file with Swagger UI from CDN
+// Generate the OpenAPI specification
+const openApiSpec = specs;
+
+// Create the HTML file with the embedded specification
 const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,7 +91,7 @@ const htmlContent = `<!DOCTYPE html>
     <script>
         window.onload = function() {
             const ui = SwaggerUIBundle({
-                spec: ${JSON.stringify(specs)},
+                spec: ${JSON.stringify(openApiSpec, null, 2)},
                 dom_id: '#swagger-ui',
                 deepLinking: true,
                 presets: [
@@ -108,67 +114,20 @@ const htmlContent = `<!DOCTYPE html>
 </html>`;
 
 // Write the HTML file
-fs.writeFileSync(path.join(docsDir, 'index.html'), htmlContent);
+const htmlPath = join(docsDir, 'index.html');
+fs.writeFileSync(htmlPath, htmlContent);
 
-// Copy favicon if it exists
-const faviconPath = path.join(__dirname, 'client', 'public', 'Cadre-Favicon01.png');
-if (fs.existsSync(faviconPath)) {
-  fs.copyFileSync(faviconPath, path.join(docsDir, 'favicon.ico'));
-}
+// Also save the OpenAPI specification as JSON for reference
+const jsonPath = join(docsDir, 'openapi.json');
+fs.writeFileSync(jsonPath, JSON.stringify(openApiSpec, null, 2));
 
-// Create a simple README for the docs
-const readmeContent = `# Cadre Markets API Documentation
-
-This directory contains the static API documentation for Cadre Markets.
-
-## Files
-- \`index.html\` - Main documentation page
-- \`favicon.ico\` - Site favicon
-
-## Deployment Options
-
-### 1. Vercel (Recommended)
-\`\`\`bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy from the api-docs directory
-cd api-docs
-vercel --prod
-\`\`\`
-
-### 2. Netlify
-\`\`\`bash
-# Install Netlify CLI
-npm i -g netlify-cli
-
-# Deploy from the api-docs directory
-cd api-docs
-netlify deploy --prod --dir=.
-\`\`\`
-
-### 3. GitHub Pages
-1. Create a new repository
-2. Upload the contents of the \`api-docs\` directory
-3. Enable GitHub Pages in repository settings
-
-### 4. Custom Domain
-You can set up a custom domain like \`docs.cadremarkets.com\` or \`api-docs.cadremarkets.com\`
-
-## Regenerating Documentation
-Run this script whenever you update the API:
-\`\`\`bash
-node generate-api-docs.js
-\`\`\`
-`;
-
-fs.writeFileSync(path.join(docsDir, 'README.md'), readmeContent);
-
-console.log('✅ API documentation generated successfully!');
-console.log('📁 Files created in: ./api-docs/');
-console.log('🌐 Deploy the contents of ./api-docs/ to any static hosting service');
-console.log('');
-console.log('🚀 Quick deployment options:');
-console.log('   • Vercel: cd api-docs && vercel --prod');
-console.log('   • Netlify: cd api-docs && netlify deploy --prod --dir=.');
-console.log('   • GitHub Pages: Upload api-docs contents to a new repository'); 
+console.log('✅ API Documentation generated successfully!');
+console.log(`📄 HTML file: ${htmlPath}`);
+console.log(`📄 JSON file: ${jsonPath}`);
+console.log('\n🌐 To host on your domain:');
+console.log('1. Upload the contents of the api-docs folder to your web server');
+console.log('2. Point a subdomain (e.g., docs.cadremarkets.com) to this folder');
+console.log('3. Or add a route in your main website to serve these files');
+console.log('\n📋 Available endpoints:');
+console.log('- HTML Documentation: /index.html');
+console.log('- OpenAPI Spec: /openapi.json'); 
