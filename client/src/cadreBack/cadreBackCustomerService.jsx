@@ -271,8 +271,8 @@ export default function CadreBackCustomerService() {
     }
   ];
 
-  return (
-    <div className="w-full md:pt-0 pt-16">
+      return (
+      <div className="w-full md:pt-0 pt-16 overflow-x-hidden">
       <PageHeader
         title="Customer Service"
         description="Manage support requests and contact form submissions"
@@ -316,7 +316,7 @@ export default function CadreBackCustomerService() {
 
       <SupportRequestStatistics refreshTrigger={refreshTrigger} />
 
-      <Card className="mb-4">
+      <Card className="mb-4 max-w-full overflow-x-hidden">
         <div className="flex flex-col gap-3">
           <Search
             onSearch={handleSearch}
@@ -361,7 +361,7 @@ export default function CadreBackCustomerService() {
         </div>
       </Card>
 
-      <Card>
+      <Card className="max-w-full overflow-x-hidden">
         {/* Desktop Table */}
         <div className="hidden md:block">
           <Table

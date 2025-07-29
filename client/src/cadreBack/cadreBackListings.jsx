@@ -316,8 +316,8 @@ const CadreBackListings = () => {
         }
     ];
 
-      return (
-    <div className="w-full md:pt-0 pt-16">
+              return (
+            <div className="w-full md:pt-0 pt-16 overflow-x-hidden">
             <PageHeader
                 title="Listings Management"
                 description="Manage and monitor all listings"
@@ -347,9 +347,11 @@ const CadreBackListings = () => {
             />
 
             {/* Statistics Dashboard */}
-            <ListingStatistics refreshTrigger={refreshTrigger} />
+            <div className="max-w-full overflow-x-hidden">
+              <ListingStatistics refreshTrigger={refreshTrigger} />
+            </div>
 
-            <Card className="mb-4 sm:mb-6">
+            <Card className="mb-4 sm:mb-6 max-w-full overflow-x-hidden">
                 <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div className="flex-1 relative">
                         <input
@@ -404,7 +406,7 @@ const CadreBackListings = () => {
                     <GE02Loader size="large" message="Loading listings..." />
                 </div>
             ) : (
-                <Card className="border border-[#db2b2e]/20 bg-black">
+                <Card className="border border-[#db2b2e]/20 bg-black max-w-full overflow-x-hidden">
                     {/* Desktop Table */}
                     <div className="hidden md:block">
                         <Table

@@ -195,7 +195,7 @@ const CadreBackDashboard = () => {
     };
 
     return (
-        <div className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-300">
+        <div className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-300 overflow-x-hidden">
             <PageHeader
                 title="Dashboard"
                 description="Overview of your business metrics and performance"
@@ -226,7 +226,7 @@ const CadreBackDashboard = () => {
                 }
             />
 
-            <div className="p-2 sm:p-4 lg:p-6 md:pt-6 pt-16">
+            <div className="p-2 sm:p-4 lg:p-6 md:pt-6 pt-16 max-w-full overflow-x-hidden">
                 {loading ? (
                     <div className="flex justify-center items-center h-[calc(100vh-200px)]">
                         <GE02Loader size="xlarge" message="Loading dashboard data..." />

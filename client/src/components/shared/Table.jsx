@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const Table = ({ columns, data, onRowClick }) => {
   return (
-    <div className="overflow-x-auto -mx-3 sm:-mx-4 md:-mx-6">
+    <div className="overflow-x-auto -mx-3 sm:-mx-4 md:-mx-6 max-w-full">
       <table className="min-w-full divide-y divide-[#db2b2e]">
         <thead>
           <tr>

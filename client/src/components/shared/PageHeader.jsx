@@ -6,7 +6,7 @@ const PageHeader = ({ title, description, actions }) => {
     <motion.div 
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-6 sm:mb-8 border-b border-[#db2b2e] pb-4 sm:pb-6"
+      className="mb-6 sm:mb-8 border-b border-[#db2b2e] pb-4 sm:pb-6 max-w-full overflow-x-hidden"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex-1">

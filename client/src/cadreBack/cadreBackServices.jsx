@@ -149,8 +149,8 @@ const CadreBackServices = () => {
     }
   };
 
-  return (
-    <div className="w-full md:pt-0 pt-16">
+      return (
+      <div className="w-full md:pt-0 pt-16 overflow-x-hidden">
       <PageHeader
         title="Services"
         description="Manage and monitor all services"
@@ -181,7 +181,7 @@ const CadreBackServices = () => {
 
       <ServiceStatistics refreshTrigger={refreshTrigger} />
 
-      <Card className="mb-4 sm:mb-6">
+      <Card className="mb-4 sm:mb-6 max-w-full overflow-x-hidden">
         {/* Filters */}
         <div className="bg-black border border-[#db2b2e] p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 lg:mb-8">
           <div className="flex flex-col gap-3 sm:gap-4">
@@ -230,7 +230,7 @@ const CadreBackServices = () => {
             <GE02Loader size="large" message="Loading services..." />
           </div>
         ) : (
-          <div className="bg-black border border-[#db2b2e] overflow-hidden">
+          <div className="bg-black border border-[#db2b2e] overflow-hidden max-w-full overflow-x-hidden">
             {/* Desktop Table */}
             <div className="hidden md:block">
               <table className="w-full">

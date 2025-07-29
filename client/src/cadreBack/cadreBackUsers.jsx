@@ -119,8 +119,8 @@ const CadreBackUsers = () => {
         }
     };
 
-      return (
-    <div className="w-full md:pt-0 pt-16">
+              return (
+            <div className="w-full md:pt-0 pt-16 overflow-x-hidden">
             <PageHeader
                 title="Users"
                 description="Manage back office user accounts"
@@ -142,7 +142,7 @@ const CadreBackUsers = () => {
                         <GE02Loader size="large" message="Loading users..." />
                     </div>
                 ) : (
-                    <div className="bg-black border border-[#db2b2e] overflow-hidden">
+                    <div className="bg-black border border-[#db2b2e] overflow-hidden max-w-full overflow-x-hidden">
                         {/* Desktop Table */}
                         <div className="hidden md:block">
                             <table className="w-full">

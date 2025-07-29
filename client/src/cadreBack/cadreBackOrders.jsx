@@ -442,7 +442,7 @@ const CadreBackOrders = () => {
   };
 
   return (
-    <div className="w-full md:pt-0 pt-16">
+    <div className="w-full md:pt-0 pt-16 overflow-x-hidden">
       <PageHeader
         title="Orders"
         description="Manage and track all orders"
@@ -472,9 +472,11 @@ const CadreBackOrders = () => {
       />
 
       {/* Order Statistics Dashboard */}
-      <OrderStatistics refreshTrigger={refreshTrigger} />
+      <div className="max-w-full overflow-x-hidden">
+        <OrderStatistics refreshTrigger={refreshTrigger} />
+      </div>
 
-      <Card className="mb-4 sm:mb-6">
+      <Card className="mb-4 sm:mb-6 max-w-full overflow-x-hidden">
         {/* Search and Filter Section */}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div className="flex-1 relative">
