@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 // Create a transporter using Gmail SMTP
 // Note: In production, you should use environment variables for email credentials
 const createTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER || 'your-email@gmail.com',
