@@ -51,7 +51,6 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLogoPressed, setIsLogoPressed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const mobileMenuRef = useRef(null);
@@ -103,14 +102,6 @@ export default function Header() {
     navigate(`/search?${searchQuery}`);
   };
 
-  const handleLogoPress = () => {
-    setIsLogoPressed(true);
-  };
-
-  const handleLogoRelease = () => {
-    setIsLogoPressed(false);
-  };
-
   return (
     <header className="fixed top-[24px] sm:top-[32px] left-0 right-0 z-40">
       <div className={`bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-[#db2b2e]/20 transition-all duration-300 ${isScrolled ? 'py-1.5 sm:py-2' : 'py-2 sm:py-2.5'}`}
@@ -133,7 +124,7 @@ export default function Header() {
                   <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
                 </svg>
               </button>
-              {/* Cart icon between logo and sign-in (closer to sign-in) */}
+              {/* Cart icon on the right side of logo */}
               <Link to="/cart" className="absolute right-16 sm:right-20 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto">
                 <div className="relative">
                   <CadreCartIcon className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
@@ -180,7 +171,7 @@ export default function Header() {
                   <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
                 </svg>
               </button>
-              {/* Cart icon between logo and sign-in (closer to sign-in) */}
+              {/* Cart icon on the right side of logo */}
               <Link to="/cart" className="absolute left-16 sm:left-20 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto">
                 <div className="relative">
                   <CadreCartIcon className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
@@ -213,42 +204,14 @@ export default function Header() {
               </Link>
             </>
           )}
-          {/* Centered logo with animation */}
-          <motion.div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center pointer-events-auto"
-            whileTap={{ scale: 0.95 }}
-            onMouseDown={handleLogoPress}
-            onMouseUp={handleLogoRelease}
-            onMouseLeave={handleLogoRelease}
-            onTouchStart={handleLogoPress}
-            onTouchEnd={handleLogoRelease}
-          >
-            <AnimatePresence mode="wait">
-              {isLogoPressed ? (
-                <motion.img
-                  key="cadre-latin"
-                  src="/mediassets/CadreLatin.png"
-                  alt="Cadre Markets Logo"
-                  className="h-12 sm:h-14 md:h-16 w-auto object-contain"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.2, ease: "easeInOut" }}
-                />
-              ) : (
-                <motion.img
-                  key="cadre-su"
-                  src="/mediassets/Cadre-su.png"
-                  alt="Cadre Markets Logo"
-                  className="h-12 sm:h-14 md:h-16 w-auto object-contain"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.2, ease: "easeInOut" }}
-                />
-              )}
-            </AnimatePresence>
-          </motion.div>
+          {/* Centered logo with home navigation */}
+          <Link to="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center pointer-events-auto transition-transform duration-300 hover:scale-105">
+            <img
+              src="/mediassets/Cadre-su.png"
+              alt="Cadre Markets Logo"
+              className="h-12 sm:h-14 md:h-16 w-auto object-contain"
+            />
+          </Link>
         </div>
         {/* MOBILE MENU DRAWER */}
         <AnimatePresence>
@@ -376,41 +339,13 @@ export default function Header() {
           <div className="relative flex items-center w-full">
             {/* Desktop logo (left/right) */}
             <div className={`hidden lg:flex items-center flex-shrink-0 ${isArabic ? 'lg:ml-0 lg:mr-0' : ''}`}> {/* Remove extra margin */}
-              <motion.div
-                className="flex-shrink-0"
-                whileTap={{ scale: 0.95 }}
-                onMouseDown={handleLogoPress}
-                onMouseUp={handleLogoRelease}
-                onMouseLeave={handleLogoRelease}
-                onTouchStart={handleLogoPress}
-                onTouchEnd={handleLogoRelease}
-              >
-                <AnimatePresence mode="wait">
-                  {isLogoPressed ? (
-                    <motion.img
-                      key="cadre-latin-desktop"
-                      src="/mediassets/CadreLatin.png"
-                      alt="Cadre Markets Logo"
-                      className="h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 w-auto object-contain"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.2, ease: "easeInOut" }}
-                    />
-                  ) : (
-                    <motion.img
-                      key="cadre-biguse2-desktop"
-                      src="/mediassets/CadreBigUse2.png"
-                      alt="Cadre Markets Logo"
-                      className="h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 w-auto object-contain"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.2, ease: "easeInOut" }}
-                    />
-                  )}
-                </AnimatePresence>
-              </motion.div>
+              <Link to="/" className="flex-shrink-0 transition-transform duration-300 hover:scale-105">
+                <img 
+                  src="/mediassets/CadreBigUse2.png"
+                  alt="Cadre Markets Logo"
+                  className="h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 w-auto object-contain"
+                />
+              </Link>
             </div>
             {/* Desktop nav (after logo) */}
             <nav className={`hidden lg:flex items-center flex-shrink-0 ${isArabic ? 'mr-6 xl:mr-8' : 'ml-6 xl:ml-8'}`}> {/* Mirror margin for RTL */}
