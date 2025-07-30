@@ -1,13 +1,49 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { FaSearch, FaShoppingCart } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import LanguageToggle from './LanguageToggle';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
 import { AnimatePresence } from 'framer-motion';
+
+// Custom Cart Icon Component for Cadre Markets
+const CadreCartIcon = ({ className = "" }) => (
+  <svg 
+    className={className}
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Cart body */}
+    <path 
+      d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l-2.5 5m0 0h12.5a2 2 0 002-2V8H5.4z" 
+      stroke="currentColor" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    {/* Cart handle */}
+    <path 
+      d="M9 17a2 2 0 100 4 2 2 0 000-4z" 
+      stroke="currentColor" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <path 
+      d="M19 17a2 2 0 100 4 2 2 0 000-4z" 
+      stroke="currentColor" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -75,10 +111,23 @@ export default function Header() {
           {/* Menu button and profile icon, RTL/LTR swap */}
           {isArabic ? (
             <>
-              {/* Cart icon on the left */}
-              <Link to="/cart" className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto ml-2 sm:ml-3">
+              {/* Menu button on the left */}
+              <button
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center ml-2 sm:ml-3 focus:outline-none transition-transform duration-200 hover:scale-105"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Open menu"
+                type="button"
+              >
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                  <rect x="4" y="13.9" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                  <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                </svg>
+              </button>
+              {/* Cart icon between logo and sign-in (closer to sign-in) */}
+              <Link to="/cart" className="absolute right-16 sm:right-20 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto">
                 <div className="relative">
-                  <FaShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
+                  <CadreCartIcon className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
                   {cartItems?.length > 0 && (
                     <motion.div
                       initial={{ scale: 0 }}
@@ -106,26 +155,26 @@ export default function Header() {
                   </span>
                 )}
               </Link>
-              {/* Menu button in the middle-right */}
-              <button
-                className="absolute right-12 sm:right-14 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center focus:outline-none transition-transform duration-200 hover:scale-105"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Open menu"
-                type="button"
-              >
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="4" y="8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                  <rect x="4" y="13.9" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                  <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                </svg>
-              </button>
             </>
           ) : (
             <>
-              {/* Cart icon on the left */}
-              <Link to="/cart" className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto ml-2 sm:ml-3">
+              {/* Menu button on the left */}
+              <button
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center ml-2 sm:ml-3 focus:outline-none transition-transform duration-200 hover:scale-105"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Open menu"
+                type="button"
+              >
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                  <rect x="4" y="13.9" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                  <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                </svg>
+              </button>
+              {/* Cart icon between logo and sign-in (closer to sign-in) */}
+              <Link to="/cart" className="absolute left-16 sm:left-20 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto">
                 <div className="relative">
-                  <FaShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
+                  <CadreCartIcon className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
                   {cartItems?.length > 0 && (
                     <motion.div
                       initial={{ scale: 0 }}
@@ -153,19 +202,6 @@ export default function Header() {
                   </span>
                 )}
               </Link>
-              {/* Menu button in the middle-left */}
-              <button
-                className="absolute left-12 sm:left-14 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center focus:outline-none transition-transform duration-200 hover:scale-105"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Open menu"
-                type="button"
-              >
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="4" y="8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                  <rect x="4" y="13.9" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                  <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                </svg>
-              </button>
             </>
           )}
           {/* Centered logo */}
