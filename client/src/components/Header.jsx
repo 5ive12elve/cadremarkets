@@ -124,7 +124,7 @@ export default function Header() {
                   <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
                 </svg>
               </button>
-              {/* Cart icon on the right side of logo */}
+              {/* Cart icon between logo and sign-in */}
               <Link to="/cart" className="absolute right-16 sm:right-20 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto">
                 <div className="relative">
                   <CadreCartIcon className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
@@ -171,8 +171,8 @@ export default function Header() {
                   <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
                 </svg>
               </button>
-              {/* Cart icon on the right side of logo */}
-              <Link to="/cart" className="absolute left-16 sm:left-20 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto">
+              {/* Cart icon between logo and sign-in */}
+              <Link to="/cart" className="absolute right-16 sm:right-20 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto">
                 <div className="relative">
                   <CadreCartIcon className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
                   {cartItems?.length > 0 && (
