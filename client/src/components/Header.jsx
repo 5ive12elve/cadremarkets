@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaShoppingCart } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import LanguageToggle from './LanguageToggle';
@@ -75,49 +75,23 @@ export default function Header() {
           {/* Menu button and profile icon, RTL/LTR swap */}
           {isArabic ? (
             <>
-              {/* Profile icon on the left */}
-              <Link to={currentUser ? '/profile' : '/sign-in'} className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto ml-2 sm:ml-3">
-                {currentUser ? (
-                  <img
-                    className="rounded-full h-7 w-7 sm:h-8 sm:w-8 object-cover border-2 border-primary"
-                    src={currentUser.avatar}
-                    alt="profile"
-                  />
-                ) : (
-                  <span className="text-sm font-normal text-black dark:text-white hover:text-primary transition-colors duration-200 underline underline-offset-4 decoration-1 hover:decoration-2 font-primary">
-                    {t.signin || 'Sign in'}
-                  </span>
-                )}
+              {/* Cart icon on the left */}
+              <Link to="/cart" className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto ml-2 sm:ml-3">
+                <div className="relative">
+                  <FaShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
+                  {cartItems?.length > 0 && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-primary rounded-full flex items-center justify-center"
+                    >
+                      <span className="text-black text-xs font-bold leading-none">
+                        {cartItems.length > 9 ? '9+' : cartItems.length}
+                      </span>
+                    </motion.div>
+                  )}
+                </div>
               </Link>
-              {/* Menu button on the right */}
-              <button
-                className="absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center mr-2 sm:mr-3 focus:outline-none transition-transform duration-200 hover:scale-105"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Open menu"
-                type="button"
-              >
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="4" y="8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                  <rect x="4" y="13.9" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                  <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                </svg>
-              </button>
-            </>
-          ) : (
-            <>
-              {/* Menu button on the left */}
-              <button
-                className="absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center ml-2 sm:ml-3 focus:outline-none transition-transform duration-200 hover:scale-105"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Open menu"
-                type="button"
-              >
-                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="4" y="8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                  <rect x="4" y="13.9" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                  <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
-                </svg>
-              </button>
               {/* Profile icon on the right */}
               <Link to={currentUser ? '/profile' : '/sign-in'} className="absolute right-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto mr-2 sm:mr-3">
                 {currentUser ? (
@@ -132,6 +106,66 @@ export default function Header() {
                   </span>
                 )}
               </Link>
+              {/* Menu button in the middle-right */}
+              <button
+                className="absolute right-12 sm:right-14 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center focus:outline-none transition-transform duration-200 hover:scale-105"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Open menu"
+                type="button"
+              >
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                  <rect x="4" y="13.9" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                  <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                </svg>
+              </button>
+            </>
+          ) : (
+            <>
+              {/* Cart icon on the left */}
+              <Link to="/cart" className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto ml-2 sm:ml-3">
+                <div className="relative">
+                  <FaShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 text-black dark:text-white hover:text-primary transition-colors duration-200" />
+                  {cartItems?.length > 0 && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-primary rounded-full flex items-center justify-center"
+                    >
+                      <span className="text-black text-xs font-bold leading-none">
+                        {cartItems.length > 9 ? '9+' : cartItems.length}
+                      </span>
+                    </motion.div>
+                  )}
+                </div>
+              </Link>
+              {/* Profile icon on the right */}
+              <Link to={currentUser ? '/profile' : '/sign-in'} className="absolute right-0 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center transition-transform duration-200 hover:scale-105 pointer-events-auto mr-2 sm:mr-3">
+                {currentUser ? (
+                  <img
+                    className="rounded-full h-7 w-7 sm:h-8 sm:w-8 object-cover border-2 border-primary"
+                    src={currentUser.avatar}
+                    alt="profile"
+                  />
+                ) : (
+                  <span className="text-sm font-normal text-black dark:text-white hover:text-primary transition-colors duration-200 underline underline-offset-4 decoration-1 hover:decoration-2 font-primary">
+                    {t.signin || 'Sign in'}
+                  </span>
+                )}
+              </Link>
+              {/* Menu button in the middle-left */}
+              <button
+                className="absolute left-12 sm:left-14 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center focus:outline-none transition-transform duration-200 hover:scale-105"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label="Open menu"
+                type="button"
+              >
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                  <rect x="4" y="13.9" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                  <rect x="4" y="19.8" width="20" height="2.2" rx="1.1" fill="#db2b2e" />
+                </svg>
+              </button>
             </>
           )}
           {/* Centered logo */}
@@ -190,25 +224,6 @@ export default function Header() {
                     isActive('/about') ? 'text-primary font-bold' : 'text-black dark:text-white'
                   }`}>
                     {t.about || 'About'}
-                  </li>
-                </Link>
-                <Link to={currentUser ? '/profile' : '/sign-in'} onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-base sm:text-lg font-normal font-primary ${
-                    isActive('/profile') || isActive('/sign-in') ? 'text-primary font-bold' : 'text-black dark:text-white'
-                  }`}>
-                    {currentUser ? (t.profile || 'Profile') : (t.signin || 'Sign in')}
-                  </li>
-                </Link>
-                <Link to="/cart" onClick={() => setIsMobileMenuOpen(false)}>
-                  <li className={`text-base sm:text-lg font-normal flex items-center font-primary ${
-                    isActive('/cart') ? 'text-primary font-bold' : 'text-black dark:text-white'
-                  }`}>
-                    {t.cart || 'Cart'}
-                    {cartItems?.length > 0 && (
-                      <span className="ml-2 bg-primary text-black text-sm rounded-full px-2 py-1">
-                        {cartItems.length}
-                      </span>
-                    )}
                   </li>
                 </Link>
                 <li className="flex items-center justify-between pt-3 border-t border-gray-300 dark:border-white/20">
