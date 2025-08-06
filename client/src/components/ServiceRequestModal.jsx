@@ -217,6 +217,22 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
       }
 
       setShowSuccess(true);
+      
+      // Clear form data after successful submission
+      setFormData({
+        fullName: '',
+        phoneNumber: '',
+        email: '',
+        serviceType: '',
+        subType: '',
+        designStage: '',
+        projectScope: '',
+        budget: '',
+        details: ''
+      });
+      setErrors({});
+      setStep(1);
+      
       setTimeout(() => {
         setShowSuccess(false);
         onClose();

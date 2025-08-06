@@ -110,6 +110,24 @@ export default function Checkout() {
     });
   };
 
+  const handleOrderSuccessClose = () => {
+    setShowOrderSuccess(false);
+    // Clear form data when success popup is closed
+    setOrderDetails({
+      phoneNumber: "",
+      email: "",
+      firstName: "",
+      lastName: "",
+      address: "",
+      district: "",
+      city: "",
+      paymentMethod: "cash",
+      notes: "",
+    });
+    setCurrentStep(1);
+    setValidationErrors({});
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setOrderDetails((prev) => ({
@@ -666,7 +684,7 @@ export default function Checkout() {
     {/* Order Success Popup */}
     <OrderSuccessPopup
       isOpen={showOrderSuccess}
-      onClose={() => setShowOrderSuccess(false)}
+      onClose={handleOrderSuccessClose}
       orderData={orderSuccessData}
     />
   </>
