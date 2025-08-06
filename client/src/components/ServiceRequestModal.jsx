@@ -383,26 +383,26 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
             {/* Close Button */}
             <button
               onClick={onClose}
-              className={`absolute top-4 ${isArabic ? 'left-4' : 'right-4'} text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white transition-colors`}
+              className={`absolute top-4 ${isArabic ? 'left-4' : 'right-4'} text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white transition-colors z-10`}
             >
               <FiX size={24} />
             </button>
 
             {/* Stepper Header */}
             <div className="bg-gray-50 dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <h2 className={`text-lg font-semibold text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>
+              <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-between'}`}>
+                <h2 className={`text-lg font-semibold text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'} ${isArabic ? 'ml-8' : 'mr-8'}`}>
                   {t?.serviceRequest || 'Service Request'}
                 </h2>
-                <span className={`text-sm text-gray-500 dark:text-gray-400 ${isArabic ? 'font-noto' : 'font-nt'}`}>
-                  {t?.step || 'Step'} {step} {t?.of || 'of'} 4
+                <span className={`text-xs text-gray-500 dark:text-gray-400 ${isArabic ? 'font-noto' : 'font-nt'}`}>
+                  {step}/4
                 </span>
               </div>
               
               {/* Stepper Indicators */}
-              <div className="flex items-center justify-between mt-4">
+              <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-between'} mt-4`}>
                 {steps.map((stepItem, index) => (
-                  <div key={stepItem.id} className="flex items-center flex-1">
+                  <div key={stepItem.id} className={`flex items-center flex-1 ${isArabic ? 'flex-row-reverse' : ''}`}>
                     <button
                       onClick={() => handleStepClick(stepItem.id)}
                       disabled={!canProceedToStep(stepItem.id)}
@@ -412,8 +412,8 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                           : isStepCompleted(stepItem.id)
                           ? 'border-green-500 bg-green-500 text-white'
                           : canProceedToStep(stepItem.id)
-                          ? 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:border-primary dark:hover:border-[#db2b2e]'
-                          : 'border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                          ? 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-white hover:border-primary dark:hover:border-[#db2b2e]'
+                          : 'border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-white cursor-not-allowed'
                       }`}
                     >
                       {isStepCompleted(stepItem.id) ? (
@@ -424,7 +424,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                     </button>
                     
                     {/* Step Title */}
-                    <div className={`ml-2 flex-1 ${isArabic ? 'text-right' : 'text-left'}`}>
+                    <div className={`${isArabic ? 'mr-2' : 'ml-2'} flex-1 ${isArabic ? 'text-right' : 'text-left'}`}>
                       <div className={`text-xs font-medium ${
                         stepItem.id === step
                           ? 'text-primary dark:text-[#db2b2e]'
@@ -440,7 +440,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                     
                     {/* Connector Line */}
                     {index < steps.length - 1 && (
-                      <div className={`flex-1 h-0.5 mx-2 ${
+                      <div className={`flex-1 h-0.5 ${isArabic ? 'mr-2' : 'ml-2'} ${
                         isStepCompleted(stepItem.id + 1)
                           ? 'bg-green-500'
                           : 'bg-gray-200 dark:bg-gray-700'
