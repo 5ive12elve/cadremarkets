@@ -78,8 +78,6 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
   const { isArabic, currentLang } = useLanguage();
   const t = getPageTranslations('serviceModal', currentLang);
   
-
-  
   const [step, setStep] = useState(1);
   const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
@@ -94,6 +92,34 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
     details: ''
   });
   const [errors, setErrors] = useState({});
+
+  // Step configuration
+  const steps = [
+    {
+      id: 1,
+      title: t?.step1Title || 'Basic Information',
+      description: t?.step1Description || 'Tell us about yourself',
+      icon: '👤'
+    },
+    {
+      id: 2,
+      title: t?.step2Title || 'Service Details',
+      description: t?.step2Description || 'Choose your service',
+      icon: '🎨'
+    },
+    {
+      id: 3,
+      title: t?.step3Title || 'Project Scope',
+      description: t?.step3Description || 'Define your project',
+      icon: '📋'
+    },
+    {
+      id: 4,
+      title: t?.step4Title || 'Additional Details',
+      description: t?.step4Description || 'Tell us more',
+      icon: '📝'
+    }
+  ];
 
   const validateStep = (currentStep) => {
     const newErrors = {};
@@ -129,6 +155,37 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
     return Object.keys(newErrors).length === 0;
   };
 
+  const isStepCompleted = (stepNumber) => {
+    switch (stepNumber) {
+      case 1:
+        return formData.fullName.trim() && 
+               formData.phoneNumber.trim() && 
+               /^[+\d\s-()]{7,}$/.test(formData.phoneNumber) &&
+               formData.email.trim() && 
+               /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+               formData.serviceType;
+      case 2:
+        return formData.subType && formData.budget;
+      case 3:
+        return formData.designStage && formData.projectScope;
+      case 4:
+        return true; // Step 4 is optional
+      default:
+        return false;
+    }
+  };
+
+  const canProceedToStep = (targetStep) => {
+    // Can always go back
+    if (targetStep < step) return true;
+    
+    // Can only proceed if all previous steps are completed
+    for (let i = 1; i < targetStep; i++) {
+      if (!isStepCompleted(i)) return false;
+    }
+    return true;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -161,11 +218,22 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
   const handleNext = () => {
     if (validateStep(step)) {
       setStep(prev => prev + 1);
+    } else {
+      // Show toast error if validation fails
+      toast.error(t?.pleaseCompleteFields || 'Please complete all required fields before proceeding.');
     }
   };
 
   const handleBack = () => {
     setStep(prev => prev - 1);
+  };
+
+  const handleStepClick = (targetStep) => {
+    if (canProceedToStep(targetStep)) {
+      setStep(targetStep);
+    } else {
+      toast.error(t?.completePreviousSteps || 'Please complete previous steps first.');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -320,15 +388,70 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
               <FiX size={24} />
             </button>
 
-            {/* Progress Bar */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-primary/20 dark:bg-[#db2b2e]/20">
-              <div
-                className="h-full bg-primary dark:bg-[#db2b2e] transition-all duration-300"
-                style={{ width: `${(step / 4) * 100}%` }}
-              ></div>
+            {/* Stepper Header */}
+            <div className="bg-gray-50 dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <h2 className={`text-lg font-semibold text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>
+                  {t?.serviceRequest || 'Service Request'}
+                </h2>
+                <span className={`text-sm text-gray-500 dark:text-gray-400 ${isArabic ? 'font-noto' : 'font-nt'}`}>
+                  {t?.step || 'Step'} {step} {t?.of || 'of'} 4
+                </span>
+              </div>
+              
+              {/* Stepper Indicators */}
+              <div className="flex items-center justify-between mt-4">
+                {steps.map((stepItem, index) => (
+                  <div key={stepItem.id} className="flex items-center flex-1">
+                    <button
+                      onClick={() => handleStepClick(stepItem.id)}
+                      disabled={!canProceedToStep(stepItem.id)}
+                      className={`flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all duration-200 ${
+                        stepItem.id === step
+                          ? 'border-primary dark:border-[#db2b2e] bg-primary dark:bg-[#db2b2e] text-white'
+                          : isStepCompleted(stepItem.id)
+                          ? 'border-green-500 bg-green-500 text-white'
+                          : canProceedToStep(stepItem.id)
+                          ? 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:border-primary dark:hover:border-[#db2b2e]'
+                          : 'border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                      }`}
+                    >
+                      {isStepCompleted(stepItem.id) ? (
+                        <FiCheck className="w-4 h-4" />
+                      ) : (
+                        <span className="text-xs">{stepItem.icon}</span>
+                      )}
+                    </button>
+                    
+                    {/* Step Title */}
+                    <div className={`ml-2 flex-1 ${isArabic ? 'text-right' : 'text-left'}`}>
+                      <div className={`text-xs font-medium ${
+                        stepItem.id === step
+                          ? 'text-primary dark:text-[#db2b2e]'
+                          : isStepCompleted(stepItem.id)
+                          ? 'text-green-600 dark:text-green-400'
+                          : canProceedToStep(stepItem.id)
+                          ? 'text-gray-600 dark:text-gray-400'
+                          : 'text-gray-400 dark:text-gray-500'
+                      }`}>
+                        {stepItem.title}
+                      </div>
+                    </div>
+                    
+                    {/* Connector Line */}
+                    {index < steps.length - 1 && (
+                      <div className={`flex-1 h-0.5 mx-2 ${
+                        isStepCompleted(stepItem.id + 1)
+                          ? 'bg-green-500'
+                          : 'bg-gray-200 dark:bg-gray-700'
+                      }`}></div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="p-8 pt-12">
+            <div className="p-8">
               {/* Step 1: Basic Information */}
               {step === 1 && (
                 <div className="space-y-6">
@@ -538,31 +661,52 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
               {/* Navigation Buttons */}
               <div className={`flex justify-between mt-8 ${isArabic ? 'flex-row-reverse' : ''}`}>
                 {step > 1 && (
-                                      <button
-                      onClick={handleBack}
-                      className={`px-6 py-2 border border-primary dark:border-[#db2b2e] text-gray-900 dark:text-white hover:bg-primary/10 dark:hover:bg-[#db2b2e]/10 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
-                    >
-                      {t?.back || 'Back'}
-                    </button>
+                  <button
+                    onClick={handleBack}
+                    className={`px-6 py-2 border border-primary dark:border-[#db2b2e] text-gray-900 dark:text-white hover:bg-primary/10 dark:hover:bg-[#db2b2e]/10 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
+                  >
+                    {t?.back || 'Back'}
+                  </button>
                 )}
                 <div className={isArabic ? 'mr-auto' : 'ml-auto'}>
                   {step < 4 ? (
-                                          <button
-                        onClick={handleNext}
-                        className={`px-6 py-2 bg-primary dark:bg-[#db2b2e] text-white hover:bg-primary/90 dark:hover:bg-[#db2b2e]/90 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
-                      >
-                        {t?.next || 'Next'}
-                      </button>
-                    ) : (
-                      <button
-                        onClick={handleSubmit}
-                        className={`px-6 py-2 bg-primary dark:bg-[#db2b2e] text-white hover:bg-primary/90 dark:hover:bg-[#db2b2e]/90 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
-                      >
-                        {t?.submitRequest || 'Submit Request'}
-                      </button>
+                    <button
+                      onClick={handleNext}
+                      disabled={!isStepCompleted(step)}
+                      className={`px-6 py-2 transition-colors ${isArabic ? 'font-noto' : 'font-nt'} ${
+                        isStepCompleted(step)
+                          ? 'bg-primary dark:bg-[#db2b2e] text-white hover:bg-primary/90 dark:hover:bg-[#db2b2e]/90'
+                          : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                      }`}
+                    >
+                      {t?.next || 'Next'}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleSubmit}
+                      className={`px-6 py-2 bg-primary dark:bg-[#db2b2e] text-white hover:bg-primary/90 dark:hover:bg-[#db2b2e]/90 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
+                    >
+                      {t?.submitRequest || 'Submit Request'}
+                    </button>
                   )}
                 </div>
               </div>
+              
+              {/* Validation Summary */}
+              {Object.keys(errors).length > 0 && (
+                <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                  <p className={`text-red-600 dark:text-red-400 text-sm font-medium ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+                    {t?.pleaseFixErrors || 'Please fix the following errors:'}
+                  </p>
+                  <ul className={`mt-2 space-y-1 ${isArabic ? 'text-right' : 'text-left'}`}>
+                    {Object.values(errors).map((error, index) => (
+                      <li key={index} className={`text-red-600 dark:text-red-400 text-sm ${isArabic ? 'font-noto' : 'font-nt'}`}>
+                        • {error}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
