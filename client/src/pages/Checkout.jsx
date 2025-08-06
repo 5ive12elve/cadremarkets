@@ -8,6 +8,7 @@ import AlertDialog from '../components/ui/AlertDialog';
 import OrderSuccessPopup from '../components/ui/OrderSuccessPopup';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import PhoneInput from '../components/shared/PhoneInput';
 
 
 const cairoDistricts = [
@@ -119,6 +120,18 @@ export default function Checkout() {
     // Clear validation error for this field when user starts typing
     if (validationErrors[name]) {
       setValidationErrors(prev => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const handlePhoneChange = (value) => {
+    setOrderDetails((prev) => ({
+      ...prev,
+      phoneNumber: value || ''
+    }));
+    
+    // Clear validation error for phone when user starts typing
+    if (validationErrors.phoneNumber) {
+      setValidationErrors(prev => ({ ...prev, phoneNumber: null }));
     }
   };
 
@@ -313,20 +326,14 @@ export default function Checkout() {
                     <label htmlFor="phoneNumber" className={`block text-sm text-gray-400 mb-1 font-secondary ${isArabic ? 'text-right' : 'text-left'}`}>
                       {phoneNumberText} <span className="text-[#db2b2e]">*</span>
                     </label>
-                    <input
-                      type="tel"
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      className={`w-full p-3 bg-white dark:bg-black border ${validationErrors.phoneNumber ? 'border-red-500' : 'border-gray-300 dark:border-[#db2b2e]/20'} rounded-sm focus:border-[#db2b2e] transition-colors outline-none text-black dark:text-white font-secondary ${isArabic ? 'text-right' : 'text-left'}`}
+                    <PhoneInput
                       value={orderDetails.phoneNumber}
-                      onChange={handleChange}
-                      required
+                      onChange={handlePhoneChange}
                       placeholder={enterPhoneNumberText}
+                      error={validationErrors.phoneNumber}
                       dir={isArabic ? 'rtl' : 'ltr'}
+                      className={`p-3 bg-white dark:bg-black border ${validationErrors.phoneNumber ? 'border-red-500' : 'border-gray-300 dark:border-[#db2b2e]/20'} rounded-sm focus:border-[#db2b2e] transition-colors text-black dark:text-white font-secondary ${isArabic ? 'text-right' : 'text-left'}`}
                     />
-                    {validationErrors.phoneNumber && (
-                      <p className="text-red-500 text-xs mt-1">{validationErrors.phoneNumber}</p>
-                    )}
                   </div>
                   <div className="mb-4">
                     <label htmlFor="email" className={`block text-sm text-gray-400 mb-1 font-secondary ${isArabic ? 'text-right' : 'text-left'}`}>

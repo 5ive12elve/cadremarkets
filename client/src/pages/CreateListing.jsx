@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { FiCheck, FiArrowLeft, FiUpload, FiX, FiImage, FiTrash2 } from 'react-icons/fi';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import PhoneInput from '../components/shared/PhoneInput';
 
 
 const containerVariants = {
@@ -414,6 +415,13 @@ export default function CreateListing() {
         [id]: value,
       });
     }
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData({
+      ...formData,
+      phoneNumber: value || ''
+    });
   };
 
   const handleSizeToggle = (size) => {
@@ -1255,18 +1263,15 @@ export default function CreateListing() {
                 }`}>
                   {phoneNumberText}
                 </label>
-                                  <input
-                    type="tel"
-                    placeholder={phoneNumberText}
-                    id="phoneNumber"
-                    pattern="[0-9]{10,15}"
-                    required
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
-                      isArabic ? 'font-noto' : 'font-nt'
-                    }`}
-                  />
+                <PhoneInput
+                  value={formData.phoneNumber}
+                  onChange={handlePhoneChange}
+                  placeholder={phoneNumberText}
+                  dir={isArabic ? 'rtl' : 'ltr'}
+                  className={`border border-[#db2b2e] dark:border-primary bg-white dark:bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e] dark:focus:border-primary-light text-black dark:text-white ${
+                    isArabic ? 'font-noto' : 'font-nt'
+                  }`}
+                />
                 {isArabic && (
                   <span className="text-xs text-gray-400 dark:text-gray-500 opacity-60 font-noto">
                     {helperText.phone}

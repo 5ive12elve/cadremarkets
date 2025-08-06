@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { FiCheck, FiArrowLeft, FiUpload, FiX, FiImage, FiTrash2 } from 'react-icons/fi';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import PhoneInput from '../components/shared/PhoneInput';
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -366,6 +367,13 @@ export default function UpdateListing() {
         [id]: value,
       });
     }
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData({
+      ...formData,
+      phoneNumber: value || ''
+    });
   };
   
   const handleRemoveImage = (index) => {
@@ -795,14 +803,10 @@ export default function UpdateListing() {
               
               <div className="flex flex-col gap-2">
                 <label className="text-sm text-gray-300">Phone Number</label>
-                <input
-                  type="tel"
-                  placeholder="Phone Number"
-                  id="phoneNumber"
-                  pattern="[0-9]{10,15}"
-                  required
+                <PhoneInput
                   value={formData.phoneNumber}
-                  onChange={handleChange}
+                  onChange={handlePhoneChange}
+                  placeholder="Phone Number"
                   className="border border-[#db2b2e] bg-black/50 p-3 w-full focus:outline-none focus:border-[#db2b2e]/80"
                 />
               </div>

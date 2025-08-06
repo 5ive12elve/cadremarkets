@@ -4,6 +4,7 @@ import { FiBook, FiMessageSquare, FiPhone } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import PhoneInput from '../components/shared/PhoneInput';
 
 
 const containerVariants = {
@@ -111,6 +112,13 @@ export default function Support() {
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      phone: value || ''
     }));
   };
 
@@ -390,12 +398,11 @@ export default function Support() {
                     }`}>
                       {phone}
                     </label>
-                    <input
-                      type="tel"
-                      name="phone"
+                    <PhoneInput
                       value={formData.phone}
-                      onChange={handleChange}
-                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
+                      onChange={handlePhoneChange}
+                      dir={isArabic ? 'rtl' : 'ltr'}
+                      className={`px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     />

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-hot-toast';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPageTranslations } from '../locales/translations';
+import PhoneInput from './shared/PhoneInput';
 
 // Service types with translation keys
 const serviceTypes = {
@@ -144,6 +145,16 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
         ...prev,
         subType: ''
       }));
+    }
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      phoneNumber: value || ''
+    }));
+    if (errors.phoneNumber) {
+      setErrors(prev => ({ ...prev, phoneNumber: '' }));
     }
   };
 
@@ -328,17 +339,14 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
 
                     <div>
                       <label className={`block mb-1 text-gray-900 dark:text-white ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>{t?.phoneNumber || 'Phone Number'} *</label>
-                      <input
-                        type="tel"
-                        name="phoneNumber"
+                      <PhoneInput
                         value={formData.phoneNumber}
-                        onChange={handleChange}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        onChange={handlePhoneChange}
                         placeholder={t?.enterPhoneNumber || 'Enter your phone number'}
+                        error={errors.phoneNumber}
+                        dir={isArabic ? 'rtl' : 'ltr'}
+                        className={`bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                       />
-                      {errors.phoneNumber && (
-                        <p className={`text-red-500 dark:text-[#db2b2e] text-sm mt-1 ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}>{errors.phoneNumber}</p>
-                      )}
                     </div>
 
                     <div>

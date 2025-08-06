@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
+import PhoneInput from './shared/PhoneInput';
 
 const ContactForm = () => {
   const { currentLang, isArabic } = useLanguage();
@@ -78,6 +79,17 @@ const ContactForm = () => {
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      phone: value || ''
+    }));
+    // Clear error when user starts typing
+    if (errors.phone) {
+      setErrors(prev => ({ ...prev, phone: '' }));
     }
   };
 
@@ -195,18 +207,14 @@ const ContactForm = () => {
             <label htmlFor="phone" className={`block mb-2 text-base sm:text-lg ${isArabic ? 'font-noto' : 'font-nt'}`}>
               {phoneLabel} <span className="text-gray-400">{phoneOptional}</span>
             </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
+            <PhoneInput
               value={formData.phone}
-              onChange={handleChange}
-              className={`w-full bg-transparent border-b ${errors.phone ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-3 text-base sm:text-lg outline-none text-black dark:text-white focus:border-primary transition-colors`}
-              aria-invalid={errors.phone ? "true" : "false"}
+              onChange={handlePhoneChange}
+              placeholder={phoneLabel}
+              error={errors.phone}
+              dir={isArabic ? 'rtl' : 'ltr'}
+              className={`bg-transparent border-b ${errors.phone ? 'border-red-500' : 'border-gray-300 dark:border-white'} p-3 text-base sm:text-lg text-black dark:text-white focus:border-primary transition-colors`}
             />
-            {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-            )}
           </div>
 
           <div>
