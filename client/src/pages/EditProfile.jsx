@@ -11,6 +11,7 @@ export default function EditProfile() {
   const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '' });
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
   
   // Alert dialog state
   const [alertDialog, setAlertDialog] = useState({
@@ -41,8 +42,37 @@ export default function EditProfile() {
     });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Username validation
+    if (!formData.username.trim()) {
+      newErrors.username = 'Username cannot be empty';
+    } else if (formData.username.trim().length < 3) {
+      newErrors.username = 'Username must be at least 3 characters long';
+    } else if (formData.username.trim().length > 30) {
+      newErrors.username = 'Username cannot exceed 30 characters';
+    }
+    
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email cannot be empty';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handlePasswordChange = (e) => {
@@ -51,6 +81,12 @@ export default function EditProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      return;
+    }
+    
     try {
       dispatch(updateUserStart());
       const data = await authenticatedFetch(`/api/user/update/${currentUser._id}`, {
@@ -60,6 +96,7 @@ export default function EditProfile() {
 
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
+      setErrors({});
       setTimeout(() => setUpdateSuccess(false), 3000);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
@@ -120,19 +157,49 @@ export default function EditProfile() {
             value={formData.username} 
             onChange={handleChange} 
             required 
-            className='w-full p-3 border border-gray-300 dark:border-white bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-white rounded-lg transition-colors duration-300' 
+            className={`w-full p-3 border ${
+              errors.username ? 'border-red-500' : 'border-gray-300 dark:border-white'
+            } bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-white rounded-lg transition-colors duration-300`}
             placeholder='Username' 
           />
+          {errors.username && (
+            <p className='text-red-500 text-sm mt-1'>{errors.username}</p>
+          )}
           <input 
             type='email' 
             name='email' 
             value={formData.email} 
             onChange={handleChange} 
             required 
-            className='w-full p-3 border border-gray-300 dark:border-white bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-white rounded-lg transition-colors duration-300' 
+            className={`w-full p-3 border ${
+              errors.email ? 'border-red-500' : 'border-gray-300 dark:border-white'
+            } bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-white rounded-lg transition-colors duration-300`}
             placeholder='Email' 
           />
-          <button type='submit' className='w-full bg-primary text-black font-bold p-3 rounded-lg hover:opacity-90'>
+          {errors.email && (
+            <p className='text-red-500 text-sm mt-1'>{errors.email}</p>
+          )}
+          {/* Error Summary */}
+          {Object.keys(errors).length > 0 && (
+            <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3'>
+              <p className='text-red-600 dark:text-red-400 text-sm font-medium mb-2'>
+                Please fix the following errors before saving:
+              </p>
+              <ul className='space-y-1'>
+                {Object.values(errors).map((error, index) => (
+                  <li key={index} className='text-red-600 dark:text-red-400 text-sm'>
+                    • {error}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <button 
+            type='submit' 
+            disabled={Object.keys(errors).length > 0}
+            className='w-full bg-primary text-black font-bold p-3 rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed'
+          >
             Save Changes
           </button>
         </form>

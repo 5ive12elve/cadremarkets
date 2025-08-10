@@ -191,25 +191,75 @@ export const updateNotificationSettings = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
     return next(errorHandler(401, 'You can only update your own account!'));
+  
   try {
-    if (req.body.password) {
-      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    // Server-side validation
+    const { username, email, password, avatar } = req.body;
+    
+    // Username validation
+    if (username !== undefined) {
+      if (!username || !username.trim()) {
+        return next(errorHandler(400, 'Username cannot be empty'));
+      }
+      if (username.trim().length < 3) {
+        return next(errorHandler(400, 'Username must be at least 3 characters long'));
+      }
+      if (username.trim().length > 30) {
+        return next(errorHandler(400, 'Username cannot exceed 30 characters'));
+      }
+      
+      // Check if username is already taken by another user
+      const existingUser = await User.findOne({ 
+        username: username.trim(), 
+        _id: { $ne: req.params.id } 
+      });
+      if (existingUser) {
+        return next(errorHandler(400, 'Username is already taken'));
+      }
     }
+    
+    // Email validation
+    if (email !== undefined) {
+      if (!email || !email.trim()) {
+        return next(errorHandler(400, 'Email cannot be empty'));
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+        return next(errorHandler(400, 'Please enter a valid email address'));
+      }
+      
+      // Check if email is already taken by another user
+      const existingUser = await User.findOne({ 
+        email: email.trim(), 
+        _id: { $ne: req.params.id } 
+      });
+      if (existingUser) {
+        return next(errorHandler(400, 'Email is already taken'));
+      }
+    }
+    
+    // Hash password if provided
+    if (password) {
+      req.body.password = bcryptjs.hashSync(password, 10);
+    }
+
+    // Prepare update object with only provided fields
+    const updateFields = {};
+    if (username !== undefined) updateFields.username = username.trim();
+    if (email !== undefined) updateFields.email = email.trim();
+    if (password) updateFields.password = req.body.password;
+    if (avatar !== undefined) updateFields.avatar = avatar;
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-          avatar: req.body.avatar,
-        },
-      },
+      { $set: updateFields },
       { new: true }
     );
 
-    const { password, ...rest } = updatedUser._doc;
+    if (!updatedUser) {
+      return next(errorHandler(404, 'User not found'));
+    }
+
+    const { password: userPassword, ...rest } = updatedUser._doc;
 
     res.status(200).json(rest);
   } catch (error) {

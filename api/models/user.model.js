@@ -6,11 +6,28 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      trim: true,
+      minlength: [3, 'Username must be at least 3 characters long'],
+      maxlength: [30, 'Username cannot exceed 30 characters'],
+      validate: {
+        validator: function(v) {
+          return v && v.trim().length > 0;
+        },
+        message: 'Username cannot be empty'
+      }
     },
     email: {
       type: String,
       required: true,
       unique: true,
+      trim: true,
+      lowercase: true,
+      validate: {
+        validator: function(v) {
+          return v && v.trim().length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        },
+        message: 'Please enter a valid email address'
+      }
     },
     password: {
       type: String,

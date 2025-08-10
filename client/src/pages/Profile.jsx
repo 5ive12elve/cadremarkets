@@ -39,6 +39,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showProfileUpdatePopup, setShowProfileUpdatePopup] = useState(false);
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
 
   // Language context
@@ -239,12 +240,59 @@ export default function Profile() {
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Username validation
+    if (formData.username !== undefined) {
+      if (!formData.username.trim()) {
+        newErrors.username = 'Username cannot be empty';
+      } else if (formData.username.trim().length < 3) {
+        newErrors.username = 'Username must be at least 3 characters long';
+      } else if (formData.username.trim().length > 30) {
+        newErrors.username = 'Username cannot exceed 30 characters';
+      }
+    }
+    
+    // Email validation
+    if (formData.email !== undefined) {
+      if (!formData.email.trim()) {
+        newErrors.email = 'Email cannot be empty';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+        newErrors.email = 'Please enter a valid email address';
+      }
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+    
+    // Clear error when user starts typing
+    if (errors[id]) {
+      setErrors(prev => ({ ...prev, [id]: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      toast.error('Please fix the errors below before updating your profile');
+      return;
+    }
+    
+    // Check if there are any changes to submit
+    const hasChanges = Object.keys(formData).length > 0;
+    if (!hasChanges) {
+      toast.error('No changes to update');
+      return;
+    }
+    
     try {
       dispatch(updateUserStart());
       const data = await authenticatedFetch(`/api/user/update/${currentUser._id}`, {
@@ -255,6 +303,7 @@ export default function Profile() {
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
       setShowProfileUpdatePopup(true);
+      setErrors({});
       setTimeout(() => setUpdateSuccess(false), 3000);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
@@ -393,10 +442,17 @@ export default function Profile() {
                         placeholder={t.username || 'Username'}
                         defaultValue={currentUser.username}
                         id="username"
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e] p-2 text-black dark:text-white placeholder-gray-500 dark:placeholder-white/40 focus:outline-none focus:border-[#db2b2e]/80 transition-colors duration-300 ${isArabic ? 'font-noto text-right' : 'font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border ${
+                          errors.username ? 'border-red-500' : 'border-gray-300 dark:border-[#db2b2e]'
+                        } p-2 text-black dark:text-white placeholder-gray-500 dark:placeholder-white/40 focus:outline-none focus:border-[#db2b2e]/80 transition-colors duration-300 ${isArabic ? 'font-noto text-right' : 'font-nt'}`}
                         onChange={handleChange}
                         dir="auto"
                       />
+                      {errors.username && (
+                        <p className={`text-red-500 text-xs mt-1 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+                          {errors.username}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label className={`block text-xs uppercase tracking-wider text-[#db2b2e] mb-1 ${isArabic ? 'font-noto' : 'font-nt'}`}>
@@ -407,13 +463,37 @@ export default function Profile() {
                         placeholder={t.email || 'Email'}
                         id="email"
                         defaultValue={currentUser.email}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e] p-2 text-black dark:text-white placeholder-gray-500 dark:placeholder-white/40 focus:outline-none focus:border-[#db2b2e]/80 transition-colors duration-300 ${isArabic ? 'font-noto text-right' : 'font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border ${
+                          errors.email ? 'border-red-500' : 'border-gray-300 dark:border-[#db2b2e]'
+                        } p-2 text-black dark:text-white placeholder-gray-500 dark:placeholder-white/40 focus:outline-none focus:border-[#db2b2e]/80 transition-colors duration-300 ${isArabic ? 'font-noto text-right' : 'font-nt'}`}
                         onChange={handleChange}
                         dir="auto"
                       />
+                      {errors.email && (
+                        <p className={`text-red-500 text-xs mt-1 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}
+                        >
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
+                    {/* Error Summary */}
+                    {Object.keys(errors).length > 0 && (
+                      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-3">
+                        <p className={`text-red-600 dark:text-red-400 text-xs font-medium mb-2 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+                          Please fix the following errors before updating:
+                        </p>
+                        <ul className={`space-y-1 ${isArabic ? 'text-right' : 'text-left'}`}>
+                          {Object.values(errors).map((error, index) => (
+                            <li key={index} className={`text-red-600 dark:text-red-400 text-xs ${isArabic ? 'font-noto' : 'font-nt'}`}>
+                              • {error}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
                     <button
-                      disabled={loading}
+                      disabled={loading || Object.keys(errors).length > 0}
                       className={`w-full bg-[#db2b2e] text-white p-2 hover:bg-[#db2b2e]/90 disabled:opacity-50 disabled:cursor-not-allowed ${isArabic ? 'font-amiri' : 'font-nt'}`}
                     >
                       {loading ? (t.updating || 'Updating...') : (t.updateProfile || 'Update Profile')}

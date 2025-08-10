@@ -106,6 +106,7 @@ export default function Support() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -113,6 +114,11 @@ export default function Support() {
       ...prev,
       [name]: value
     }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handlePhoneChange = (value) => {
@@ -130,10 +136,48 @@ export default function Support() {
       category,
       specificIssue: ''
     }));
+    
+    // Clear category error when user selects a category
+    if (errors.category) {
+      setErrors(prev => ({ ...prev, category: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Required field validation
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    if (!formData.category) {
+      newErrors.category = 'Please select an issue category';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      toast.error('Please fix the errors below before submitting');
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
@@ -161,6 +205,7 @@ export default function Support() {
           priority: 'medium'
         });
         setSelectedCategory('');
+        setErrors({});
       } else {
         throw new Error('Failed to submit request');
       }
@@ -367,10 +412,17 @@ export default function Support() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
+                      className={`w-full px-3 py-2 border ${
+                        errors.name ? 'border-red-500' : 'border-[#db2b2e] dark:border-[#db2b2e]'
+                      } bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     />
+                    {errors.name && (
+                      <p className={`text-red-500 text-sm mt-1 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+                        {errors.name}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${
@@ -384,10 +436,17 @@ export default function Support() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
+                      className={`w-full px-3 py-2 border ${
+                        errors.email ? 'border-red-500' : 'border-[#db2b2e] dark:border-[#db2b2e]'
+                      } bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     />
+                    {errors.email && (
+                      <p className={`text-red-500 text-sm mt-1 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -437,7 +496,9 @@ export default function Support() {
                       value={formData.category}
                       onChange={handleCategoryChange}
                       required
-                      className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
+                      className={`w-full px-3 py-2 border ${
+                        errors.category ? 'border-red-500' : 'border-[#db2b2e] dark:border-[#db2b2e]'
+                      } bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 ${
                         isArabic ? 'font-noto' : 'font-nt'
                       }`}
                     >
@@ -448,6 +509,11 @@ export default function Support() {
                         </option>
                       ))}
                     </select>
+                    {errors.category && (
+                      <p className={`text-red-500 text-sm mt-1 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+                        {errors.category}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label className={`block text-sm font-medium mb-2 ${
@@ -509,12 +575,35 @@ export default function Support() {
                     onChange={handleChange}
                     required
                     rows="5"
-                    className={`w-full px-3 py-2 border border-[#db2b2e] dark:border-[#db2b2e] bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 resize-vertical ${
+                    className={`w-full px-3 py-2 border ${
+                      errors.message ? 'border-red-500' : 'border-[#db2b2e] dark:border-[#db2b2e]'
+                    } bg-white dark:bg-black text-black dark:text-white focus:border-[#db2b2e] focus:ring-1 focus:ring-[#db2b2e] outline-none transition-colors duration-300 resize-vertical ${
                       isArabic ? 'font-noto' : 'font-nt'
                     }`}
                     placeholder={messagePlaceholder}
                   />
+                  {errors.message && (
+                    <p className={`text-red-500 text-sm mt-1 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
+
+                {/* Error Summary */}
+                {Object.keys(errors).length > 0 && (
+                  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
+                    <p className={`text-red-600 dark:text-red-400 text-sm font-medium mb-2 ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
+                      Please fix the following errors before submitting:
+                    </p>
+                    <ul className={`space-y-1 ${isArabic ? 'text-right' : 'text-left'}`}>
+                      {Object.values(errors).map((error, index) => (
+                        <li key={index} className={`text-red-600 dark:text-red-400 text-sm ${isArabic ? 'font-noto' : 'font-nt'}`}>
+                          • {error}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 <div className="text-center">
                   <button
