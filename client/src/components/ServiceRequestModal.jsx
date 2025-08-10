@@ -378,32 +378,32 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
             animate="center"
             exit="exit"
             transition={{ duration: 0.3 }}
-            className="relative bg-white dark:bg-black border border-primary dark:border-[#db2b2e] w-full max-w-2xl mx-4"
+            className="relative bg-white dark:bg-black border border-primary dark:border-[#db2b2e] w-full max-w-sm sm:max-w-lg lg:max-w-2xl mx-2 sm:mx-4"
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className={`absolute top-4 ${isArabic ? 'left-4' : 'right-4'} text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white transition-colors z-10`}
+              className={`absolute top-3 sm:top-4 ${isArabic ? 'left-3 sm:left-4' : 'right-3 sm:right-4'} text-gray-600 dark:text-white/80 hover:text-gray-900 dark:hover:text-white transition-colors z-10`}
             >
-              <FiX size={24} />
+              <FiX size={20} className="sm:w-6 sm:h-6" />
             </button>
 
             {/* Stepper Header */}
-            <div className="bg-gray-50 dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 dark:border-gray-700">
               <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-center'}`}>
-                <h2 className={`text-lg font-semibold text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>
+                <h2 className={`text-base sm:text-lg font-semibold text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>
                   {t?.serviceRequest || 'Service Request'}
                 </h2>
               </div>
               
               {/* Stepper Indicators */}
-              <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-between'} mt-4`}>
+              <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-between'} mt-3 sm:mt-4`}>
                 {steps.map((stepItem, index) => (
                   <div key={stepItem.id} className={`flex items-center flex-1 ${isArabic ? 'flex-row-reverse' : ''}`}>
                     <button
                       onClick={() => handleStepClick(stepItem.id)}
                       disabled={!canProceedToStep(stepItem.id)}
-                      className={`flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all duration-200 ${
+                      className={`flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 transition-all duration-200 ${
                         stepItem.id === step
                           ? 'border-primary dark:border-[#db2b2e] bg-primary dark:bg-[#db2b2e] text-white'
                           : isStepCompleted(stepItem.id)
@@ -414,14 +414,14 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                       }`}
                     >
                       {isStepCompleted(stepItem.id) ? (
-                        <FiCheck className="w-4 h-4" />
+                        <FiCheck className="w-3 h-3 sm:w-4 sm:h-4" />
                       ) : (
-                        <span className="text-sm font-medium">{stepItem.id}</span>
+                        <span className="text-xs sm:text-sm font-medium">{stepItem.id}</span>
                       )}
                     </button>
                     
-                    {/* Step Title */}
-                    <div className={`${isArabic ? 'mr-2' : 'ml-2'} flex-1 ${isArabic ? 'text-right' : 'text-left'}`}>
+                    {/* Step Title - Hidden on mobile, shown on larger screens */}
+                    <div className={`${isArabic ? 'mr-2' : 'ml-2'} flex-1 hidden sm:block ${isArabic ? 'text-right' : 'text-left'}`}>
                       <div className={`text-xs font-medium ${
                         stepItem.id === step
                           ? 'text-primary dark:text-[#db2b2e]'
@@ -435,9 +435,9 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                       </div>
                     </div>
                     
-                    {/* Connector Line */}
+                    {/* Connector Line - Hidden on mobile for cleaner look */}
                     {index < steps.length - 1 && (
-                      <div className={`flex-1 h-0.5 ${isArabic ? 'mr-2' : 'ml-2'} ${
+                      <div className={`flex-1 h-0.5 ${isArabic ? 'mr-2' : 'ml-2'} hidden sm:block ${
                         isStepCompleted(stepItem.id + 1)
                           ? 'bg-green-500'
                           : 'bg-gray-200 dark:bg-gray-700'
@@ -446,18 +446,32 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                   </div>
                 ))}
               </div>
+              
+              {/* Mobile Step Title - Shows current step title below stepper */}
+              <div className="sm:hidden mt-2 text-center">
+                <div className={`text-sm font-medium ${
+                  isStepCompleted(step)
+                    ? 'text-green-600 dark:text-green-400'
+                    : 'text-primary dark:text-[#db2b2e]'
+                }`}>
+                  {steps.find(s => s.id === step)?.title}
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {steps.find(s => s.id === step)?.description}
+                </div>
+              </div>
             </div>
 
-            <div className="p-8">
+            <div className="p-4 sm:p-8">
               {/* Step 1: Basic Information */}
               {step === 1 && (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div className={isArabic ? 'text-right' : 'text-left'}>
-                    <h2 className={`text-2xl font-bold mb-2 text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>{t?.tellUsAboutYourself || 'Tell us about yourself'}</h2>
-                    <p className={`text-gray-600 dark:text-white/80 ${isArabic ? 'font-noto' : 'font-nt'}`}>{t?.basicInformation || 'Let\'s start with some basic information'}</p>
+                    <h2 className={`text-xl sm:text-2xl font-bold mb-2 text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>{t?.tellUsAboutYourself || 'Tell us about yourself'}</h2>
+                    <p className={`text-sm sm:text-base text-gray-600 dark:text-white/80 ${isArabic ? 'font-noto' : 'font-nt'}`}>{t?.basicInformation || 'Let\'s start with some basic information'}</p>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     <div>
                       <label className={`block mb-1 text-gray-900 dark:text-white ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>{t?.fullName || 'Full Name'} *</label>
                       <input
@@ -465,7 +479,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                         name="fullName"
                         value={formData.fullName}
                         onChange={handleChange}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                         placeholder={t?.enterFullName || 'Enter your full name'}
                       />
                       {errors.fullName && (
@@ -481,7 +495,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                         placeholder={t?.enterPhoneNumber || 'Enter your phone number'}
                         error={errors.phoneNumber}
                         dir={isArabic ? 'rtl' : 'ltr'}
-                        className={`bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        className={`bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                       />
                     </div>
 
@@ -492,7 +506,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                         placeholder={t?.enterEmail || 'Enter your email'}
                       />
                       {errors.email && (
@@ -506,7 +520,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                         name="serviceType"
                         value={formData.serviceType}
                         onChange={handleChange}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                       >
                         <option value="">{t?.selectServiceType || 'Select a service type'}</option>
                         {Object.entries(serviceTypes).map(([key, { labelKey }]) => (
@@ -525,13 +539,13 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
 
               {/* Step 2: Service Details */}
               {step === 2 && (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div className={isArabic ? 'text-right' : 'text-left'}>
-                    <h2 className={`text-2xl font-bold mb-2 text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>{t?.serviceDetails || 'Service Details'}</h2>
-                    <p className={`text-gray-600 dark:text-white/80 ${isArabic ? 'font-noto' : 'font-nt'}`}>{t?.serviceDetailsDescription || 'Tell us more about the service you need'}</p>
+                    <h2 className={`text-xl sm:text-2xl font-bold mb-2 text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>{t?.serviceDetails || 'Service Details'}</h2>
+                    <p className={`text-sm sm:text-base text-gray-600 dark:text-white/80 ${isArabic ? 'font-noto' : 'font-nt'}`}>{t?.serviceDetailsDescription || 'Tell us more about the service you need'}</p>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     <div>
                       <label className={`block mb-1 text-gray-900 dark:text-white ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>
                         {t?.whatKindOf || 'What kind of'} {serviceTypes[formData.serviceType]?.labelKey ? (t?.[serviceTypes[formData.serviceType].labelKey]?.toLowerCase() || serviceTypes[formData.serviceType].labelKey) : ''} {t?.servicesQuestion || 'services?'} *
@@ -540,7 +554,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                         name="subType"
                         value={formData.subType}
                         onChange={handleChange}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                       >
                         <option value="">{t?.serviceCategory || 'Select a service category'}</option>
                         {serviceTypes[formData.serviceType]?.subTypes.map(typeKey => (
@@ -560,7 +574,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                         name="budget"
                         value={formData.budget}
                         onChange={handleChange}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                       >
                         <option value="">{t?.selectBudgetRange || 'Select budget range'}</option>
                         {budgetRanges.map(rangeKey => (
@@ -579,20 +593,20 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
 
               {/* Step 3: Project Details */}
               {step === 3 && (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div className={isArabic ? 'text-right' : 'text-left'}>
-                    <h2 className={`text-2xl font-bold mb-2 text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>{t?.projectDetails || 'Project Details'}</h2>
-                    <p className={`text-gray-600 dark:text-white/80 ${isArabic ? 'font-noto' : 'font-nt'}`}>{t?.projectDetailsDescription || 'Tell us about your project requirements'}</p>
+                    <h2 className={`text-xl sm:text-2xl font-bold mb-2 text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>{t?.projectDetails || 'Project Details'}</h2>
+                    <p className={`text-sm sm:text-base text-gray-600 dark:text-white/80 ${isArabic ? 'font-noto' : 'font-nt'}`}>{t?.projectDetailsDescription || 'Tell us about your project requirements'}</p>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     <div>
                       <label className={`block mb-1 text-gray-900 dark:text-white ${isArabic ? 'font-noto text-right' : 'font-nt text-left'}`}>{t?.designStage || 'What\'s your design stage?'} *</label>
                       <select
                         name="designStage"
                         value={formData.designStage}
                         onChange={handleChange}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                       >
                         <option value="">{t?.selectDesignStage || 'Select design stage'}</option>
                         {designStages.map(stageKey => (
@@ -612,7 +626,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                         name="projectScope"
                         value={formData.projectScope}
                         onChange={handleChange}
-                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                        className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] [&>option]:text-black dark:[&>option]:text-white [&>option]:bg-white dark:[&>option]:bg-black ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                       >
                         <option value="">{t?.selectProjectScope || 'Select project scope'}</option>
                         {projectScopes.map(scopeKey => (
@@ -631,10 +645,10 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
 
               {/* Step 4: Additional Details */}
               {step === 4 && (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div className={isArabic ? 'text-right' : 'text-left'}>
-                    <h2 className={`text-2xl font-bold mb-2 text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>{t?.additionalDetails || 'Additional Details'}</h2>
-                    <p className={`text-gray-600 dark:text-white/80 ${isArabic ? 'font-noto' : 'font-nt'}`}>{t?.additionalDetailsDescription || 'Tell us more about your project'}</p>
+                    <h2 className={`text-xl sm:text-2xl font-bold mb-2 text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>{t?.additionalDetails || 'Additional Details'}</h2>
+                    <p className={`text-sm sm:text-base text-gray-600 dark:text-white/80 ${isArabic ? 'font-noto' : 'font-nt'}`}>{t?.additionalDetailsDescription || 'Tell us more about your project'}</p>
                   </div>
 
                   <div>
@@ -643,8 +657,8 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                       name="details"
                       value={formData.details}
                       onChange={handleChange}
-                      rows="6"
-                      className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] resize-none ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
+                      rows="4"
+                      className={`w-full bg-white dark:bg-black border border-gray-300 dark:border-[#db2b2e]/20 p-2.5 sm:p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:border-primary dark:focus:border-[#db2b2e] resize-none ${isArabic ? 'text-right font-noto' : 'text-left font-nt'}`}
                       placeholder={t?.projectDetailsPlaceholder || 'Please provide any additional details about your project...'}
                     ></textarea>
                   </div>
@@ -656,11 +670,11 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
               )}
 
               {/* Navigation Buttons */}
-              <div className={`flex justify-between mt-8 ${isArabic ? 'flex-row-reverse' : ''}`}>
+              <div className={`flex justify-between mt-6 sm:mt-8 ${isArabic ? 'flex-row-reverse' : ''}`}>
                 {step > 1 && (
                   <button
                     onClick={handleBack}
-                    className={`px-6 py-2 border border-primary dark:border-[#db2b2e] text-gray-900 dark:text-white hover:bg-primary/10 dark:hover:bg-[#db2b2e]/10 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
+                    className={`px-4 sm:px-6 py-2 border border-primary dark:border-[#db2b2e] text-gray-900 dark:text-white hover:bg-primary/10 dark:hover:bg-[#db2b2e]/10 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
                   >
                     {t?.back || 'Back'}
                   </button>
@@ -670,7 +684,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                     <button
                       onClick={handleNext}
                       disabled={!isStepCompleted(step)}
-                      className={`px-6 py-2 transition-colors ${isArabic ? 'font-noto' : 'font-nt'} ${
+                      className={`px-4 sm:px-6 py-2 transition-colors ${isArabic ? 'font-noto' : 'font-nt'} ${
                         isStepCompleted(step)
                           ? 'bg-primary dark:bg-[#db2b2e] text-white hover:bg-primary/90 dark:hover:bg-[#db2b2e]/90'
                           : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
@@ -681,7 +695,7 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                   ) : (
                     <button
                       onClick={handleSubmit}
-                      className={`px-6 py-2 bg-primary dark:bg-[#db2b2e] text-white hover:bg-primary/90 dark:hover:bg-[#db2b2e]/90 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
+                      className={`px-4 sm:px-6 py-2 bg-primary dark:bg-[#db2b2e] text-white hover:bg-primary/90 dark:hover:bg-[#db2b2e]/90 transition-colors ${isArabic ? 'font-noto' : 'font-nt'}`}
                     >
                       {t?.submitRequest || 'Submit Request'}
                     </button>
@@ -715,4 +729,4 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
 ServiceRequestModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired
-}; 
+};
