@@ -390,13 +390,10 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
 
             {/* Stepper Header */}
             <div className="bg-gray-50 dark:bg-gray-900 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-between'}`}>
-                <h2 className={`text-lg font-semibold text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'} ${isArabic ? 'ml-8' : 'mr-8'}`}>
+              <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-center'}`}>
+                <h2 className={`text-lg font-semibold text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>
                   {t?.serviceRequest || 'Service Request'}
                 </h2>
-                <span className={`text-xs text-gray-500 dark:text-gray-400 ${isArabic ? 'font-noto' : 'font-nt'}`}>
-                  {step}/4
-                </span>
               </div>
               
               {/* Stepper Indicators */}
@@ -412,14 +409,14 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
                           : isStepCompleted(stepItem.id)
                           ? 'border-green-500 bg-green-500 text-white'
                           : canProceedToStep(stepItem.id)
-                          ? 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-white hover:border-primary dark:hover:border-[#db2b2e]'
-                          : 'border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-white cursor-not-allowed'
+                          ? 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-primary dark:hover:border-[#db2b2e]'
+                          : 'border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                       }`}
                     >
                       {isStepCompleted(stepItem.id) ? (
                         <FiCheck className="w-4 h-4" />
                       ) : (
-                        <span className="text-xs">{stepItem.icon}</span>
+                        <span className="text-sm font-medium">{stepItem.id}</span>
                       )}
                     </button>
                     
