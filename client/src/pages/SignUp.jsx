@@ -42,7 +42,21 @@ export default function SignUp() {
       });
       if (data.success === false) {
         setLoading(false);
-        setError(data.message);
+        
+        // Handle specific error cases with user-friendly messages
+        let translatedError = '';
+        
+        if (data.message === 'Email already exists') {
+          translatedError = t.emailAlreadyExists || 'Email already exists. Please use a different email or sign in.';
+        } else if (data.message === 'Username already exists') {
+          translatedError = t.usernameAlreadyExists || 'Username already exists. Please choose a different username.';
+        } else if (data.message.includes('Validation failed') || data.message.includes('All fields are required')) {
+          translatedError = t.validationError || 'Please check your input and try again.';
+        } else {
+          translatedError = t.accountCreationFailed || 'Account creation failed. Please try again.';
+        }
+        
+        setError(translatedError);
         return;
       }
       setLoading(false);
@@ -78,7 +92,17 @@ export default function SignUp() {
       navigate('/sign-in');
     } catch (error) {
       setLoading(false);
-      setError(error.message);
+      console.error('Signup error:', error);
+      
+      // Handle network or unexpected errors
+      let translatedError = '';
+      if (error.message.includes('Failed to fetch') || error.message.includes('Network Error')) {
+        translatedError = common.networkError || 'Network error. Please check your connection and try again.';
+      } else {
+        translatedError = t.accountCreationFailed || 'Account creation failed. Please try again.';
+      }
+      
+      setError(translatedError);
     }
   };
   

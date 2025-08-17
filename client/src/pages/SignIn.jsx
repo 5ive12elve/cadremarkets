@@ -76,8 +76,19 @@ export default function SignIn() {
       console.log('Success flag:', data.success);
       
       if (data.success === false) {
-        dispatch(signInFailure(data.message));
-        toast.error(data.message);
+        // Handle specific error cases with user-friendly messages
+        let translatedError = '';
+        
+        if (data.message === 'User not found') {
+          translatedError = t.emailNotFound || 'Email not found. Please check your email or sign up.';
+        } else if (data.message === 'Invalid credentials') {
+          translatedError = t.incorrectPassword || 'Incorrect password. Please try again.';
+        } else {
+          translatedError = t.signInFailed || 'Sign in failed. Please try again.';
+        }
+        
+        dispatch(signInFailure(translatedError));
+        toast.error(translatedError);
         return;
       }
       
@@ -247,8 +258,17 @@ export default function SignIn() {
       
     } catch (error) {
       console.error('Signin error:', error);
-      dispatch(signInFailure(error.message || 'Sign in failed'));
-      toast.error(error.message || 'Sign in failed');
+      
+      // Handle network or unexpected errors
+      let translatedError = '';
+      if (error.message.includes('Failed to fetch') || error.message.includes('Network Error')) {
+        translatedError = common.networkError || 'Network error. Please check your connection and try again.';
+      } else {
+        translatedError = t.signInFailed || 'Sign in failed. Please try again.';
+      }
+      
+      dispatch(signInFailure(translatedError));
+      toast.error(translatedError);
     }
   };
   return (

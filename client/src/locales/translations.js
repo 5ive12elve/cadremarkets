@@ -36,6 +36,7 @@ export const translations = {
       retry: 'Retry',
       pleaseEnterDetails: 'Please enter your details',
       signInError: 'Sign in failed. Please try again.',
+      networkError: 'Network error. Please check your connection and try again.',
       continueWithGoogle: 'Continue with Google',
       alreadySignedIn: 'You are already signed in. Please sign out first to use a different account.',
       alreadySignedInSuccess: 'You are already signed in!',
@@ -79,6 +80,7 @@ export const translations = {
       retry: 'إعادة المحاولة',
       pleaseEnterDetails: 'يرجى إدخال بياناتك',
       signInError: 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.',
+      networkError: 'خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مرة أخرى.',
       continueWithGoogle: 'المتابعة باستخدام جوجل',
       alreadySignedIn: 'أنت مسجل دخول بالفعل. يرجى تسجيل الخروج أولاً لاستخدام حساب مختلف.',
       alreadySignedInSuccess: 'أنت مسجل دخول بالفعل!',
@@ -789,6 +791,11 @@ export const translations = {
       cadreInternalLogin: 'Cadre Internal Login',
       welcomeBack: 'Welcome back!',
       signedInSuccessfully: 'You have successfully signed in',
+      // Error messages
+      emailNotFound: 'Email not found. Please check your email or sign up.',
+      incorrectPassword: 'Incorrect password. Please try again.',
+      invalidCredentials: 'Invalid credentials. Please check your email and password.',
+      signInFailed: 'Sign in failed. Please try again.',
     },
     ar: {
       title: 'تسجيل الدخول',
@@ -802,6 +809,11 @@ export const translations = {
       cadreInternalLogin: 'تسجيل الدخول الداخلي لكادر',
       welcomeBack: 'مرحباً بعودتك!',
       signedInSuccessfully: 'تم تسجيل الدخول بنجاح',
+      // Error messages
+      emailNotFound: 'البريد الإلكتروني غير موجود. يرجى التحقق من بريدك الإلكتروني أو التسجيل.',
+      incorrectPassword: 'كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.',
+      invalidCredentials: 'بيانات الاعتماد غير صحيحة. يرجى التحقق من بريدك الإلكتروني وكلمة المرور.',
+      signInFailed: 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.',
     }
   },
 
@@ -828,6 +840,11 @@ export const translations = {
       canNowSignIn: 'You can now sign in to your account',
       mustAcceptTerms: 'You must accept the Terms of Service and Privacy Policy to create an account.',
       freeShipping: 'FREE SHIPPING',
+      // Error messages
+      emailAlreadyExists: 'Email already exists. Please use a different email or sign in.',
+      usernameAlreadyExists: 'Username already exists. Please choose a different username.',
+      accountCreationFailed: 'Account creation failed. Please try again.',
+      validationError: 'Please check your input and try again.',
     },
     ar: {
       title: 'إنشاء حساب',
@@ -850,6 +867,11 @@ export const translations = {
       accountCreated: 'تم إنشاء الحساب!',
       canNowSignIn: 'يمكنك الآن تسجيل الدخول إلى حسابك',
       mustAcceptTerms: 'يجب أن توافق على شروط الخدمة و سياسة الخصوصية لإنشاء حساب.',
+      // Error messages
+      emailAlreadyExists: 'البريد الإلكتروني موجود بالفعل. يرجى استخدام بريد إلكتروني مختلف أو تسجيل الدخول.',
+      usernameAlreadyExists: 'اسم المستخدم موجود بالفعل. يرجى اختيار اسم مستخدم مختلف.',
+      accountCreationFailed: 'فشل في إنشاء الحساب. يرجى المحاولة مرة أخرى.',
+      validationError: 'يرجى التحقق من إدخالك والمحاولة مرة أخرى.',
     }
   },
 
