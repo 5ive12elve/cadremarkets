@@ -304,7 +304,6 @@ export default function ServicesPage() {
               </div>
             </motion.div>
             <motion.div variants={imageVariants} className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent z-10" />
               <img
                 src="/mediassets/CADT02.png"
                 alt="Creative Process"
