@@ -2101,6 +2101,19 @@ export const translations = {
   // Service Request Modal
   serviceModal: {
     en: {
+      // Stepper / Header
+      serviceRequest: 'Service Request',
+      step1Title: 'Basic Information',
+      step1Description: 'Tell us about yourself',
+      step2Title: 'Service Details',
+      step2Description: 'Choose your service',
+      step3Title: 'Project Scope',
+      step3Description: 'Define your project',
+      step4Title: 'Additional Details',
+      step4Description: 'Tell us more',
+      completePreviousSteps: 'Please complete previous steps first.',
+      pleaseCompleteFields: 'Please complete all required fields before proceeding.',
+      pleaseFixErrors: 'Please fix the following errors:',
       tellUsAboutYourself: 'Tell us about yourself',
       basicInformation: 'Let\'s start with some basic information',
       serviceDetails: 'Service Details',
@@ -2193,6 +2206,19 @@ export const translations = {
       moreThan100k: 'More than 100,000 EGP'
     },
     ar: {
+      // Stepper / Header
+      serviceRequest: 'طلب خدمة',
+      step1Title: 'معلومات أساسية',
+      step1Description: 'أخبرنا عن نفسك',
+      step2Title: 'تفاصيل الخدمة',
+      step2Description: 'اختر خدمتك',
+      step3Title: 'نطاق المشروع',
+      step3Description: 'حدد مشروعك',
+      step4Title: 'تفاصيل إضافية',
+      step4Description: 'أخبرنا المزيد',
+      completePreviousSteps: 'يرجى إكمال الخطوات السابقة أولاً.',
+      pleaseCompleteFields: 'يرجى إكمال جميع الحقول المطلوبة قبل المتابعة.',
+      pleaseFixErrors: 'يرجى إصلاح الأخطاء التالية:',
       tellUsAboutYourself: 'أخبرنا عن نفسك',
       basicInformation: 'لنبدأ ببعض المعلومات الأساسية',
       serviceDetails: 'تفاصيل الخدمة',

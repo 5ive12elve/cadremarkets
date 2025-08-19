@@ -390,14 +390,14 @@ export default function ServiceRequestModal({ isOpen, onClose }) {
 
             {/* Stepper Header */}
             <div className="bg-gray-50 dark:bg-gray-900 px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 dark:border-gray-700">
-              <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-center'}`}>
+              <div className={`flex items-center justify-center ${isArabic ? 'flex-row-reverse' : ''}`}>
                 <h2 className={`text-base sm:text-lg font-semibold text-gray-900 dark:text-white ${isArabic ? 'font-amiri' : 'font-nt'}`}>
                   {t?.serviceRequest || 'Service Request'}
                 </h2>
               </div>
               
               {/* Stepper Indicators */}
-              <div className={`flex items-center ${isArabic ? 'flex-row-reverse' : 'justify-between'} mt-3 sm:mt-4`}>
+              <div className={`flex items-center justify-between ${isArabic ? 'flex-row-reverse' : ''} mt-3 sm:mt-4`}>
                 {steps.map((stepItem, index) => (
                   <div key={stepItem.id} className={`flex items-center flex-1 ${isArabic ? 'flex-row-reverse' : ''}`}>
                     <button
