@@ -176,6 +176,44 @@ export default function ServicesPage() {
           </div>
         </motion.section>
 
+        {/* LIQUID Video Showcase */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={containerVariants}
+          className="py-20"
+        >
+          <motion.div variants={itemVariants} className="max-w-6xl mx-auto">
+            <h2 className={`text-2xl md:text-4xl text-primary mb-4 md:mb-6 text-center ${
+              isArabic ? 'font-amiri font-bold' : 'font-nt-bold'
+            }`}>LIQUID</h2>
+            <p className={`text-sm md:text-base text-gray-600 dark:text-gray-300 text-center mb-6 md:mb-8 ${
+              isArabic ? 'font-noto' : 'font-nt'
+            }`}>
+              A glimpse into our motion and visual direction.
+            </p>
+            <motion.div
+              variants={imageVariants}
+              className="relative aspect-video w-full overflow-hidden rounded-sm border border-gray-200 dark:border-[#db2b2e]/20 bg-black"
+            >
+              <video
+                className="absolute inset-0 h-full w-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                controls
+              >
+                <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/sp_auto/v1755608238/vocerg1jicfuxghut2tq.m3u8" type="application/x-mpegURL" />
+                <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/v1755608238/vocerg1jicfuxghut2tq.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </motion.div>
+          </motion.div>
+        </motion.section>
+
         {/* Services Grid Section */}
                 <motion.div
           initial="hidden"
@@ -313,42 +351,7 @@ export default function ServicesPage() {
           </div>
         </motion.section>
 
-        {/* LIQUID Video Showcase */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={containerVariants}
-          className="py-20"
-        >
-          <motion.div variants={itemVariants} className="max-w-6xl mx-auto">
-            <h2 className={`text-2xl md:text-4xl text-primary mb-4 md:mb-6 text-center ${
-              isArabic ? 'font-amiri font-bold' : 'font-nt-bold'
-            }`}>LIQUID</h2>
-            <p className={`text-sm md:text-base text-gray-600 dark:text-gray-300 text-center mb-6 md:mb-8 ${
-              isArabic ? 'font-noto' : 'font-nt'
-            }`}>
-              A glimpse into our motion and visual direction.
-            </p>
-            <motion.div
-              variants={imageVariants}
-              className="relative aspect-video w-full overflow-hidden rounded-sm border border-gray-200 dark:border-[#db2b2e]/20 bg-black"
-            >
-              <video
-                className="absolute inset-0 h-full w-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                controls
-              >
-                <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/sp_auto/v1755608238/vocerg1jicfuxghut2tq.m3u8" type="application/x-mpegURL" />
-                <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/v1755608238/vocerg1jicfuxghut2tq.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </motion.div>
-          </motion.div>
-        </motion.section>
+        
       </div>
 
       <ServiceRequestModal
