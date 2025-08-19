@@ -116,7 +116,7 @@ export default function SignUp() {
         </div>
 
         {/* Right Form */}
-        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300 overflow-hidden">
+        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300 overflow-hidden">
           {/* Mobile Background Image + Accordion accent */}
           <div className="md:hidden absolute inset-0 opacity-5 pointer-events-none select-none">
             <img 
@@ -128,7 +128,7 @@ export default function SignUp() {
           {/* Corner accents */}
           {/* Remove previous corner accents 14, 17 and ruler 15 */}
           {/* Add 3-box (19) and 2-box (20) as corner accents */}
-          <div className={`relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 bg-white/90 dark:bg-black/90 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-4 md:p-8 h-full flex flex-col justify-center ${direction === 'rtl' ? 'ml-0 md:ml-8 lg:ml-16' : 'mr-0 md:mr-8 lg:mr-16'}`}>
+          <div className={`relative z-10 w-full md:w-[80%] mx-auto md:mx-0 bg-white/90 dark:bg-black/90 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-4 md:p-8 h-auto flex flex-col justify-center ${direction === 'rtl' ? 'ml-0 md:ml-8 lg:ml-16' : 'mr-0 md:mr-8 lg:mr-16'}`}>
             {/* 3-box (element 19) top-left */}
             {/* 2-box (element 20) bottom-right */}
             {/* Target/crosshair watermark */}

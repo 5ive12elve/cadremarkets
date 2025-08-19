@@ -297,9 +297,9 @@ export default function SignIn() {
         </div>
 
         {/* Right Form */}
-        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300 overflow-hidden">
+        <div className="bg-white dark:bg-black text-black dark:text-white flex flex-col items-center justify-center p-4 sm:p-6 md:p-10 lg:p-20 relative transition-colors duration-300 overflow-hidden">
           {/* Form Content */}
-          <div className={`relative z-10 w-full max-w-sm mx-auto md:max-w-none md:mx-0 bg-white/90 dark:bg-black/90 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-4 md:p-8 h-full flex flex-col justify-center ${direction === 'rtl' ? 'ml-0 md:ml-8 lg:ml-16' : 'mr-0 md:mr-8 lg:mr-16'}`}>
+          <div className={`relative z-10 w-full md:w-[80%] mx-auto md:mx-0 bg-white/90 dark:bg-black/90 border-2 border-[#db2b2e] shadow-none md:shadow-lg p-4 md:p-8 h-auto flex flex-col justify-center ${direction === 'rtl' ? 'ml-0 md:ml-8 lg:ml-16' : 'mr-0 md:mr-8 lg:mr-16'}`}>
             <div className="flex items-center justify-between w-full mb-3 md:mb-2">
               <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold font-primary text-[#db2b2e] ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-amiri' : 'font-primary'}`}>{t.title || 'Sign In'}</h1>
               <img src="/mediassets/cm2025red.png" alt="CM2025 Red" className={`h-8 w-auto ${direction === 'rtl' ? 'mr-2' : 'ml-2'}`} />
