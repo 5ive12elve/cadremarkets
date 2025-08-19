@@ -336,13 +336,16 @@ export default function ServicesPage() {
             >
               <video
                 className="absolute inset-0 h-full w-full object-cover"
-                src="/mediassets/LIQUID.mp4"
                 autoPlay
                 muted
                 loop
                 playsInline
                 controls
-              />
+              >
+                <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/sp_auto/v1755608238/vocerg1jicfuxghut2tq.m3u8" type="application/x-mpegURL" />
+                <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/v1755608238/vocerg1jicfuxghut2tq.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </motion.div>
           </motion.div>
         </motion.section>
