@@ -182,13 +182,13 @@ export default function ServicesPage() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={containerVariants}
-          className="py-20"
+          className="py-6 md:py-8"
         >
           <motion.div variants={itemVariants} className="max-w-6xl mx-auto">
-            <h2 className={`text-2xl md:text-4xl text-primary mb-4 md:mb-6 text-center ${
+            <h2 className={`text-2xl md:text-4xl text-primary mb-2 md:mb-3 text-center ${
               isArabic ? 'font-amiri font-bold' : 'font-nt-bold'
             }`}>LIQUID</h2>
-            <p className={`text-sm md:text-base text-gray-600 dark:text-gray-300 text-center mb-6 md:mb-8 ${
+            <p className={`text-sm md:text-base text-gray-600 dark:text-gray-300 text-center mb-4 md:mb-5 ${
               isArabic ? 'font-noto' : 'font-nt'
             }`}>
               A glimpse into our motion and visual direction.
@@ -220,7 +220,7 @@ export default function ServicesPage() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={containerVariants}
-          className="py-20"
+          className="pt-6 md:pt-8 pb-20 md:pb-24"
         >
           <div className={`w-full max-w-7xl mx-auto px-4 text-black dark:text-white ${
             isArabic ? 'font-noto' : 'font-nt'
