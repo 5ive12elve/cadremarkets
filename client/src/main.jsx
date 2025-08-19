@@ -6,10 +6,33 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store.js';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Toaster } from 'react-hot-toast';
-import './utils/debug-token.js'; // Import debug utilities
 
-// Expose store to window for debugging and token access
-if (typeof window !== 'undefined') {
+// Silence all console output in production
+if (import.meta.env.PROD && typeof window !== 'undefined') {
+  const noop = () => {};
+  const methods = [
+    'log',
+    'info',
+    'debug',
+    'warn',
+    'error',
+    'trace',
+    'group',
+    'groupCollapsed',
+    'groupEnd',
+    'time',
+    'timeEnd',
+    'table'
+  ];
+  methods.forEach((method) => {
+    if (typeof console[method] === 'function') {
+      console[method] = noop;
+    }
+  });
+}
+
+// Expose store to window only in development for debugging
+if (import.meta.env.DEV && typeof window !== 'undefined') {
   window.__REDUX_STORE__ = store;
 }
 

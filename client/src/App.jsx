@@ -60,11 +60,13 @@ import Error401 from './pages/Error401';
 import Error403 from './pages/Error403';
 import Error500 from './pages/Error500';
 
-console.log('=== FRONTEND VERSION CHECK ===');
-console.log('Frontend updated with token storage: true');
-console.log('Current timestamp:', new Date().toISOString());
-console.log('Environment:', import.meta.env.MODE);
-console.log('API URL:', import.meta.env.VITE_API_URL);
+if (import.meta.env.DEV) {
+  console.log('=== FRONTEND VERSION CHECK ===');
+  console.log('Frontend updated with token storage: true');
+  console.log('Current timestamp:', new Date().toISOString());
+  console.log('Environment:', import.meta.env.MODE);
+  console.log('API URL:', import.meta.env.VITE_API_URL);
+}
 
 // Token restoration component
 const TokenRestorer = () => {
@@ -72,32 +74,38 @@ const TokenRestorer = () => {
   const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log('=== ENHANCED TOKEN RESTORER ===');
-    console.log('Current Redux token:', !!token);
-    console.log('Current Redux token length:', token ? token.length : 0);
+    if (import.meta.env.DEV) {
+      console.log('=== ENHANCED TOKEN RESTORER ===');
+      console.log('Current Redux token:', !!token);
+      console.log('Current Redux token length:', token ? token.length : 0);
+    }
     
     // If no token in Redux state, try to restore from multiple sources
     if (!token) {
-      console.log('No token in Redux state, checking storage locations...');
+      if (import.meta.env.DEV) console.log('No token in Redux state, checking storage locations...');
       
       // Check localStorage first
       const storedToken = localStorage.getItem('auth_token');
-      console.log('localStorage token:', !!storedToken);
-      console.log('localStorage token length:', storedToken ? storedToken.length : 0);
+      if (import.meta.env.DEV) {
+        console.log('localStorage token:', !!storedToken);
+        console.log('localStorage token length:', storedToken ? storedToken.length : 0);
+      }
       
       if (storedToken) {
-        console.log('Restoring token from localStorage to Redux state');
+        if (import.meta.env.DEV) console.log('Restoring token from localStorage to Redux state');
         dispatch(restoreToken(storedToken));
         return;
       }
       
       // Check sessionStorage
       const sessionToken = sessionStorage.getItem('auth_token');
-      console.log('sessionStorage token:', !!sessionToken);
-      console.log('sessionStorage token length:', sessionToken ? sessionToken.length : 0);
+      if (import.meta.env.DEV) {
+        console.log('sessionStorage token:', !!sessionToken);
+        console.log('sessionStorage token length:', sessionToken ? sessionToken.length : 0);
+      }
       
       if (sessionToken) {
-        console.log('Restoring token from sessionStorage to Redux state');
+        if (import.meta.env.DEV) console.log('Restoring token from sessionStorage to Redux state');
         // Also store in localStorage for future use
         localStorage.setItem('auth_token', sessionToken);
         dispatch(restoreToken(sessionToken));
@@ -110,24 +118,26 @@ const TokenRestorer = () => {
         try {
           const user = JSON.parse(userString);
           const userToken = user.token;
-          console.log('user object token:', !!userToken);
-          console.log('user object token length:', userToken ? userToken.length : 0);
+          if (import.meta.env.DEV) {
+            console.log('user object token:', !!userToken);
+            console.log('user object token length:', userToken ? userToken.length : 0);
+          }
           
           if (userToken) {
-            console.log('Restoring token from user object to Redux state');
+            if (import.meta.env.DEV) console.log('Restoring token from user object to Redux state');
             // Also store in localStorage for future use
             localStorage.setItem('auth_token', userToken);
             dispatch(restoreToken(userToken));
             return;
           }
         } catch (e) {
-          console.log('Error parsing user object:', e);
+          if (import.meta.env.DEV) console.log('Error parsing user object:', e);
         }
       }
       
-      console.log('No token found in any storage location to restore');
+      if (import.meta.env.DEV) console.log('No token found in any storage location to restore');
     } else {
-      console.log('Token already exists in Redux state');
+      if (import.meta.env.DEV) console.log('Token already exists in Redux state');
     }
   }, [dispatch, token]);
 
