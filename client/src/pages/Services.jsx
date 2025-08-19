@@ -303,14 +303,48 @@ export default function ServicesPage() {
                 </div>
               </div>
             </motion.div>
-            <motion.div variants={imageVariants} className="relative">
+            <motion.div variants={imageVariants} className="relative w-full flex items-center justify-center bg-transparent">
               <img
                 src="/mediassets/CADT02.png"
                 alt="Creative Process"
-                className="w-full h-[400px] object-cover rounded-sm"
+                className="w-full max-h-[520px] object-contain rounded-sm"
               />
             </motion.div>
           </div>
+        </motion.section>
+
+        {/* LIQUID Video Showcase */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={containerVariants}
+          className="py-20"
+        >
+          <motion.div variants={itemVariants} className="max-w-6xl mx-auto">
+            <h2 className={`text-2xl md:text-4xl text-primary mb-4 md:mb-6 text-center ${
+              isArabic ? 'font-amiri font-bold' : 'font-nt-bold'
+            }`}>LIQUID</h2>
+            <p className={`text-sm md:text-base text-gray-600 dark:text-gray-300 text-center mb-6 md:mb-8 ${
+              isArabic ? 'font-noto' : 'font-nt'
+            }`}>
+              A glimpse into our motion and visual direction.
+            </p>
+            <motion.div
+              variants={imageVariants}
+              className="relative aspect-video w-full overflow-hidden rounded-sm border border-gray-200 dark:border-[#db2b2e]/20 bg-black"
+            >
+              <video
+                className="absolute inset-0 h-full w-full object-cover"
+                src="/mediassets/LIQUID.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                controls
+              />
+            </motion.div>
+          </motion.div>
         </motion.section>
       </div>
 
