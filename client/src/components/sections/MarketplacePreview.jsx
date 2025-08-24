@@ -26,7 +26,8 @@ export default function MarketplacePreview() {
         setError(null);
 
         console.log('🔍 MarketplacePreview: Fetching listings...');
-        const endpoint = `api/listing/get?limit=1000&cadremarketsService=true`;
+        // Reduced limit from 1000 to 12 for better performance
+        const endpoint = `api/listing/get?limit=12&cadremarketsService=true`;
         console.log('🔍 Endpoint:', endpoint);
         
         // Fetch listings with cadremarketsService: true using publicApiCall
@@ -70,8 +71,17 @@ export default function MarketplacePreview() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center min-h-[200px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-items-center md:justify-items-start">
+          {[...Array(8)].map((_, index) => (
+            <div key={index} className="w-full max-w-[265px] animate-pulse">
+              <div className="aspect-square w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div className="p-3 sm:p-4 space-y-2">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : error ? (
         <div className="text-center text-red-500 py-8">

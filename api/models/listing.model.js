@@ -187,3 +187,11 @@ ListingSchema.pre('save', function(next) {
 });
 
 export default mongoose.model('Listing', ListingSchema);
+
+// Add database indexes for better performance
+ListingSchema.index({ status: 1, cadremarketsService: 1 });
+ListingSchema.index({ type: 1, status: 1 });
+ListingSchema.index({ name: 'text', description: 'text' });
+ListingSchema.index({ createdAt: -1 });
+ListingSchema.index({ price: 1 });
+ListingSchema.index({ city: 1, district: 1 });

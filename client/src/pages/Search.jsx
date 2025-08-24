@@ -162,15 +162,18 @@ export default function Search() {
     urlParams.set('startIndex', startIndex);
 
     try {
+      setLoading(true);
       const res = await fetch(getApiUrl(`api/listing/get?${urlParams.toString()}`));
       if (!res.ok) {
         throw new Error('Failed to fetch additional listings.');
       }
       const data = await res.json();
       setListings((prev) => [...prev, ...data]);
-      setShowMore(data.length === 9);
+      setShowMore(data.length === 12); // Updated to match the new limit
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -159,7 +159,7 @@ export const getListing = async (req, res, next) => {
 
 export const getListings = async (req, res, next) => {
   try {
-    const limit = parseInt(req.query.limit) || 9;
+    const limit = parseInt(req.query.limit) || 12; // Reduced from 9 to 12 for better UX
     const startIndex = parseInt(req.query.startIndex) || 0;
 
     const {
@@ -173,20 +173,23 @@ export const getListings = async (req, res, next) => {
       cadremarketsService,
     } = req.query;
 
-    // Build filters dynamically
+    // Build filters dynamically - optimize for performance
     const filters = {
-      name: { $regex: searchTerm, $options: 'i' }, // Search by name
-      type: type && type !== 'all' ? type : { $in: [
-        'Paintings & Drawings',
-        'Sculptures & 3D Art',
-        'Antiques & Collectibles',
-        'Clothing & Wearables',
-        'Home Décor',
-        'Accessories',
-        'Prints & Posters',
-      ]}, // Match categories
       status: 'For Sale', // Only show listings that are for sale
     };
+
+    // Add search filter only if searchTerm is provided and not empty
+    if (searchTerm && searchTerm.trim()) {
+      filters.$or = [
+        { name: { $regex: searchTerm.trim(), $options: 'i' } },
+        { description: { $regex: searchTerm.trim(), $options: 'i' } }
+      ];
+    }
+
+    // Add type filter only if not 'all'
+    if (type && type !== 'all') {
+      filters.type = type;
+    }
 
     // Add optional filters
     if (city) filters.city = city;
@@ -198,15 +201,24 @@ export const getListings = async (req, res, next) => {
     const sortField = sort;
     const sortOrder = order === 'asc' ? 1 : -1;
 
+    // Use lean() for better performance when you don't need full mongoose documents
     const listings = await Listing.find(filters)
+      .select('_id name description type price imageUrls city district dimensions width height depth createdAt cadremarketsService') // Only select needed fields
       .sort({ [sortField]: sortOrder })
       .limit(limit)
-      .skip(startIndex);
+      .skip(startIndex)
+      .lean(); // Convert to plain JavaScript objects for better performance
 
     console.log('🔍 Backend getListings: Found', listings.length, 'listings');
     console.log('🔍 Backend getListings: Filters:', filters);
     console.log('🔍 Backend getListings: Response type:', typeof listings);
     console.log('🔍 Backend getListings: Is array?', Array.isArray(listings));
+
+    // Add cache headers for better performance
+    res.set({
+      'Cache-Control': 'public, max-age=300', // Cache for 5 minutes
+      'ETag': `"${Date.now()}"` // Simple ETag for caching
+    });
 
     // ✅ FIX: Always return an array, even if empty
     return res.status(200).json(listings || []);

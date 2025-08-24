@@ -22,6 +22,8 @@ export default function ListingItem({ listing }) {
             alt="listing cover"
             className="w-full h-full object-cover"
             onError={handleImageError}
+            loading="lazy"
+            decoding="async"
           />
         </div>
         <div className="p-3 sm:p-4 w-full overflow-hidden">
