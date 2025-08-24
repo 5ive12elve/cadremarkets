@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { backofficeApiRequest, isBackofficeAuthenticated } from '../backUtils/cadreBackAuth';
-import { FiFilter, FiSearch, FiX, FiRefreshCw, FiDownload } from 'react-icons/fi';
+import { FiFilter, FiSearch, FiX, FiRefreshCw, FiDownload, FiTrash2 } from 'react-icons/fi';
 import PageHeader from '../components/shared/PageHeader';
 import Card from '../components/shared/Card';
 import Button from '../components/shared/Button';
@@ -24,6 +24,7 @@ const CadreBackServices = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedService, setSelectedService] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [notes, setNotes] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -94,6 +95,29 @@ const CadreBackServices = () => {
     } catch (error) {
       console.error('Error updating status:', error);
       toast.error('Failed to update status');
+    }
+  };
+
+  const handleDeleteService = async () => {
+    if (!selectedService) return;
+    
+    try {
+      const response = await backofficeApiRequest(`/services/${selectedService._id}`, {
+        method: 'DELETE'
+      });
+
+      if (!response.ok) throw new Error('Failed to delete service');
+      
+      toast.success('Service deleted successfully');
+      setShowDeleteConfirm(false);
+      setShowDetailsModal(false);
+      setSelectedService(null);
+      setNotes('');
+      fetchServices();
+      setRefreshTrigger(prev => prev + 1);
+    } catch (error) {
+      console.error('Error deleting service:', error);
+      toast.error('Failed to delete service');
     }
   };
 
@@ -413,49 +437,88 @@ const CadreBackServices = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap gap-2 sm:gap-3 justify-end pt-4 border-t border-[#db2b2e]/20">
-                  {selectedService.status === 'pending' && (
-                    <>
+                <div className="flex flex-wrap gap-2 sm:gap-3 justify-between pt-4 border-t border-[#db2b2e]/20">
+                  {/* Delete Button - Always visible */}
+                  <button
+                    onClick={() => setShowDeleteConfirm(true)}
+                    className="px-2 sm:px-3 lg:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm flex items-center gap-2"
+                  >
+                    <FiTrash2 className="w-4 h-4" />
+                    Delete
+                  </button>
+
+                  {/* Status Change Buttons */}
+                  <div className="flex flex-wrap gap-2 sm:gap-3">
+                    {selectedService.status === 'pending' && (
+                      <>
+                        <button
+                          onClick={() => handleStatusChange(selectedService._id, 'rejected')}
+                          className="px-2 sm:px-3 lg:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
+                        >
+                          Reject
+                        </button>
+                        <button
+                          onClick={() => handleStatusChange(selectedService._id, 'approved')}
+                          className="px-2 sm:px-3 lg:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
+                        >
+                          Approve
+                        </button>
+                      </>
+                    )}
+                    {selectedService.status === 'approved' && (
+                      <>
+                        <button
+                          onClick={() => handleStatusChange(selectedService._id, 'rejected')}
+                          className="px-2 sm:px-3 lg:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
+                        >
+                          Reject
+                        </button>
+                        <button
+                          onClick={() => handleStatusChange(selectedService._id, 'completed')}
+                          className="px-2 sm:px-3 lg:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
+                        >
+                          Complete
+                        </button>
+                      </>
+                    )}
+                    {(selectedService.status === 'rejected' || selectedService.status === 'completed') && (
                       <button
-                        onClick={() => handleStatusChange(selectedService._id, 'rejected')}
-                        className="px-2 sm:px-3 lg:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
+                        onClick={() => handleStatusChange(selectedService._id, 'pending')}
+                        className="px-2 sm:px-3 lg:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e]/10 transition-colors rounded text-xs sm:text-sm"
                       >
-                        Reject
+                        Reopen
                       </button>
-                      <button
-                        onClick={() => handleStatusChange(selectedService._id, 'approved')}
-                        className="px-2 sm:px-3 lg:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
-                      >
-                        Approve
-                      </button>
-                    </>
-                  )}
-                  {selectedService.status === 'approved' && (
-                    <>
-                      <button
-                        onClick={() => handleStatusChange(selectedService._id, 'rejected')}
-                        className="px-2 sm:px-3 lg:px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors rounded text-xs sm:text-sm"
-                      >
-                        Reject
-                      </button>
-                      <button
-                        onClick={() => handleStatusChange(selectedService._id, 'completed')}
-                        className="px-2 sm:px-3 lg:px-4 py-2 bg-[#db2b2e] text-white hover:bg-[#db2b2e]/90 transition-colors rounded text-xs sm:text-sm"
-                      >
-                        Complete
-                      </button>
-                    </>
-                  )}
-                  {(selectedService.status === 'rejected' || selectedService.status === 'completed') && (
-                    <button
-                      onClick={() => handleStatusChange(selectedService._id, 'pending')}
-                      className="px-2 sm:px-3 lg:px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e]/10 transition-colors rounded text-xs sm:text-sm"
-                    >
-                      Reopen
-                    </button>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/90 flex justify-center items-center z-40 p-4">
+          <div className="bg-black border border-[#db2b2e] w-full max-w-md p-6 rounded">
+            <h3 className="text-xl font-bold text-[#db2b2e] mb-4">Confirm Deletion</h3>
+            <p className="text-white mb-6">
+              Are you sure you want to delete service request #{selectedService?.requestId}? 
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 border border-[#db2b2e] text-[#db2b2e] hover:bg-[#db2b2e]/10 transition-colors rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteService}
+                className="px-4 py-2 bg-red-500 text-white hover:bg-red-600 transition-colors rounded"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>
