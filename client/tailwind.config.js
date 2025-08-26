@@ -7,6 +7,9 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        ipad: '820px',
+      },
       colors: {
         primary: "#db2b2e",
         yellowAccent: "#f3eb4b",

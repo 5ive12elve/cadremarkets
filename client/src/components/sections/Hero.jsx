@@ -53,16 +53,16 @@ export default function Hero() {
       animate="visible"
       variants={containerVariants}
     >
-      <section className="relative flex justify-center items-start h-[50vh] min-h-[300px] md:h-[calc(100vh-400px)] md:min-h-[320px] bg-white dark:bg-black transition-colors duration-300 mt-3">
+      <section className="relative flex justify-center items-start h-[50vh] min-h-[300px] md:h-[calc(100vh-420px)] ipad:h-[calc(100vh-460px)] md:min-h-[320px] bg-white dark:bg-black transition-colors duration-300 mt-2 md:mt-3">
         <motion.img
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: isMobile ? 0.6 : 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           src="/mediassets/GE01.png"
           alt="Hero"
-          className="w-[280px] md:w-[360px] h-[278px] md:h-[358px] object-contain absolute top-[70px] z-0"
+          className="w-[280px] md:w-[340px] ipad:w-[360px] h-[278px] md:h-[338px] ipad:h-[358px] object-contain absolute top-[60px] md:top-[60px] ipad:top-[60px] z-0"
         />
-        <div className={`relative z-10 w-full max-w-7xl mx-auto flex flex-col ${isArabic ? 'md:flex-row-reverse' : 'md:flex-row'} justify-between items-center md:items-center px-3 gap-[30px] md:gap-[30px]`} dir={isArabic ? 'rtl' : 'ltr'}>
+        <div className={`relative z-10 w-full max-w-7xl mx-auto flex flex-col ${isArabic ? 'md:flex-row-reverse' : 'md:flex-row'} justify-between items-center md:items-center px-3 gap-[24px] md:gap-[24px]`} dir={isArabic ? 'rtl' : 'ltr'}>
           {/* Image Block */}
           <motion.div 
             variants={itemVariants}
@@ -74,7 +74,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.3 }}
               src="/mediassets/HeroTextLight.png"
               alt="Hero Text"
-              className="w-full max-w-[695px] h-auto object-contain px-4 md:px-0 block dark:hidden"
+              className="w-full max-w-[655px] md:max-w-[680px] ipad:max-w-[695px] h-auto object-contain px-4 md:px-0 block dark:hidden"
             />
             <motion.img
               initial={{ opacity: 0, x: -30 }}
@@ -82,14 +82,14 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.3 }}
               src="/mediassets/HeroText.png"
               alt="Hero Text"
-              className="w-full max-w-[695px] h-auto object-contain px-4 md:px-0 hidden dark:block"
+              className="w-full max-w-[655px] md:max-w-[680px] ipad:max-w-[695px] h-auto object-contain px-4 md:px-0 hidden dark:block"
             />
           </motion.div>
 
           {/* Text Block */}
           <motion.div 
             variants={itemVariants}
-            className={`text-black dark:text-white ${isArabic ? 'font-noto' : 'font-nt'} text-[18px] md:text-[20px] font-light max-w-[360px] ${isArabic ? 'text-right md:text-right order-2' : 'text-left md:text-left order-2'} leading-relaxed mt-4 md:mt-8 px-4 md:px-0 transition-colors duration-300`}
+            className={`text-black dark:text-white ${isArabic ? 'font-noto' : 'font-nt'} text-[18px] md:text-[20px] font-light max-w-[360px] ${isArabic ? 'text-right md:text-right order-2' : 'text-left md:text-left order-2'} leading-relaxed mt-2 md:mt-4 px-4 md:px-0 transition-colors duration-300`}
           >
             <motion.p
               variants={itemVariants}
@@ -101,7 +101,7 @@ export default function Hero() {
             </motion.p>
             <motion.p 
               variants={itemVariants}
-              className="mt-4 w-full"
+              className="mt-3 w-full"
             >
               {heroDescription2}
               <br />
@@ -112,21 +112,21 @@ export default function Hero() {
       </section>
       <motion.section 
         variants={itemVariants}
-        className="w-full max-w-7xl mx-auto px-3 flex justify-between items-start mt-4 md:mt-6"
+        className="w-full max-w-7xl mx-auto px-3 flex justify-between items-start mt-2 md:mt-3"
       >
         <motion.img
           whileHover={{ rotate: 180 }}
           transition={{ duration: 0.5 }}
           src="/mediassets/GE02.png"
           alt="Graphic Left"
-          className="w-[35px] md:w-[43px] h-[37px] md:h-[45px] object-contain"
+          className="w-[35px] md:w-[40px] ipad:w-[43px] h-[37px] md:h-[42px] ipad:h-[45px] object-contain"
         />
         <motion.img
           whileHover={{ rotate: -180 }}
           transition={{ duration: 0.5 }}
           src="/mediassets/GE02.png"
           alt="Graphic Right"
-          className="w-[35px] md:w-[43px] h-[37px] md:h-[45px] object-contain"
+          className="w-[35px] md:w-[40px] ipad:w-[43px] h-[37px] md:h-[42px] ipad:h-[45px] object-contain"
         />
       </motion.section>
     </motion.div>
