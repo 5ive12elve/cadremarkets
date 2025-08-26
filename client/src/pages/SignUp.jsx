@@ -12,6 +12,7 @@ export default function SignUp() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   
   // Language context
@@ -141,6 +142,7 @@ export default function SignUp() {
             </p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-4 space-y-4">
               <div className="space-y-1">
+                <label htmlFor="username" className="sr-only">{t.name || 'Name'}</label>
                 <input
                   type="text"
                   placeholder={t.name || "Name"}
@@ -149,10 +151,13 @@ export default function SignUp() {
                   onChange={handleChange}
                   required
                   dir="auto"
+                  autoComplete="name"
+                  aria-label={t.name || 'Name'}
                 />
               </div>
               
               <div className="space-y-1">
+                <label htmlFor="email" className="sr-only">{t.email || 'Email'}</label>
                 <input
                   type="email"
                   placeholder={t.email || "Email"}
@@ -161,19 +166,41 @@ export default function SignUp() {
                   onChange={handleChange}
                   required
                   dir="auto"
+                  autoComplete="email"
+                  inputMode="email"
+                  aria-label={t.email || 'Email'}
                 />
               </div>
               
               <div className="space-y-1">
-                <input
-                  type="password"
-                  placeholder={t.password || "Password"}
-                  className={`w-full border-b-2 border-gray-300 dark:border-gray-600 bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-3 md:p-3 text-base focus:outline-none focus:border-primary transition-all duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}
-                  id="password"
-                  onChange={handleChange}
-                  required
-                  dir="auto"
-                />
+                <label htmlFor="password" className="sr-only">{t.password || 'Password'}</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder={t.password || "Password"}
+                    className={`w-full border-b-2 border-gray-300 dark:border-gray-600 bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-3 md:p-3 pr-12 text-base focus:outline-none focus:border-primary transition-all duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}
+                    id="password"
+                    onChange={handleChange}
+                    required
+                    dir="auto"
+                    autoComplete="new-password"
+                    aria-label={t.password || 'Password'}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    aria-pressed={showPassword}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    tabIndex={0}
+                  >
+                    {showPassword ? (
+                      <span className="text-sm">Hide</span>
+                    ) : (
+                      <span className="text-sm">Show</span>
+                    )}
+                  </button>
+                </div>
               </div>
               
               {/* Terms Acceptance Checkbox */}

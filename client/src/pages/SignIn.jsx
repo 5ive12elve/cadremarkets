@@ -16,6 +16,7 @@ import { apiCall } from '../utils/apiConfig';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
   const { loading, error, currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -310,6 +311,7 @@ export default function SignIn() {
             
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:gap-4 space-y-4">
               <div className="space-y-1">
+                <label htmlFor="email" className="sr-only">{t.email || 'Email'}</label>
                 <input
                   type="email"
                   placeholder={t.email || 'Email'}
@@ -317,18 +319,40 @@ export default function SignIn() {
                   id="email"
                   onChange={handleChange}
                   dir="auto"
+                  autoComplete="email"
+                  inputMode="email"
+                  aria-label={t.email || 'Email'}
                 />
               </div>
               
               <div className="space-y-1">
-                <input
-                  type="password"
-                  placeholder={t.password || 'Password'}
-                  className={`w-full border-b-2 border-gray-300 dark:border-gray-600 bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-3 md:p-3 text-base focus:outline-none focus:border-primary transition-all duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}
-                  id="password"
-                  onChange={handleChange}
-                  dir="auto"
-                />
+                <label htmlFor="password" className="sr-only">{t.password || 'Password'}</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder={t.password || 'Password'}
+                    className={`w-full border-b-2 border-gray-300 dark:border-gray-600 bg-transparent text-black dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-3 md:p-3 pr-12 text-base focus:outline-none focus:border-primary transition-all duration-300 font-secondary ${direction === 'rtl' ? 'text-right' : 'text-left'} ${direction === 'rtl' ? 'font-noto' : 'font-secondary'}`}
+                    id="password"
+                    onChange={handleChange}
+                    dir="auto"
+                    autoComplete="current-password"
+                    aria-label={t.password || 'Password'}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    aria-pressed={showPassword}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    tabIndex={0}
+                  >
+                    {showPassword ? (
+                      <span className="text-sm">Hide</span>
+                    ) : (
+                      <span className="text-sm">Show</span>
+                    )}
+                  </button>
+                </div>
               </div>
               
               <button
