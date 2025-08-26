@@ -106,7 +106,7 @@ export default function ServicesPage() {
     },
   };
 
-    return (
+  return (
     <motion.main
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -126,7 +126,7 @@ export default function ServicesPage() {
           <FaArrowLeft /> {back}
         </button>
 
-        {/* Hero Section */}
+        {/* Hero Section with Liquid Video */}
         <motion.section
           initial="hidden"
           animate="visible"
@@ -138,11 +138,18 @@ export default function ServicesPage() {
             className="absolute inset-0 w-full h-full"
           >
             <div className="absolute inset-0 bg-black/60 z-10" />
-            <img
-              src="/mediassets/SERV01.jpg"
-              alt="Services Hero"
-              className="w-full h-full object-cover"
-            />
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            >
+              <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/sp_auto/v1755608238/vocerg1jicfuxghut2tq.m3u8" type="application/x-mpegURL" />
+              <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/v1755608238/vocerg1jicfuxghut2tq.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </motion.div>
           
           <div className="relative z-20 text-center max-w-4xl mx-auto px-4">
@@ -176,46 +183,8 @@ export default function ServicesPage() {
           </div>
         </motion.section>
 
-        {/* LIQUID Video Showcase */}
-        <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={containerVariants}
-          className="py-6 md:py-8"
-        >
-          <motion.div variants={itemVariants} className="max-w-6xl mx-auto">
-            <h2 className={`text-2xl md:text-4xl text-primary mb-2 md:mb-3 text-center ${
-              isArabic ? 'font-amiri font-bold' : 'font-nt-bold'
-            }`}>LIQUID</h2>
-            <p className={`text-sm md:text-base text-gray-600 dark:text-gray-300 text-center mb-4 md:mb-5 ${
-              isArabic ? 'font-noto' : 'font-nt'
-            }`}>
-              A glimpse into our motion and visual direction.
-            </p>
-            <motion.div
-              variants={imageVariants}
-              className="relative aspect-video w-full overflow-hidden rounded-sm border border-gray-200 dark:border-[#db2b2e]/20 bg-black"
-            >
-              <video
-                className="absolute inset-0 h-full w-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                controls
-              >
-                <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/sp_auto/v1755608238/vocerg1jicfuxghut2tq.m3u8" type="application/x-mpegURL" />
-                <source src="https://res.cloudinary.com/dt7c4jpgf/video/upload/v1755608238/vocerg1jicfuxghut2tq.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </motion.div>
-          </motion.div>
-        </motion.section>
-
         {/* Services Grid Section */}
-                <motion.div
+        <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -242,7 +211,7 @@ export default function ServicesPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
               {Object.entries(services).map(([category, { icon, isReactIcon, items }], index) => (
-                                <motion.div 
+                <motion.div 
                   key={category}
                   variants={itemVariants}
                   custom={index}
