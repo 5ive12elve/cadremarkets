@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ListingItem from '../components/ListingItem';
-import GE02Loader from '../components/GE02Loader';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTranslation } from '../locales/translations';
 import { smartFetch, getApiUrl } from '../utils/apiConfig';
@@ -334,7 +333,18 @@ export default function Search() {
             <div className="border border-[#db2b2e] rounded-sm p-2 md:p-4">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {loading ? (
-                <GE02Loader />
+                <>
+                  {[...Array(12)].map((_, index) => (
+                    <div key={index} className="w-full max-w-[265px] animate-pulse">
+                      <div className="aspect-square w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="p-3 sm:p-4 space-y-2">
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+                      </div>
+                    </div>
+                  ))}
+                </>
               ) : listings.length === 0 ? (
                 <div className="col-span-full text-center py-12">
                   <h3 className={`text-lg md:text-xl font-bold mb-4 ${
