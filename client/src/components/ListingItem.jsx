@@ -1,9 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types'; // Import PropTypes
 import { getMainImageUrl, getPlaceholderImageUrl } from '../utils/imageUtils';
+import { FiPlus } from 'react-icons/fi';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../redux/cart/cartSlice';
+import toast from 'react-hot-toast';
 
 export default function ListingItem({ listing }) {
   const mainImageUrl = getMainImageUrl(listing.imageUrls);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleImageError = (e) => {
     console.error(`Failed to load image for listing ${listing._id}:`, mainImageUrl);
@@ -13,9 +19,32 @@ export default function ListingItem({ listing }) {
     e.target.classList.add('placeholder-image');
   };
 
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Clothing requires selecting a size first; navigate to listing page
+    if (listing.type === 'Clothing & Wearables') {
+      navigate(`/listing/${listing._id}`);
+      return;
+    }
+
+    dispatch(addToCart({ ...listing, quantity: 1 }));
+    toast.success('Added to cart');
+  };
+
   return (
     <div className="border border-primary bg-white dark:bg-black hover:!bg-[#db2b2e] transition-all duration-300 text-black dark:text-white hover:!text-white w-full max-w-[265px] sm:max-w-none mx-auto group relative z-10">
-      <Link to={`/listing/${listing._id}`} className="block w-full h-full">
+      <Link to={`/listing/${listing._id}`} className="block w-full h-full relative">
+        {/* Add-to-cart button */}
+        <button
+          onClick={handleAddToCart}
+          aria-label="Add to cart"
+          className="absolute top-2 right-2 z-20 bg-primary text-white rounded-full w-9 h-9 flex items-center justify-center shadow-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/60"
+        >
+          <FiPlus className="w-5 h-5" />
+        </button>
+
         <div className="aspect-square w-full">
           <img
             src={mainImageUrl}
